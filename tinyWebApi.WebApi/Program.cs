@@ -18,7 +18,7 @@ using static tinyWebApi.WebApi.Configurations.Extensions;
 var filePath = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName, "appsettings.json");
 if (File.Exists(filePath))
 {
-    var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(filePath));
+    var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(tinyWebApi.Helpers.FileReadWriteHelper.ReadAllText(filePath));
     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     {
         var url = data.GetValueOrDefault<string, object>("urls");

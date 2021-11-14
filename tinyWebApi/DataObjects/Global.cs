@@ -110,7 +110,7 @@ namespace tinyWebApi.Common.DataObjects
             {
                 Dictionary<string, RunAsUserSpecification> result = new();
                 if (File.Exists(TinyWebApiConfigurations.RunAsUserJSONFilePath))
-                    result = JsonConvert.DeserializeObject<Dictionary<string, RunAsUserSpecification>>(File.ReadAllText(TinyWebApiConfigurations.RunAsUserJSONFilePath));
+                    result = JsonConvert.DeserializeObject<Dictionary<string, RunAsUserSpecification>>(tinyWebApi.Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.RunAsUserJSONFilePath));
                 if (TinyWebApiConfigurations.RunAsUserSpecifications is not null && TinyWebApiConfigurations.RunAsUserSpecifications.Count > 0)
                     foreach (var item in TinyWebApiConfigurations.RunAsUserSpecifications.Where(item => !result.ContainsKey(item.Key)))
                         result.Add(item.Key, item.Value);
@@ -130,7 +130,7 @@ namespace tinyWebApi.Common.DataObjects
             {
                 Dictionary<string, DatabaseSpecification> result = new();
                 if (File.Exists(TinyWebApiConfigurations.ConnectionStringJSONFilePath))
-                    result = JsonConvert.DeserializeObject<Dictionary<string, DatabaseSpecification>>(File.ReadAllText(TinyWebApiConfigurations.ConnectionStringJSONFilePath));
+                    result = JsonConvert.DeserializeObject<Dictionary<string, DatabaseSpecification>>(tinyWebApi.Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.ConnectionStringJSONFilePath));
                 if (TinyWebApiConfigurations.DatabaseSpecifications is not null && TinyWebApiConfigurations.DatabaseSpecifications.Count > 0)
                     foreach (var item in TinyWebApiConfigurations.DatabaseSpecifications.Where(item => !result.ContainsKey(item.Key)))
                         result.Add(item.Key, item.Value);
@@ -150,7 +150,7 @@ namespace tinyWebApi.Common.DataObjects
             {
                 Dictionary<string, MailerSpecification> result = new();
                 if (File.Exists(TinyWebApiConfigurations.MailerJSONFilePath))
-                    result = JsonConvert.DeserializeObject<Dictionary<string, MailerSpecification>>(File.ReadAllText(TinyWebApiConfigurations.MailerJSONFilePath));
+                    result = JsonConvert.DeserializeObject<Dictionary<string, MailerSpecification>>(tinyWebApi.Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.MailerJSONFilePath));
                 if (TinyWebApiConfigurations.MailerSpecifications is not null && TinyWebApiConfigurations.MailerSpecifications.Count > 0)
                     foreach (var item in TinyWebApiConfigurations.MailerSpecifications.Where(item => !result.ContainsKey(item.Key)))
                         result.Add(item.Key, item.Value);
@@ -170,7 +170,7 @@ namespace tinyWebApi.Common.DataObjects
             {
                 Dictionary<string, QuerySpecification> result = new();
                 if (File.Exists(TinyWebApiConfigurations.QueriesJSONFilePath))
-                    result = JsonConvert.DeserializeObject<Dictionary<string, QuerySpecification>>(File.ReadAllText(TinyWebApiConfigurations.QueriesJSONFilePath));
+                    result = JsonConvert.DeserializeObject<Dictionary<string, QuerySpecification>>(tinyWebApi.Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.QueriesJSONFilePath));
                 if (TinyWebApiConfigurations.QuerySpecifications is not null && TinyWebApiConfigurations.QuerySpecifications.Count > 0)
                     foreach (var item in TinyWebApiConfigurations.QuerySpecifications.Where(item => !result.ContainsKey(item.Key)))
                         result.Add(item.Key, item.Value);
