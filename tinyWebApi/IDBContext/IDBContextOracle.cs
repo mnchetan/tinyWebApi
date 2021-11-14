@@ -2,6 +2,7 @@
 ///     Copyright (c) 2021 tiny. All rights reserved.
 /// </copyright>
 using Oracle.ManagedDataAccess.Client;
+using System;
 using System.Data;
 using System.Diagnostics;
 using System.Xml;
@@ -10,7 +11,7 @@ namespace tinyWebApi.Common.IDBContext
     /// <summary>
     ///     Interface for idb context oracle.
     /// </summary>
-    public interface IDBContextOracle
+    public interface IDBContextOracle : IDisposable
     {
         /// <summary>
         ///     Executes the 'non query' operation.
@@ -81,6 +82,16 @@ namespace tinyWebApi.Common.IDBContext
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        OracleConnection GetConnection(string connectionString);
+        OracleConnection GetConnection(string connectionString, bool isOpenConnection = false);
+        /// <summary>
+        /// Auto Dispose Connection.
+        /// </summary>
+        [DebuggerHidden]
+        bool AutoDisposeConnection { get; set; }
+        /// <summary>
+        /// Oracle Transaction.
+        /// </summary>
+        [DebuggerHidden]
+        OracleTransaction Transaction { get; set; }
     }
 }

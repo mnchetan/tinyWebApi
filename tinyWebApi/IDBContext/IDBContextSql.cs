@@ -1,17 +1,18 @@
 ﻿/// <copyright file="IDBContextSql.cs" company="tiny">
 ///     Copyright (c) 2021 tiny. All rights reserved.
 /// </copyright>
-using tinyWebApi.Common.DataObjects;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Xml;
+using tinyWebApi.Common.DataObjects;
 namespace tinyWebApi.Common.IDBContext
 {
     /// <summary>
     ///     Interface for idb context sql.
     /// </summary>
-    public interface IDBContextSql
+    public interface IDBContextSql : IDisposable
     {
         /// <summary>
         ///     Gets a connection.
@@ -22,7 +23,7 @@ namespace tinyWebApi.Common.IDBContext
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        internal SqlConnection GetConnection(QuerySpecification querySpecification);
+        internal SqlConnection GetConnection(QuerySpecification querySpecification, bool isOpenConnection = false);
         /// <summary>
         ///     Gets a connection.
         /// </summary>
@@ -32,7 +33,7 @@ namespace tinyWebApi.Common.IDBContext
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        SqlConnection GetConnection(string connectionString);
+        SqlConnection GetConnection(string connectionString, bool isOpenConnection = false);
         /// <summary>
         ///     Executes the 'non query' operation.
         /// </summary>
@@ -93,5 +94,15 @@ namespace tinyWebApi.Common.IDBContext
         [DebuggerStepThrough]
         [DebuggerHidden]
         XmlReader ExecuteXmlReader(SqlCommand sqlCommand);
+        /// <summary>
+        /// Auto Dispose Connection.
+        /// </summary>
+        [DebuggerHidden]
+        bool AutoDisposeConnection { get; set; }
+        /// <summary>
+        /// SQL Transaction.
+        /// </summary>
+        [DebuggerHidden]
+        SqlTransaction Transaction { get; set; }
     }
 }

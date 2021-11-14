@@ -67,8 +67,11 @@ namespace tinyWebApi.Common.DatabaseManagers
         [DebuggerStepThrough]
         public DataBaseManagerOracle(IDBContextOracle context, QuerySpecification querySpecification, bool autoDisposeConnection = true)
         {
-            _querySpecification = querySpecification; _autoDisposeConnection = autoDisposeConnection;
-            _conn = (_context = context).GetConnection(querySpecification.DatabaseSpecification.IsEncrypted ? EncryptFactory.Decrypt(querySpecification.DatabaseSpecification.ConnectionString + "", querySpecification?.DatabaseSpecification?.EncryptionKey + "") : querySpecification.DatabaseSpecification.ConnectionString + "");
+            _context = context;
+            _querySpecification = querySpecification;
+            _context.AutoDisposeConnection = _autoDisposeConnection = autoDisposeConnection;
+            _context.Transaction = Transaction;
+            _conn = _context.GetConnection(querySpecification.DatabaseSpecification.IsEncrypted ? EncryptFactory.Decrypt(querySpecification.DatabaseSpecification.ConnectionString + "", querySpecification?.DatabaseSpecification?.EncryptionKey + "") : querySpecification.DatabaseSpecification.ConnectionString + "", false);
         }
         /// <summary>
         ///     Initializes a new instance of the tinyWebApi.Common.DatabaseManagers.DataBaseManagerOracle class.
@@ -82,8 +85,10 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </param>
         public DataBaseManagerOracle(IDBContextOracle context, string connectionString, bool autoDisposeConnection = false)
         {
-            _autoDisposeConnection = autoDisposeConnection;
-            _conn = (_context = context).GetConnection(connectionString + "");
+            _context = context;
+            _context.AutoDisposeConnection = _autoDisposeConnection = autoDisposeConnection;
+            _context.Transaction = Transaction;
+            _conn = _context.GetConnection(connectionString + "", false);
         }
         /// <summary>
         ///     Creates a command.
@@ -120,6 +125,7 @@ namespace tinyWebApi.Common.DatabaseManagers
                             {
                                 if (isMapUDTAsJSON || isMapUDTAsXML)
                                 {
+                                    if (_conn.State != ConnectionState.Open) { _conn.Open(); }
                                     OracleClob clob = new(_conn);
                                     var arr = Encoding.Unicode.GetBytes(item.Value as string);
                                     clob.Write(arr, 0, arr.Length);
@@ -134,6 +140,7 @@ namespace tinyWebApi.Common.DatabaseManagers
                             }
                         case DatabaseParameterType.Binary when !item.IsOutParameter:
                             {
+                                if(_conn.State!= ConnectionState.Open) { _conn.Open(); }
                                 OracleBlob blob = new(_conn);
                                 var arr = Encoding.Unicode.GetBytes(item.Value as string);
                                 blob.Write(arr, 0, arr.Length);
@@ -1140,7 +1147,7 @@ namespace tinyWebApi.Common.DatabaseManagers
             if (Trans is not null)
             {
                 Trans.Rollback();
-                Trans = null;
+                _context.Transaction = Trans = null;
             }
         }
         /// <summary>
@@ -1153,7 +1160,7 @@ namespace tinyWebApi.Common.DatabaseManagers
             if (Trans is not null)
             {
                 Trans.Commit();
-                Trans = null;
+                _context.Transaction = Trans = null;
             }
         }
         /// <summary>
@@ -1167,7 +1174,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         public OracleTransaction BeginTransaction()
         {
             Rollback();
-            Trans = _conn?.BeginTransaction(IsolationLevel.ReadUncommitted);
+            _context.Transaction = Trans = _conn?.BeginTransaction(IsolationLevel.ReadUncommitted);
             return Transaction;
         }
     }

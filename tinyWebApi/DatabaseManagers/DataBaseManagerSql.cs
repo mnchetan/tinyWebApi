@@ -64,8 +64,11 @@ namespace tinyWebApi.Common.DatabaseManagers
         [DebuggerStepThrough]
         public DataBaseManagerSql(IDBContextSql context, QuerySpecification querySpecification, bool autoDisposeConnection = true)
         {
-            _querySpecification = querySpecification; _autoDisposeConnection = autoDisposeConnection;
-            _conn = (_context = context).GetConnection(querySpecification.DatabaseSpecification.ConnectionString + "");
+            _context = context;
+            _querySpecification = querySpecification;
+            _context.AutoDisposeConnection = _autoDisposeConnection = autoDisposeConnection;
+            _context.Transaction = Transaction;
+            _conn = _context.GetConnection(querySpecification.DatabaseSpecification.ConnectionString + "", false);
         }
         /// <summary>
         ///     Initializes a new instance of the tinyWebApi.Common.DatabaseManagers.DataBaseManagerSql class.
@@ -77,8 +80,10 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </param>
         public DataBaseManagerSql(IDBContextSql context, string connectionString, bool autoDisposeConnection = false)
         {
-            _autoDisposeConnection = autoDisposeConnection;
-            _conn = (_context = context).GetConnection(connectionString + "");
+            _context = context;
+            _context.AutoDisposeConnection = _autoDisposeConnection = autoDisposeConnection;
+            _context.Transaction = Transaction;
+            _conn = _context.GetConnection(connectionString + "", false);
         }
         /// <summary>
         ///     Creates a command.
@@ -1052,7 +1057,7 @@ namespace tinyWebApi.Common.DatabaseManagers
             if (Trans is not null)
             {
                 Trans.Rollback();
-                Trans = null;
+                _context.Transaction = Trans = null;
             }
         }
         /// <summary>
@@ -1065,7 +1070,7 @@ namespace tinyWebApi.Common.DatabaseManagers
             if (Trans is not null)
             {
                 Trans.Commit();
-                Trans = null;
+                _context.Transaction = Trans = null;
             }
         }
         /// <summary>
@@ -1079,7 +1084,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         public SqlTransaction BeginTransaction()
         {
             Rollback();
-            Trans = _conn?.BeginTransaction(IsolationLevel.ReadUncommitted);
+            _context.Transaction = Trans = _conn?.BeginTransaction(IsolationLevel.ReadUncommitted);
             return Transaction;
         }
     }
