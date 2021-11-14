@@ -1040,9 +1040,12 @@ namespace tinyWebApi.Common.DatabaseManagers
                 Rollback();
                 if (disposing && _conn is not null)
                 {
-                    if (_conn.State == ConnectionState.Open) _conn.Close();
-                    _conn.Dispose();
-                    _conn = null;
+                    lock (_lockObject)
+                    {
+                        if (_conn.State == ConnectionState.Open) _conn.Close();
+                        _conn.Dispose();
+                        _conn = null;
+                    }
                 }
                 _disposed = true;
             }
@@ -1087,5 +1090,9 @@ namespace tinyWebApi.Common.DatabaseManagers
             _context.Transaction = Trans = _conn?.BeginTransaction(IsolationLevel.ReadUncommitted);
             return Transaction;
         }
+        /// <summary>
+        /// (Immutable) Lock Object.
+        /// </summary>
+        private readonly object _lockObject = new();
     }
 }

@@ -200,5 +200,24 @@ namespace tinyWebApi.Common.DataObjects
                 return mailerSpecification;
             }
         }
+        /// <summary>
+        ///     Gets or Sets whether the caching is required or not.
+        /// </summary>
+        /// <value>
+        ///     The IsCachingRequired.
+        /// </value>
+        [DebuggerHidden]
+        [JsonProperty(PropertyName = "IsCachingRequired", Required = Required.Default)]
+        public bool IsCachingRequired { get; set; } = false;
+        /// <summary>
+        ///     Gets or Sets the duration for which the data cache to be cached and after which will be renewed.
+        ///     Note: Renewal will be done on subsequent calls.
+        /// </summary>
+        /// <value>
+        ///     The CacheDurationInSeconds.
+        /// </value>
+        [DebuggerHidden]
+        [JsonProperty(PropertyName = "CacheDurationInSeconds", Required = Required.Default)]
+        public int CacheDurationInSeconds { get; set; } = 0;
     }
 }

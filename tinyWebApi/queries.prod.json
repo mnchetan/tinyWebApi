@@ -18,7 +18,9 @@
     "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing": "",
     "IsSendOutputViaEmailAlso": false,
     "Mailer": "somemailername1",
-    "IsAllowSendingJSONInMail": false
+    "IsAllowSendingJSONInMail": false,
+    "IsCachingRequired": false,
+    "CacheDurationInSeconds": 0
   },
   "GetEmployeeDetails_StoredProcedure": {
     "Query": "usp_GetEmployeeDetails @EID = @EmployeeId",
@@ -36,6 +38,8 @@
     "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing": "",
     "IsSendOutputViaEmailAlso": false,
     "Mailer": "somemailername2",
-    "IsAllowSendingJSONInMail": false
+    "IsAllowSendingJSONInMail": false,
+    "IsCachingRequired": false,
+    "CacheDurationInSeconds": 0
   }
 }

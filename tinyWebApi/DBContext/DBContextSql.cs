@@ -247,8 +247,9 @@ namespace tinyWebApi.Common.DBContext
         [DebuggerHidden]
         public SqlConnection GetConnection(string connectionString, bool isOpenConnection = false)
         {
+            _connectionString = connectionString + "";
             if (_connection == null)
-                _connection = new SqlConnection(connectionString + "");
+                _connection = new SqlConnection(_connectionString);
             if (!_querySpecification.DatabaseSpecification.IsImpersonationNeeded && isOpenConnection) _connection.Open();
             return _connection;
         }
@@ -281,7 +282,7 @@ namespace tinyWebApi.Common.DBContext
         /// <summary>
         /// The connection string
         /// </summary>
-        private string _connectionString;
+        private string _connectionString = "";
         /// <summary>
         /// SQL Connection
         /// </summary>
@@ -299,9 +300,12 @@ namespace tinyWebApi.Common.DBContext
                 Rollback();
                 if (disposing && _connection is not null)
                 {
-                    if (_connection.State == ConnectionState.Open) _connection.Close();
-                    _connection.Dispose();
-                    _connection = null;
+                    lock (_lockObject)
+                    {
+                        if (_connection.State == ConnectionState.Open) _connection.Close();
+                        _connection.Dispose();
+                        _connection = null;
+                    }
                 }
                 _disposed = true;
             }
@@ -334,5 +338,9 @@ namespace tinyWebApi.Common.DBContext
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        /// <summary>
+        /// (Immutable) Lock Object.
+        /// </summary>
+        private readonly object _lockObject = new();
     }
 }

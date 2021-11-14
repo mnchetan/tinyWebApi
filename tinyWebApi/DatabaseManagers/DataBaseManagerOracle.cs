@@ -97,7 +97,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         ///     When the DatabaseParameterType is Structured that is complex UDT and not an Out Parameter: If isMapUDTAsXML or IsMapUDTAsJSON are true then the UDT will be mapped serialized as XML/JSON and mapped as CLOB. else it UDT will be mapped as UDT but will only be supported with Oracle 21C onwards.
         ///     When the DatabaseParameterType is Binary and not an Out Parameterthen the parameter will be mapped as BLOB.
         ///     The type of UDT (Supported for Oracle 21C and above) and type information should be availed vai Tag field of DatabaseParameters.
-        
+
         /// <param name="query">          The query. </param>
         /// <param name="type">           The type. </param>
         /// <param name="parameters">     Options for controlling the operation. </param>
@@ -140,7 +140,7 @@ namespace tinyWebApi.Common.DatabaseManagers
                             }
                         case DatabaseParameterType.Binary when !item.IsOutParameter:
                             {
-                                if(_conn.State!= ConnectionState.Open) { _conn.Open(); }
+                                if (_conn.State != ConnectionState.Open) { _conn.Open(); }
                                 OracleBlob blob = new(_conn);
                                 var arr = Encoding.Unicode.GetBytes(item.Value as string);
                                 blob.Write(arr, 0, arr.Length);
@@ -1130,9 +1130,12 @@ namespace tinyWebApi.Common.DatabaseManagers
                 Rollback();
                 if (disposing && _conn is not null)
                 {
-                    if (_conn.State == ConnectionState.Open) _conn.Close();
-                    _conn.Dispose();
-                    _conn = null;
+                    lock (_lockObject)
+                    {
+                        if (_conn.State == ConnectionState.Open) _conn.Close();
+                        _conn.Dispose();
+                        _conn = null;
+                    }
                 }
                 _disposed = true;
             }
@@ -1177,5 +1180,9 @@ namespace tinyWebApi.Common.DatabaseManagers
             _context.Transaction = Trans = _conn?.BeginTransaction(IsolationLevel.ReadUncommitted);
             return Transaction;
         }
+        /// <summary>
+        /// (Immutable) Lock Object.
+        /// </summary>
+        private readonly object _lockObject = new();
     }
 }

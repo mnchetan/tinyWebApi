@@ -7,7 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-namespace tinyWebApi.Common.Helpers
+namespace tinyWebApi.Common.Extensions
 {
     /// <summary>
     /// The extensions.

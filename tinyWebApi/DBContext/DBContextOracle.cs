@@ -226,9 +226,12 @@ namespace tinyWebApi.Common.DBContext
                 Rollback();
                 if (disposing && _connection is not null)
                 {
-                    if (_connection.State == ConnectionState.Open) _connection.Close();
-                    _connection.Dispose();
-                    _connection = null;
+                    lock (_lockObject)
+                    {
+                        if (_connection.State == ConnectionState.Open) _connection.Close();
+                        _connection.Dispose();
+                        _connection = null;
+                    }
                 }
                 _disposed = true;
             }
@@ -261,5 +264,9 @@ namespace tinyWebApi.Common.DBContext
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        /// <summary>
+        /// (Immutable) Lock Object.
+        /// </summary>
+        private readonly object _lockObject = new();
     }
 }
