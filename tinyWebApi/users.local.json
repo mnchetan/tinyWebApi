@@ -1,0 +1,19 @@
+﻿/// <copyright file="users.local.json" company="tiny">
+///   Copyright (c) 2021 tiny. All rights reserved.
+/// </copyright>
+{
+  "systemuser1": {
+    "RunAsDomain": "domain",
+    "RunAsUserName": "username",
+    "RunAsPassword": "password",
+    "IsRunAsPasswordEncrypted": true,
+    "EncryptionKey": "some base 64 encryption key"
+  },
+  "systemuser2": {
+    "RunAsDomain": "domain",
+    "RunAsUserName": "username",
+    "RunAsPassword": "password",
+    "IsRunAsPasswordEncrypted": true,
+    "EncryptionKey": "some base 64 encryption key"
+  }
+}

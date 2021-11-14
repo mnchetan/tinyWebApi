@@ -1,0 +1,41 @@
+﻿/// <copyright file="queries.dev.json" company="tiny">
+///   Copyright (c) 2021 tiny. All rights reserved.
+/// </copyright>
+{
+  "GetEmployeeDetails_Query": {
+    "Query": "select employeeid as eid, employeename as ename from dbo.employee",
+    "ExecutionType": "DataTableText",
+    "InputFieldNamesInSequence_UDTDollarSeperatedByType": "",
+    "Outputs_RefCursor_InSequence_ColonSeperated_NotRequiredForMSSQL": "",
+    "Database": "db1",
+    "IsMapUDTAsJSON_ApplicableForOracle": false,
+    "IsMapUDTAsXML_ApplicableForOracle": false,
+    "ExternalDllPathImplementingIProcessDataInterface_PreProcessing": "",
+    "ExternalDllNameImplementingIProcessDataInterface_PreProcessing": "",
+    "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PreProcessing": "",
+    "ExternalDllPathImplementingIProcessDataInterface_PostProcessing": "",
+    "ExternalDllNameImplementingIProcessDataInterface_PostProcessing": "",
+    "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing": "",
+    "IsSendOutputViaEmailAlso": false,
+    "Mailer": "somemailername1",
+    "IsAllowSendingJSONInMail": false
+  },
+  "GetEmployeeDetails_StoredProcedure": {
+    "Query": "usp_GetEmployeeDetails @EID = @EmployeeId",
+    "ExecutionType": "DataTableText",
+    "InputFieldNamesInSequence_UDTDollarSeperatedByType": "",
+    "Outputs_RefCursor_InSequence_ColonSeperated_NotRequiredForMSSQL": "",
+    "Database": "db1",
+    "IsMapUDTAsJSON_ApplicableForOracle": false,
+    "IsMapUDTAsXML_ApplicableForOracle": false,
+    "ExternalDllPathImplementingIProcessDataInterface_PreProcessing": "",
+    "ExternalDllNameImplementingIProcessDataInterface_PreProcessing": "",
+    "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PreProcessing": "",
+    "ExternalDllPathImplementingIProcessDataInterface_PostProcessing": "",
+    "ExternalDllNameImplementingIProcessDataInterface_PostProcessing": "",
+    "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing": "",
+    "IsSendOutputViaEmailAlso": false,
+    "Mailer": "somemailername2",
+    "IsAllowSendingJSONInMail": false
+  }
+}

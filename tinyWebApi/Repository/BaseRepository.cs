@@ -1,0 +1,267 @@
+﻿/// <copyright file="BaseRepository.cs" company="tiny">
+///     Copyright (c) 2021 tiny. All rights reserved.
+/// </copyright>
+/// <summary>
+///     Implements the base repository class.
+/// </summary>
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using tinyWebApi.Common.DataObjects;
+using tinyWebApi.Common.Enums;
+using tinyWebApi.Common.Helpers;
+using tinyWebApi.Common.IDBContext;
+using tinyWebApi.Common.Extensions;
+using ora = tinyWebApi.Common.DatabaseManagers.DataBaseManagerOracle;
+using sql = tinyWebApi.Common.DatabaseManagers.DataBaseManagerSql;
+namespace tinyWebApi.Common
+{
+    /// <summary>
+    ///     A base repository.
+    /// </summary>
+    [DebuggerStepThrough]
+    public class BaseRepository
+    {
+        /// <summary>
+        ///     (Immutable) context for the SQL.
+        /// </summary>
+        private readonly IDBContextSql _sqlContext;
+        /// <summary>
+        ///     (Immutable) context for the oracle.
+        /// </summary>
+        private readonly IDBContextOracle _oracleContext;
+        /// <summary>
+        ///     Initializes a new instance of the tinyWebApi.Common.BaseRepository class.
+        /// </summary>
+        /// <param name="sqlContext">    (Immutable) context for the SQL. </param>
+        /// <param name="oracleContext"> (Immutable) context for the oracle. </param>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
+        public BaseRepository(IDBContextSql sqlContext, IDBContextOracle oracleContext)
+        {
+            _sqlContext = sqlContext;
+            _oracleContext = oracleContext;
+        }
+        /// <summary>
+        ///     Process the query.
+        /// </summary>
+        /// <param name="querySpecification"> The query specification. </param>
+        /// <param name="list">               The list. </param>
+        /// <param name="executionType">      Type of the execution. </param>
+        /// <returns>
+        ///     A string.
+        /// </returns>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
+        public static string ProcessQuery(QuerySpecification querySpecification, List<DatabaseParameters> list, ExecutionType executionType)
+        {
+            switch (executionType)
+            {
+                case ExecutionType.ScalarText:
+                case ExecutionType.NonQueryText:
+                case ExecutionType.DataTableText:
+                case ExecutionType.DataSetText:
+                    {
+                        list.ForEach((item) =>
+                        {
+                            var val = JsonConvert.ToString(item.Value);
+                            if (!string.IsNullOrEmpty($"{val}") && val.Length > 0 && !val.Contains(",") && item.Type != DatabaseParameterType.Structured && item.Type != DatabaseParameterType.Binary)
+                            {
+                                val = val.Replace("'", "''");
+                                val = $"'{val}'";
+                                val = querySpecification.DatabaseSpecification.DatabaseType == DatabaseType.ORACLE ? val.Replace("&", "' || CHR(38) || '") : val;
+                            }
+                            querySpecification.Query = querySpecification.DatabaseSpecification.DatabaseType switch
+                            {
+                                DatabaseType.MSSQL => item.Type != DatabaseParameterType.Structured && item.Type != DatabaseParameterType.Binary && !string.IsNullOrEmpty(item.Name) && !string.IsNullOrEmpty(val) ? querySpecification.Query.Replace($"@{item.Name}", val, StringComparison.OrdinalIgnoreCase) : querySpecification.Query,
+                                DatabaseType.ORACLE => item.Type != DatabaseParameterType.Structured && item.Type != DatabaseParameterType.Binary && !string.IsNullOrEmpty(item.Name) && !string.IsNullOrEmpty(val) ? querySpecification.Query.Replace($":{item.Name}", val, StringComparison.OrdinalIgnoreCase) : querySpecification.Query,
+                                _ => querySpecification.Query
+                            };
+                        });
+                        _ = querySpecification.DatabaseSpecification.DatabaseType switch
+                        {
+                            DatabaseType.MSSQL => list.RemoveAll(o => o.Type is not DatabaseParameterType.Structured and not DatabaseParameterType.Binary),
+                            DatabaseType.ORACLE => list.RemoveAll(o => o.Type is not DatabaseParameterType.Structured and not DatabaseParameterType.Binary and not DatabaseParameterType.RefCursor),
+                            _ => throw new NotImplementedException()
+                        };
+                        break;
+                    }
+                default:
+                    break;
+            }
+            return querySpecification.Query;
+        }
+        /// <summary>
+        ///     Process the parameters.
+        /// </summary>
+        /// <exception cref="NotSupportedException"> Thrown when the requested operation is not supported. </exception>
+        /// <param name="querySpecification"> The query specification. </param>
+        /// <param name="list">               The list. </param>
+        /// <returns>
+        ///     A List&lt;DatabaseParameters&gt;
+        /// </returns>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
+        public static List<DatabaseParameters> ProcessParameters(QuerySpecification querySpecification, List<DatabaseParameters> list)
+        {
+            List<DatabaseParameters> l1 = new();
+            switch (querySpecification.DatabaseSpecification.DatabaseType)
+            {
+                case DatabaseType.MSSQL:
+                    var inputParameters = $"{querySpecification.Inputs}".Split("$");
+                    foreach (var (dbp, input) in inputParameters.SelectMany(input => list.Where(dbp => $"{input}".Replace(",", "").Replace("@", "").Split("$")[0].Replace("$", "").ToLower() == $"{dbp.Name}".ToLower()).Select(dbp => (dbp, input))))
+                    {
+                        if (dbp.Type == DatabaseParameterType.Structured && input.Contains("$"))
+                        {
+                            var strSplit = $"{input}".Split("$");
+                            dbp.Tag = strSplit.Length == 2 ? $"{strSplit[1]}" : "dbo." + input;
+                        }
+                        l1.Add(dbp);
+                    }
+                    l1 = CopyUnMappedDatabaseParameters(list, l1);
+                    break;
+                case DatabaseType.ORACLE:
+                    var inputs = $"{querySpecification.Inputs}".Split("$");
+                    var outPutParameters = $"{querySpecification.Outputs}".Split(',');
+                    foreach (var output in outPutParameters)
+                    {
+                        if (!string.IsNullOrEmpty(output))
+                        {
+                            DatabaseParameters dbp = new();
+                            dbp.IsOutParameter = true;
+                            dbp.Name = $"{output}".Replace("$", "");
+                            dbp.Type = DatabaseParameterType.RefCursor;
+                            l1.Add(dbp);
+                        }
+                    }
+                    foreach (var (dbp, input) in inputs.SelectMany(input => list.Where(dbp => $"{input}".Replace(",", "").Replace(":", "").Split("$")[0].Replace("$", "").ToLower() == $"{dbp.Name}".ToLower()).Select(dbp => (dbp, input))))
+                    {
+                        if (dbp.Type == DatabaseParameterType.Structured && input.Contains("$"))
+                        {
+                            var strSplit = $"{input}".Split("$");
+                            if (strSplit.Length == 2) dbp.Tag = $"{strSplit[1]}";
+                            l1.Add(dbp);
+                        }
+                        else if (dbp.Type == DatabaseParameterType.Structured && !input.Contains("$"))
+                        {
+                            dbp.Value = querySpecification.IsMapUDTAsJSON && dbp.Value is DataTable ? dbp.Value.ToJSON() : querySpecification.IsMapUDTAsXML && dbp.Value is DataTable ? (dbp.Value as DataTable).DataTableAsXML() : throw new NotSupportedException("User defined type support if needed to be used then type name should be specified as $ seperated in the inputs within the queryspecification else should be mapped either as xml or json and should be of type a table/array...");
+                            l1.Add(dbp);
+                        }
+                    }
+                    l1 = CopyUnMappedDatabaseParameters(list, l1);
+                    break;
+                default:
+                    break;
+            }
+            return l1;
+        }
+        /// <summary>
+        ///     Copies the un mapped database parameters.
+        /// </summary>
+        /// <param name="list"> The list. </param>
+        /// <param name="l1">   The first List&lt;DatabaseParameters&gt; </param>
+        /// <returns>
+        ///     A List&lt;DatabaseParameters&gt;
+        /// </returns>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
+        private static List<DatabaseParameters> CopyUnMappedDatabaseParameters(List<DatabaseParameters> list, List<DatabaseParameters> l1)
+        {
+            foreach (var item in list)
+            {
+                var notFound = true;
+                foreach (var _ in l1.Where(inp => inp.Name == item.Name).Select(inp => new { }))
+                {
+                    notFound = false;
+                    break;
+                }
+                if (notFound) l1.Add(item);
+            }
+            return l1;
+        }
+        /// <summary>
+        ///     Gets the parameters.
+        /// </summary>
+        /// <param name="requestSpecifications"> The request specifications. </param>
+        /// <returns>
+        ///     The parameters.
+        /// </returns>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
+        public static List<DatabaseParameters> GetParameters(List<RequestSpecification> requestSpecifications)
+        {
+            List<DatabaseParameters> list = new();
+            foreach (var (item, l) in from item in requestSpecifications let l = new DatabaseParameters() select (item, l))
+            {
+                if (item.DatabaseParameterType == DatabaseParameterType.UnKnown) continue;
+                l.Name = item.PropertyName;
+                l.Type = item.DatabaseParameterType;
+                l.Value = item.Value;
+                list.Add(l);
+            }
+            return list;
+        }
+        /// <summary>
+        ///     Executes the 'query' operation.
+        /// </summary>
+        /// <param name="key">                   The key. </param>
+        /// <param name="querySpecification">    The query specification. </param>
+        /// <param name="executionType">         Type of the execution. </param>
+        /// <param name="list">                  The list. </param>
+        /// <param name="requestSpecifications"> The request specifications. </param>
+        /// <param name="outPutType">            (Optional) Type of the out put, default JSON. </param>
+        /// <returns>
+        ///     A dynamic.
+        /// </returns>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
+        public virtual dynamic ExecuteQuery(string key, QuerySpecification querySpecification, ExecutionType executionType, List<DatabaseParameters> list, List<RequestSpecification> requestSpecifications, OutPutType outPutType = OutPutType.JSON) => (executionType, querySpecification.DatabaseSpecification.DatabaseType, outPutType) switch
+        {
+            (ExecutionType.DataSetText, DatabaseType.MSSQL, OutPutType.Excel) => new sql(_sqlContext, querySpecification).ExecDataSet(querySpecification, list).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetText, DatabaseType.MSSQL, OutPutType.PDF) => new sql(_sqlContext, querySpecification).ExecDataSet(querySpecification, list).ProcessOutPutDataForPDF(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetText, DatabaseType.MSSQL, OutPutType.CSV) => new sql(_sqlContext, querySpecification).ExecDataSet(querySpecification, list).Tables[0].ProcessOutPutDataForCSV(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetText, DatabaseType.MSSQL, OutPutType.JSON) => new sql(_sqlContext, querySpecification).ExecDataSet(querySpecification, list).ProcessOutPutData(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetText, DatabaseType.ORACLE, OutPutType.Excel) => new ora(_oracleContext, querySpecification).ExecDataSet(querySpecification, list).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetText, DatabaseType.ORACLE, OutPutType.PDF) => new ora(_oracleContext, querySpecification).ExecDataSet(querySpecification, list).ProcessOutPutDataForPDF(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetText, DatabaseType.ORACLE, OutPutType.CSV) => new ora(_oracleContext, querySpecification).ExecDataSet(querySpecification, list).Tables[0].ProcessOutPutDataForCSV(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetText, DatabaseType.ORACLE, OutPutType.JSON) => new ora(_oracleContext, querySpecification).ExecDataSet(querySpecification, list).ProcessOutPutData(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableText, DatabaseType.MSSQL, OutPutType.Excel) => new sql(_sqlContext, querySpecification).ExecDataTable(querySpecification, list).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableText, DatabaseType.MSSQL, OutPutType.PDF) => new sql(_sqlContext, querySpecification).ExecDataTable(querySpecification, list).ProcessOutPutDataForPDF(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableText, DatabaseType.MSSQL, OutPutType.CSV) => new sql(_sqlContext, querySpecification).ExecDataTable(querySpecification, list).ProcessOutPutDataForCSV(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableText, DatabaseType.MSSQL, OutPutType.JSON) => new sql(_sqlContext, querySpecification).ExecDataTable(querySpecification, list).ProcessOutPutData(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableText, DatabaseType.ORACLE, OutPutType.Excel) => new ora(_oracleContext, querySpecification).ExecDataTable(querySpecification, list).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableText, DatabaseType.ORACLE, OutPutType.PDF) => new ora(_oracleContext, querySpecification).ExecDataTable(querySpecification, list).ProcessOutPutDataForPDF(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableText, DatabaseType.ORACLE, OutPutType.CSV) => new ora(_oracleContext, querySpecification).ExecDataTable(querySpecification, list).ProcessOutPutDataForCSV(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableText, DatabaseType.ORACLE, OutPutType.JSON) => new ora(_oracleContext, querySpecification).ExecDataTable(querySpecification, list).ProcessOutPutData(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetProcedure, DatabaseType.MSSQL, OutPutType.Excel) => new sql(_sqlContext, querySpecification).ExecDataSetProc(querySpecification, list).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetProcedure, DatabaseType.MSSQL, OutPutType.PDF) => new sql(_sqlContext, querySpecification).ExecDataSetProc(querySpecification, list).ProcessOutPutDataForPDF(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetProcedure, DatabaseType.MSSQL, OutPutType.CSV) => new sql(_sqlContext, querySpecification).ExecDataSetProc(querySpecification, list).Tables[0].ProcessOutPutDataForCSV(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetProcedure, DatabaseType.MSSQL, OutPutType.JSON) => new sql(_sqlContext, querySpecification).ExecDataSetProc(querySpecification, list).ProcessOutPutData(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetProcedure, DatabaseType.ORACLE, OutPutType.Excel) => new ora(_oracleContext, querySpecification).ExecDataSetProc(querySpecification, list).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetProcedure, DatabaseType.ORACLE, OutPutType.PDF) => new ora(_oracleContext, querySpecification).ExecDataSetProc(querySpecification, list).ProcessOutPutDataForPDF(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetProcedure, DatabaseType.ORACLE, OutPutType.CSV) => new ora(_oracleContext, querySpecification).ExecDataSetProc(querySpecification, list).Tables[0].ProcessOutPutDataForCSV(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetProcedure, DatabaseType.ORACLE, OutPutType.JSON) => new ora(_oracleContext, querySpecification).ExecDataSetProc(querySpecification, list).ProcessOutPutData(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableProcedure, DatabaseType.MSSQL, OutPutType.Excel) => new sql(_sqlContext, querySpecification).ExecDataTableProc(querySpecification, list).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableProcedure, DatabaseType.MSSQL, OutPutType.PDF) => new sql(_sqlContext, querySpecification).ExecDataTableProc(querySpecification, list).ProcessOutPutDataForPDF(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableProcedure, DatabaseType.MSSQL, OutPutType.CSV) => new sql(_sqlContext, querySpecification).ExecDataTableProc(querySpecification, list).ProcessOutPutDataForCSV(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableProcedure, DatabaseType.MSSQL, OutPutType.JSON) => new sql(_sqlContext, querySpecification).ExecDataTableProc(querySpecification, list).ProcessOutPutData(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableProcedure, DatabaseType.ORACLE, OutPutType.Excel) => new ora(_oracleContext, querySpecification).ExecDataTableProc(querySpecification, list).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableProcedure, DatabaseType.ORACLE, OutPutType.PDF) => new ora(_oracleContext, querySpecification).ExecDataTableProc(querySpecification, list).ProcessOutPutDataForPDF(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableProcedure, DatabaseType.ORACLE, OutPutType.CSV) => new ora(_oracleContext, querySpecification).ExecDataTableProc(querySpecification, list).ProcessOutPutDataForCSV(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataTableProcedure, DatabaseType.ORACLE, OutPutType.JSON) => new ora(_oracleContext, querySpecification).ExecDataTableProc(querySpecification, list).ProcessOutPutData(key, querySpecification, requestSpecifications),
+            (ExecutionType.NonQueryText, DatabaseType.MSSQL, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new sql(_sqlContext, querySpecification).ExecNonQuery(querySpecification, list), key, querySpecification, requestSpecifications),
+            (ExecutionType.NonQueryText, DatabaseType.ORACLE, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new ora(_oracleContext, querySpecification).ExecNonQuery(querySpecification, list), key, querySpecification, requestSpecifications),
+            (ExecutionType.ScalarText, DatabaseType.MSSQL, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new sql(_sqlContext, querySpecification).ExecScalar(querySpecification, list), key, querySpecification, requestSpecifications),
+            (ExecutionType.ScalarText, DatabaseType.ORACLE, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new ora(_oracleContext, querySpecification).ExecScalar(querySpecification, list), key, querySpecification, requestSpecifications),
+            (ExecutionType.NonQueryProcedure, DatabaseType.MSSQL, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new sql(_sqlContext, querySpecification).ExecNonQueryProc(querySpecification, list), key, querySpecification, requestSpecifications),
+            (ExecutionType.NonQueryProcedure, DatabaseType.ORACLE, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new ora(_oracleContext, querySpecification).ExecNonQueryProc(querySpecification, list), key, querySpecification, requestSpecifications),
+            (ExecutionType.ScalarProcedure, DatabaseType.MSSQL, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new sql(_sqlContext, querySpecification).ExecScalarProc(querySpecification, list), key, querySpecification, requestSpecifications),
+            (ExecutionType.ScalarProcedure, DatabaseType.ORACLE, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new ora(_oracleContext, querySpecification).ExecScalarProc(querySpecification, list), key, querySpecification, requestSpecifications),
+            _ => throw new NotImplementedException()
+        };
+    }
+}

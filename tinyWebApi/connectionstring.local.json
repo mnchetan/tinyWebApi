@@ -1,0 +1,23 @@
+/// <copyright file="connectionstring.local.json" company="tiny">
+///   Copyright (c) 2021 tiny. All rights reserved.
+/// </copyright>
+{
+  "db1": {
+    "ConnectionString": "sql server connection string",
+    "IsEncrypted": false,
+    "IsImpersonationNeeded": true,
+    "RunAsUser": "systemuser1",
+    "EncryptionKey": "",
+    "ConnectionTimeOut": 1200,
+    "DatabaseType": "MSSQL"
+  },
+  "db2": {
+    "ConnectionString": "oracle connection string",
+    "IsEncrypted": true,
+    "IsImpersonationNeeded": false,
+    "RunAsUser": "",
+    "EncryptionKey": "some base 64 encryption key",
+    "ConnectionTimeOut": 1200,
+    "DatabaseType": "ORACLE"
+  }
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>tinyWebApi.EncryptDecryptUtility</name>
+    </assembly>
+    <members>
+        <member name="T:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility">
+            <summary>
+            Class EncryptDecryptUtility.
+            Implements the <see cref="T:System.Windows.Forms.Form" />
+            </summary>
+            <seealso cref="T:System.Windows.Forms.Form" />
+            <summary>
+            Class EncryptDecryptUtility
+            </summary>
+        </member>
+        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility"/> class.
+            </summary>
+        </member>
+        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.btnClear_Click(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Click event of the btnClear control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.btnDecrypt_Click(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Click event of the btnDecrypt control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.btnEncrypt_Click(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Click event of the btnEncrypt control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="F:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.components">
+            <summary>
+             Required designer variable.
+            </summary>
+        </member>
+        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.Dispose(System.Boolean)">
+            <summary>
+             Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.InitializeComponent">
+            <summary>
+             Required method for Designer support - do not modify
+             the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:tinyWebApi.EncryptDecryptUtility.EncryptFactory">
+            <summary>   Class EncryptDecryptUtility. </summary>
+        </member>
+        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptFactory.Encrypt(System.String,System.String)">
+            <summary>
+            Encrypts the plain text.
+            </summary>
+            <param name="encryptString">The encrypt string.</param>
+            <param name="key">The key.</param>
+            <returns>A string.</returns>
+        </member>
+        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptFactory.Decrypt(System.String,System.String)">
+            <summary>
+            Decrypts the encrypted text.
+            </summary>
+            <param name="decryptString">The encrypt string.</param>
+            <param name="key">The key.</param>
+            <returns>A string.</returns>
+        </member>
+    </members>
+</doc>
