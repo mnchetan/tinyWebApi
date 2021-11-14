@@ -1,21 +1,14 @@
 ﻿/// <copyright file="Exceptions.cs" company="tiny">
 ///     Copyright (c) 2021 tiny. All rights reserved.
 /// </copyright>
-using tinyWebApi.Common.DataObjects;
-using tinyWebApi.Common.Enums;
-using tinyWebApi.Common.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using static tinyWebApi.Common.DataObjects.Global;
+using tinyWebApi.Common.DataObjects;
+using tinyWebApi.Common.Enums;
 using tinyWebApi.Helpers;
-using Newtonsoft.Json;
-
 namespace tinyWebApi.Common.Extensions
 {
     /// <summary>

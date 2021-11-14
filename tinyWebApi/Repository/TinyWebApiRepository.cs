@@ -4,17 +4,17 @@
 /// <summary>
 ///     Implements the tiny web API repository class.
 /// </summary>
-using tinyWebApi.Common.DataObjects;
-using tinyWebApi.Common.Enums;
-using tinyWebApi.Common.Exceptions;
-using tinyWebApi.Common.IDBContext;
-using tinyWebApi.Common.IRepository;
-using tinyWebApi.Common.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
+using tinyWebApi.Common.DataObjects;
+using tinyWebApi.Common.Enums;
+using tinyWebApi.Common.Exceptions;
+using tinyWebApi.Common.Extensions;
+using tinyWebApi.Common.IDBContext;
+using tinyWebApi.Common.IRepository;
 namespace tinyWebApi.Common
 {
     /// <summary>

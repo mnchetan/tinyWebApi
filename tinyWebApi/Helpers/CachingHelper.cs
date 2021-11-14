@@ -4,7 +4,6 @@
 using System;
 using System.Diagnostics;
 using tinyWebApi.Common.DataObjects;
-
 namespace tinyWebApi.Helpers
 {
     /// <summary>
