@@ -123,9 +123,11 @@ namespace tinyWebApi.Common.Controllers
         /// </summary>
         private void SetGlobal()
         {
+            _logger.LogInformation("Setting up globals.");
             Global.ServicePort = HttpContext.Connection.LocalPort;
             Global.ServiceIP = HttpContext.Connection.LocalIpAddress;
             Global.CurrentHttpContext = HttpContext;
+            _logger.LogInformation("globals have been set.");
         }
         /// <summary>
         ///     Gets request specification.
@@ -148,11 +150,14 @@ namespace tinyWebApi.Common.Controllers
         {
             try
             {
+                _logger.LogInformation("Inside GetRequestSpecification").
+                _logger.LogInformation("validating input data.");
                 if (hasFileContent && executionType != ExecutionType.DataSetProcedure && executionType != ExecutionType.DataTableProcedure)
                     throw new CustomException((int)HttpStatusCode.InternalServerError, "Internal Server Error!!!", "Request having file content should have execution type either DataTableProcedure or DataSetProcedure.");
                 if ((executionType == ExecutionType.NonQueryProcedure || executionType == ExecutionType.NonQueryText || executionType == ExecutionType.ScalarProcedure || executionType == ExecutionType.ScalarText) && outPutType != OutPutType.JSON)
                     throw new CustomException((int)HttpStatusCode.InternalServerError, "Internal Server Error!!!", "Request execution type ScalarText, ScalarProcedure, NonQueryText, NonQueryProcedure can only support JSON serialized output.");
                 var result = new List<RequestSpecification>();
+                _logger.LogInformation("Looping thorugh request.");
                 foreach (var (p, r) in from KeyValuePair<string, JToken> p in request as JObject
                                        let r = new RequestSpecification
                                        {
@@ -166,17 +171,21 @@ namespace tinyWebApi.Common.Controllers
                                        }
                                        select (p, r))
                 {
+                    _logger.LogInformation("Setting property type.");
                     r.PropertyType = hasFileContent && $"{fileContentFieldName}".Contains($"{p.Key}", StringComparison.OrdinalIgnoreCase) ? null : GetPropertyType(p, r);
                     try
                     {
+                        _logger.LogInformation("Setting propery value.");
                         r.PropertyValue = hasFileContent && $"{fileContentFieldName}".Contains($"{p.Key}", StringComparison.OrdinalIgnoreCase) ? fileContentType == FileContentType.CSV ? ExcelCSVHelper.ImportCSVToDataTable(p.Value.ToObject<byte[]>()) : fileContentType == FileContentType.Excel ? ExcelCSVHelper.ImportExcelToDataTable(p.Value.ToObject<byte[]>(), sheetName) : p.Value.ToObject<byte[]>() : r.IsArrayOfSingleField && !r.IsArrayOfMultipleFields ? (dynamic)p.Value.ToObject<List<dynamic>>() : r.IsArrayOfSingleField && r.IsArrayOfMultipleFields ? (dynamic)p.Value : (dynamic)p.Value.ToObject(r.PropertyType);
                     }
                     catch
                     {
-                        r.PropertyType = null; r.PropertyValue = null;
+                        r.PropertyType = null; 
+                        r.PropertyValue = null;
                     }
                     result.Add(r);
                 }
+                _logger.LogInformation("Getting request specification from query parameters if any.");
                 var q = _.GetRequestSpecificationFromQueryParameters();
                 if (q.Count > 0) result.AddRange(q);
                 return result;
@@ -219,6 +228,7 @@ namespace tinyWebApi.Common.Controllers
         /// <seealso cref="M:IBase.MapOutPutType(OutPutType,ExecutionType)"/>
         public IBase MapOutPutType(OutPutType outPutType, ExecutionType executionType)
         {
+            _logger.LogInformation("Mapping output type based on execution type.");
             _.OutPutType = (executionType == ExecutionType.DataSetProcedure || executionType == ExecutionType.DataSetText || executionType == ExecutionType.DataTableProcedure || executionType == ExecutionType.DataTableText) && outPutType == OutPutType.Excel ? OutPutType.Excel : outPutType == OutPutType.PDF ? OutPutType.PDF : (executionType == ExecutionType.DataTableProcedure || executionType == ExecutionType.DataTableText) && outPutType == OutPutType.CSV ? OutPutType.CSV : OutPutType.JSON;
             return _;
         }

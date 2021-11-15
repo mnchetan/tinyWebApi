@@ -64,6 +64,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         [DebuggerStepThrough]
         public DataBaseManagerSql(IDBContextSql context, QuerySpecification querySpecification, bool autoDisposeConnection = true)
         {
+            Global.LogInformation("Inside DataBaseManagerSql and setting up the parameters.");
             _context = context;
             _querySpecification = querySpecification;
             _context.AutoDisposeConnection = _autoDisposeConnection = autoDisposeConnection;
@@ -80,6 +81,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </param>
         public DataBaseManagerSql(IDBContextSql context, string connectionString, bool autoDisposeConnection = false)
         {
+            Global.LogInformation("Inside DataBaseManagerSql and setting up the parameters.");
             _context = context;
             _context.AutoDisposeConnection = _autoDisposeConnection = autoDisposeConnection;
             _context.Transaction = Transaction;
@@ -98,18 +100,24 @@ namespace tinyWebApi.Common.DatabaseManagers
         [DebuggerStepThrough]
         public SqlCommand CreateCommand(string query, CommandType type, List<DatabaseParameters> parameters)
         {
+            Global.LogInformation("Inside CreateCommand.");
             SqlCommand cmd = new(query, _conn);
+            Global.LogInformation("If transaction is not null then set transaction.");
             if (Trans is not null) cmd.Transaction = Trans;
+            Global.LogInformation("Setting command type, command timeout.");
             cmd.CommandType = type;
             cmd.CommandTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
+            Global.LogInformation("Set parameters if any.");
             if (parameters is not null && parameters.Count > 0)
             {
+                Global.LogInformation("Loop through parameters.");
                 foreach (var item in parameters)
                 {
                     switch (item.Type)
                     {
                         case DatabaseParameterType.Structured when !item.IsOutParameter:
                             {
+                                Global.LogInformation("When parameter tpe is stuctured and is not an out parameter.");
                                 var s = cmd.Parameters.AddWithValue(!string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains("@") ? item.Name : "@" + item.Name, item.Value);
                                 s.TypeName = item.Tag;
                                 s.SqlDbType = SqlDbType.Structured;
@@ -120,14 +128,17 @@ namespace tinyWebApi.Common.DatabaseManagers
                                 var p = cmd.Parameters.Add(new SqlParameter());
                                 if (item.IsOutParameter)
                                 {
+                                    Global.LogInformation("When parameter is an out parameter then set the direction accordingly.");
                                     p.Direction = ParameterDirection.Output;
                                     p.Size = item.Size is > 0 ? item.Size : p.Size;
                                 }
                                 else
                                 {
+                                    Global.LogInformation("When parameter is an input parameter then set the direction and value.");
                                     p.Value = item.Value;
                                     p.Direction = ParameterDirection.Input;
                                 }
+                                Global.LogInformation("Setting parameter type and name and ignore the UnKnown as already handled.");
                                 p.ParameterName = !string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains("@") ? item.Name : "@" + item.Name;
                                 if (item.Type is not null && item.Type.HasValue && item.Type.Value != DatabaseParameterType.UnKnown) p.DbType = (DbType)(int)item.Type.Value;
                                 break;
@@ -151,9 +162,13 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Non Query as text.");
                 return _context.ExecuteNonQuery(CreateCommand(query, CommandType.Text, parameters));
             }
-            catch { throw; }
+            catch
+            {
+                throw;
+            }
             finally
             {
                 if (Transaction is null && _autoDisposeConnection) Dispose(true);
@@ -174,6 +189,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Non Query as text with command out.");
                 return _context.ExecuteNonQuery(command = CreateCommand(query, CommandType.Text, parameters));
             }
             catch
@@ -199,6 +215,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Non Query as procedure.");
                 return _context.ExecuteNonQuery(CreateCommand(query, CommandType.StoredProcedure, parameters));
             }
             catch
@@ -225,6 +242,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Non Query with command out as procedure.");
                 return _context.ExecuteNonQuery(command = CreateCommand(query, CommandType.StoredProcedure, parameters));
             }
             catch
@@ -250,6 +268,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Scalar as text.");
                 return _context.ExecuteScalar(CreateCommand(query, CommandType.Text, parameters));
             }
             catch
@@ -276,6 +295,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Scalar as text with command out.");
                 return _context.ExecuteScalar(command = CreateCommand(query, CommandType.Text, parameters));
             }
             catch
@@ -301,6 +321,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Scalar as procedure.");
                 return _context.ExecuteScalar(CreateCommand(query, CommandType.StoredProcedure, parameters));
             }
             catch
@@ -325,7 +346,11 @@ namespace tinyWebApi.Common.DatabaseManagers
         [DebuggerStepThrough]
         public object ExecScalarProcWithCommandOut(string query, List<DatabaseParameters> parameters, out SqlCommand command)
         {
-            try { return _context.ExecuteScalar(command = CreateCommand(query, CommandType.StoredProcedure, parameters)); }
+            try
+            {
+                Global.LogInformation("Executing Scalar as procedure with command out.");
+                return _context.ExecuteScalar(command = CreateCommand(query, CommandType.StoredProcedure, parameters));
+            }
             catch
             {
                 throw;
@@ -349,6 +374,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Data Reader as text.");
                 return _context.ExecuteDataReader(CreateCommand(query, CommandType.Text, parameters));
             }
             catch
@@ -373,7 +399,11 @@ namespace tinyWebApi.Common.DatabaseManagers
         [DebuggerStepThrough]
         public SqlDataReader ExecDataReaderWithCommandOut(string query, List<DatabaseParameters> parameters, out SqlCommand command)
         {
-            try { return _context.ExecuteDataReader(command = CreateCommand(query, CommandType.Text, parameters)); }
+            try
+            {
+                Global.LogInformation("Executing Data Reader as text with command out.");
+                return _context.ExecuteDataReader(command = CreateCommand(query, CommandType.Text, parameters));
+            }
             catch
             {
                 throw;
@@ -397,6 +427,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Data Reader as procedure.");
                 return _context.ExecuteDataReader(CreateCommand(query, CommandType.StoredProcedure, parameters));
             }
             catch
@@ -423,6 +454,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Data Reader as procedure with command out.");
                 return _context.ExecuteDataReader(command = CreateCommand(query, CommandType.StoredProcedure, parameters));
             }
             catch
@@ -448,6 +480,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing XML Reader as text.");
                 return _context.ExecuteXmlReader(CreateCommand(query, CommandType.Text, parameters));
             }
             catch
@@ -474,6 +507,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing XML Reader as text with command out.");
                 return _context.ExecuteXmlReader(command = CreateCommand(query, CommandType.Text, parameters));
             }
             catch
@@ -499,6 +533,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing XML Reader as procedure.");
                 return _context.ExecuteXmlReader(CreateCommand(query, CommandType.StoredProcedure, parameters));
             }
             catch
@@ -525,6 +560,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing XML Reader as procedure with command out.");
                 return _context.ExecuteXmlReader(command = CreateCommand(query, CommandType.StoredProcedure, parameters));
             }
             catch
@@ -550,6 +586,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Fill Data Set as text.");
                 return _context.FillDataSet(new SqlDataAdapter(CreateCommand(query, CommandType.Text, parameters)));
             }
             catch
@@ -576,6 +613,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Fill Data Set as text with command out.");
                 return _context.FillDataSet(new SqlDataAdapter(command = CreateCommand(query, CommandType.Text, parameters)));
             }
             catch
@@ -601,6 +639,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Fill Data Set as procedure.");
                 return _context.FillDataSet(new SqlDataAdapter(CreateCommand(query, CommandType.StoredProcedure, parameters)));
             }
             catch
@@ -627,6 +666,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Fill Data Set as procedure with command out.");
                 return _context.FillDataSet(new SqlDataAdapter(command = CreateCommand(query, CommandType.StoredProcedure, parameters)));
             }
             catch
@@ -652,6 +692,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Fill Data Table as text.");
                 return _context.FillDataTable(new SqlDataAdapter(CreateCommand(query, CommandType.Text, parameters)));
             }
             catch
@@ -678,6 +719,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Fill Data Table as text with command out.");
                 return _context.FillDataTable(new SqlDataAdapter(command = CreateCommand(query, CommandType.Text, parameters)));
             }
             catch
@@ -703,6 +745,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Fill Data Table as procedure.");
                 return _context.FillDataTable(new SqlDataAdapter(CreateCommand(query, CommandType.StoredProcedure, parameters)));
             }
             catch
@@ -729,6 +772,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         {
             try
             {
+                Global.LogInformation("Executing Fill Data Table as procedure with command out.");
                 return _context.FillDataTable(new SqlDataAdapter(command = CreateCommand(query, CommandType.StoredProcedure, parameters)));
             }
             catch
@@ -1024,6 +1068,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         [DebuggerStepThrough]
         public void Dispose()
         {
+            Global.LogInformation("Inside Dispose.");
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -1035,17 +1080,22 @@ namespace tinyWebApi.Common.DatabaseManagers
         [DebuggerStepThrough]
         protected virtual void Dispose(bool disposing)
         {
+            Global.LogInformation("Inside Dispose, If not already disposed.");
             if (!_disposed)
             {
                 Rollback();
+                Global.LogInformation("When disposing is true and connection is not null.");
                 if (disposing && _conn is not null)
                 {
+                    Global.LogInformation("Lock when disposing connection.");
                     lock (_lockObject)
                     {
+                        Global.LogInformation("Close connection when open, dispose and set as null.");
                         if (_conn.State == ConnectionState.Open) _conn.Close();
                         _conn.Dispose();
                         _conn = null;
                     }
+                    Global.LogInformation("Releasing lock.");
                 }
                 _disposed = true;
             }
@@ -1057,9 +1107,12 @@ namespace tinyWebApi.Common.DatabaseManagers
         [DebuggerStepThrough]
         public void Rollback()
         {
+            Global.LogInformation("Inside rollback, rollback if transaction is not null.");
             if (Trans is not null)
             {
+                Global.LogInformation("Rolling back transaction.");
                 Trans.Rollback();
+                Global.LogInformation("Transaction rolled back.");
                 _context.Transaction = Trans = null;
             }
         }
@@ -1070,9 +1123,12 @@ namespace tinyWebApi.Common.DatabaseManagers
         [DebuggerStepThrough]
         public void Commit()
         {
+            Global.LogInformation("Inside Commit transaction, commiting if transaction is not null.");
             if (Trans is not null)
             {
+                Global.LogInformation("Commiting transaction.");
                 Trans.Commit();
+                Global.LogInformation("Transaction committed.");
                 _context.Transaction = Trans = null;
             }
         }
@@ -1086,8 +1142,11 @@ namespace tinyWebApi.Common.DatabaseManagers
         [DebuggerStepThrough]
         public SqlTransaction BeginTransaction()
         {
+            Global.LogInformation("Inside Begin transaction.");
             Rollback();
+            Global.LogInformation("Beginning transaction.");
             _context.Transaction = Trans = _conn?.BeginTransaction(IsolationLevel.ReadUncommitted);
+            Global.LogInformation("Transaction begun.");
             return Transaction;
         }
         /// <summary>
