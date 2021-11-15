@@ -11,6 +11,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using tinyWebApi.Common.DataObjects;
 using tinyWebApi.Common.Extensions;
 
 namespace tinyWebApi.Common.Helpers
@@ -32,6 +33,7 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public static byte[] ExportToPDF(this DataSet ds)
         {
+            Global.LogInformation("Inside ExportToPDF, export the DataSet to ByteArray.");
             if (ds is null) ds = new();
             using MemoryStream ms = new();
             Document document = new();

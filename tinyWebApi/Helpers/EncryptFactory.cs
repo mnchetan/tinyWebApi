@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using tinyWebApi.Common.DataObjects;
+
 namespace tinyWebApi.Common.Helpers
 {
     /// <summary>
@@ -32,6 +34,7 @@ namespace tinyWebApi.Common.Helpers
         {
             try
             {
+                Global.LogInformation("Inside Encrypt, encrypting the plain text.");
                 byte[] clearBytes = Encoding.Unicode.GetBytes(encryptString);
                 using (Aes encryptor = Aes.Create())
                 {
@@ -48,6 +51,7 @@ namespace tinyWebApi.Common.Helpers
                     }
                     encryptString = Convert.ToBase64String(ms.ToArray());
                 }
+                Global.LogInformation("Returning the encrypted text.");
                 return encryptString;
             }
             catch (Exception ex)
@@ -70,6 +74,7 @@ namespace tinyWebApi.Common.Helpers
         {
             try
             {
+                Global.LogInformation("Inside Decrypt, decrypting the encrypted text.");
                 byte[] cipherBytes = Convert.FromBase64String(decryptString);
                 using (Aes encryptor = Aes.Create())
                 {
@@ -86,6 +91,7 @@ namespace tinyWebApi.Common.Helpers
                     }
                     decryptString = Encoding.Unicode.GetString(ms.ToArray());
                 }
+                Global.LogInformation("Returning the plain text.");
                 return decryptString;
             }
             catch (Exception ex)

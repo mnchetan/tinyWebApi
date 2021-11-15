@@ -6,6 +6,7 @@ using System;
 using System.Data;
 using System.Diagnostics;
 using System.Xml;
+using tinyWebApi.Common.DataObjects;
 using tinyWebApi.Common.IDBContext;
 namespace tinyWebApi.Common.DBContext
 {
@@ -30,6 +31,7 @@ namespace tinyWebApi.Common.DBContext
         {
             try
             {
+                Global.LogInformation("Inside ExecuteDataReader, get connection and execute.");
                 GetConnection(_connectionString, true);
                 return OracleCommand.ExecuteReader();
             }
@@ -56,6 +58,7 @@ namespace tinyWebApi.Common.DBContext
         {
             try
             {
+                Global.LogInformation("Inside ExecuteNonQuery, get connection and execute.");
                 GetConnection(_connectionString, true);
                 return OracleCommand.ExecuteNonQuery();
             }
@@ -82,6 +85,7 @@ namespace tinyWebApi.Common.DBContext
         {
             try
             {
+                Global.LogInformation("Inside ExecuteScalar, get connection and execute.");
                 GetConnection(_connectionString, true);
                 return OracleCommand.ExecuteScalar();
             }
@@ -108,6 +112,7 @@ namespace tinyWebApi.Common.DBContext
         {
             try
             {
+                Global.LogInformation("Inside ExecuteXmlReader, get connection and execute.");
                 GetConnection(_connectionString, true);
                 return OracleCommand.ExecuteXmlReader();
             }
@@ -135,6 +140,7 @@ namespace tinyWebApi.Common.DBContext
         {
             try
             {
+                Global.LogInformation("Inside FillDataSet, get connection and fill.");
                 GetConnection(_connectionString, true);
                 DataSet ds = new();
                 OracleDataAdapter.Fill(ds);
@@ -163,6 +169,7 @@ namespace tinyWebApi.Common.DBContext
         {
             try
             {
+                Global.LogInformation("Inside FillDataTable, get connection and fill.");
                 GetConnection(_connectionString, true);
                 DataTable dt = new();
                 OracleDataAdapter.Fill(dt);
@@ -190,9 +197,12 @@ namespace tinyWebApi.Common.DBContext
         [DebuggerHidden]
         public OracleConnection GetConnection(string connectionString, bool isOpenConnection = false)
         {
+            Global.LogInformation("Inside GetConnection, create new connection object.");
             if (_connection == null)
                 _connection = new OracleConnection(_connectionString = connectionString);
+            Global.LogInformation("If connection state is not open and isOpenConnection as true then open the connection.");
             if (_connection.State != ConnectionState.Open && isOpenConnection) _connection.Open();
+            Global.LogInformation("Return connection.");
             return _connection;
         }
         /// <summary>
@@ -221,17 +231,22 @@ namespace tinyWebApi.Common.DBContext
         [DebuggerStepThrough]
         protected virtual void Dispose(bool disposing)
         {
+            Global.LogInformation("Inside Dispose, If not already disposed.");
             if (!_disposed)
             {
                 Rollback();
+                Global.LogInformation("When disposing is true and connection is not null.");
                 if (disposing && _connection is not null)
                 {
+                    Global.LogInformation("Lock when disposing connection.");
                     lock (_lockObject)
                     {
+                        Global.LogInformation("Close connection when open, dispose and set as null.");
                         if (_connection.State == ConnectionState.Open) _connection.Close();
                         _connection.Dispose();
                         _connection = null;
                     }
+                    Global.LogInformation("Releasing lock.");
                 }
                 _disposed = true;
             }
@@ -243,9 +258,12 @@ namespace tinyWebApi.Common.DBContext
         [DebuggerStepThrough]
         public void Rollback()
         {
+            Global.LogInformation("Inside rollback, rollback if transaction is not null.");
             if (Transaction is not null)
             {
+                Global.LogInformation("Rolling back transaction.");
                 Transaction.Rollback();
+                Global.LogInformation("Transaction rolled back.");
                 Transaction = null;
             }
         }
@@ -261,6 +279,7 @@ namespace tinyWebApi.Common.DBContext
         [DebuggerStepThrough]
         public void Dispose()
         {
+            Global.LogInformation("Inside Dispose.");
             Dispose(true);
             GC.SuppressFinalize(this);
         }

@@ -7,6 +7,8 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using tinyWebApi.Common.DataObjects;
+
 namespace tinyWebApi.Common.Extensions
 {
     /// <summary>
@@ -26,6 +28,7 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerStepThrough]
         public static dynamic DataTableToCSV(this DataTable dt)
         {
+            Global.LogInformation("Inside DataTableToCSV, Converting DataTable to csv and taking in account the double quotes in data.");
             StringBuilder sb = new();
             var columnNames = dt.Columns.Cast<DataColumn>().Select(o => o.ColumnName.Replace("\"", "\"\""));
             _ = sb.AppendLine(string.Join(",", columnNames));
@@ -55,6 +58,7 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerStepThrough]
         public static T GetValueOrDefault<T>(this DataRow row, string fieldName)
         {
+            Global.LogInformation($"Inside GetValueOrDefault, Getting the value for specified DataColumn of the DataRow in scope and if not found the return instance of {typeof(T)}.");
             if (row.Table.Columns.Contains(fieldName) && !row[fieldName].Equals(DBNull.Value) && !row[fieldName].Equals(null))
             {
                 switch (row[fieldName])

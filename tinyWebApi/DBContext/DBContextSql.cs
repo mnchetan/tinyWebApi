@@ -32,6 +32,7 @@ namespace tinyWebApi.Common.DBContext
         {
             try
             {
+                Global.LogInformation("Inside ExecuteDataReader, get connection and execute.");
                 if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
                 {
                     return ImpersonationHelper.Execute(() => { sqlCommand.Connection.Open(); return sqlCommand.ExecuteReader(); }, _querySpecification.DatabaseSpecification);
@@ -66,6 +67,7 @@ namespace tinyWebApi.Common.DBContext
         {
             try
             {
+                Global.LogInformation("Inside ExecuteNonQuery, get connection and execute.");
                 if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
                 {
                     return ImpersonationHelper.Execute(() => { sqlCommand.Connection.Open(); return sqlCommand.ExecuteNonQuery(); }, _querySpecification.DatabaseSpecification);
@@ -100,6 +102,7 @@ namespace tinyWebApi.Common.DBContext
         {
             try
             {
+                Global.LogInformation("Inside ExecuteScalar, get connection and execute.");
                 if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
                 {
                     return ImpersonationHelper.Execute(() => { sqlCommand.Connection.Open(); return sqlCommand.ExecuteScalar(); }, _querySpecification.DatabaseSpecification);
@@ -134,6 +137,7 @@ namespace tinyWebApi.Common.DBContext
         {
             try
             {
+                Global.LogInformation("Inside ExecuteXmlReader, get connection and execute.");
                 if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
                 {
                     return ImpersonationHelper.Execute(() => { sqlCommand.Connection.Open(); return sqlCommand.ExecuteXmlReader(); }, _querySpecification.DatabaseSpecification);
@@ -168,6 +172,7 @@ namespace tinyWebApi.Common.DBContext
         {
             try
             {
+                Global.LogInformation("Inside FillDataSet, get connection and fill.");
                 DataSet ds = new();
                 if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
                 {
@@ -208,6 +213,7 @@ namespace tinyWebApi.Common.DBContext
         {
             try
             {
+                Global.LogInformation("Inside FillDataTable, get connection and fill."); 
                 DataTable dt = new();
                 if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
                 {
@@ -247,10 +253,13 @@ namespace tinyWebApi.Common.DBContext
         [DebuggerHidden]
         public SqlConnection GetConnection(string connectionString, bool isOpenConnection = false)
         {
+            Global.LogInformation("Inside GetConnection, create new connection object.");
             _connectionString = connectionString + "";
             if (_connection == null)
                 _connection = new SqlConnection(_connectionString);
-            if (!_querySpecification.DatabaseSpecification.IsImpersonationNeeded && isOpenConnection) _connection.Open();
+            Global.LogInformation("If connection state is not open and isOpenConnection as true and impersonation is not needed then open the connection.");
+            if (!_querySpecification.DatabaseSpecification.IsImpersonationNeeded && _connection.State != ConnectionState.Open && isOpenConnection) _connection.Open();
+            Global.LogInformation("Return connection.");
             return _connection;
         }
         /// <summary>
@@ -295,17 +304,22 @@ namespace tinyWebApi.Common.DBContext
         [DebuggerStepThrough]
         protected virtual void Dispose(bool disposing)
         {
+            Global.LogInformation("Inside Dispose, If not already disposed.");
             if (!_disposed)
             {
                 Rollback();
+                Global.LogInformation("When disposing is true and connection is not null.");
                 if (disposing && _connection is not null)
                 {
+                    Global.LogInformation("Lock when disposing connection.");
                     lock (_lockObject)
                     {
+                        Global.LogInformation("Close connection when open, dispose and set as null.");
                         if (_connection.State == ConnectionState.Open) _connection.Close();
                         _connection.Dispose();
                         _connection = null;
                     }
+                    Global.LogInformation("Releasing lock.");
                 }
                 _disposed = true;
             }
@@ -317,9 +331,12 @@ namespace tinyWebApi.Common.DBContext
         [DebuggerStepThrough]
         public void Rollback()
         {
+            Global.LogInformation("Inside rollback, rollback if transaction is not null.");
             if (Transaction is not null)
             {
+                Global.LogInformation("Rolling back transaction.");
                 Transaction.Rollback();
+                Global.LogInformation("Transaction rolled back.");
                 Transaction = null;
             }
         }
@@ -335,6 +352,7 @@ namespace tinyWebApi.Common.DBContext
         [DebuggerStepThrough]
         public void Dispose()
         {
+            Global.LogInformation("Inside Dispose.");
             Dispose(true);
             GC.SuppressFinalize(this);
         }

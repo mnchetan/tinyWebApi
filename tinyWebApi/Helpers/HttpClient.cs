@@ -45,6 +45,7 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public T Get<T>(Uri requestUri)
         {
+            Global.LogInformation("Inside Get, get data using httpclient synchronously.");
             var response = _httpClient.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead).GetAwaiter().GetResult();
             string data;
             try
@@ -71,6 +72,7 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public async Task<T> GetAsync<T>(Uri requestUri)
         {
+            Global.LogInformation("Inside Get, get data using httpclient asynchronously.");
             var response = _httpClient.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead).GetAwaiter().GetResult();
             string data;
             try
@@ -98,6 +100,7 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public T Post<T>(Uri requestUri, T content)
         {
+            Global.LogInformation("Inside Post, post data using httpclient synchronously.");
             var response = _httpClient.PostAsync(requestUri, CreateHttpContent(content)).GetAwaiter().GetResult();
             string data;
             try
@@ -126,6 +129,7 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public T1 Post<T1, T2>(Uri requestUri, T2 content)
         {
+            Global.LogInformation("Inside Post, post data using httpclient synchronously.");
             var response = _httpClient.PostAsync(requestUri, CreateHttpContent(content)).GetAwaiter().GetResult();
             string data;
             try
@@ -153,6 +157,7 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public async Task<T> PostAsync<T>(Uri requestUri, T content)
         {
+            Global.LogInformation("Inside Post, post data using httpclient asynchronously.");
             var response = await _httpClient.PostAsync(requestUri, CreateHttpContent(content));
             string data;
             try
@@ -181,6 +186,7 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public async Task<T1> PostAsync<T1, T2>(Uri requestUri, T2 content)
         {
+            Global.LogInformation("Inside Post, post data using httpclient asynchronously.");
             var response = await _httpClient.PostAsync(requestUri, CreateHttpContent(content));
             string data;
             try

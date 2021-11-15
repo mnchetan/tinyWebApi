@@ -49,7 +49,9 @@ namespace tinyWebApi.Common.Controllers
         /// <param name="oracleContext"> (Immutable) context for the oracle. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable IDE0060 // Remove unused parameter
         public Base(ILogger<Base> logger, IDBContextSql sqlContext, IDBContextOracle oracleContext)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             _ = this; _logger = logger;
         }
@@ -150,7 +152,7 @@ namespace tinyWebApi.Common.Controllers
         {
             try
             {
-                _logger.LogInformation("Inside GetRequestSpecification").
+                _logger.LogInformation("Inside GetRequestSpecification");
                 _logger.LogInformation("validating input data.");
                 if (hasFileContent && executionType != ExecutionType.DataSetProcedure && executionType != ExecutionType.DataTableProcedure)
                     throw new CustomException((int)HttpStatusCode.InternalServerError, "Internal Server Error!!!", "Request having file content should have execution type either DataTableProcedure or DataSetProcedure.");

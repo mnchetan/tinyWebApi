@@ -75,6 +75,7 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public static void SendMail(string from, string to, string cc, string bcc, string subject, string body, bool isBodyHtml, string smtp_server, int smtp_port, Stream content = null, ContentType type = null)
         {
+            Global.LogInformation("Inside SendMail, send mail asynchronously.");
             try
             {
                 if (string.IsNullOrWhiteSpace(to) || string.IsNullOrWhiteSpace(subject) || string.IsNullOrWhiteSpace(body)) return;
@@ -179,6 +180,7 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         private static string ResolveValues(this string value)
         {
+            Global.LogInformation("Inside ResolveValues, resolving mail template for $ seperated date time formats.");
             if (value is null) return value;
             var v = value;
             var list = new List<string>();

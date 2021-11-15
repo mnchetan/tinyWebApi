@@ -36,19 +36,24 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         public static List<RequestSpecification> ProcessInputData(this List<RequestSpecification> requestSpecifications, string key, QuerySpecification querySpecification, ref bool isDoNotFireFurtherQuery, ref object outPut)
         {
+            LogInformation($"Inside ProcessInputData.");
             string filePath;
+            LogInformation($"Return requestSpecifications as it is if PreProcessFileName or class name is empty or null.");
             if (string.IsNullOrWhiteSpace(querySpecification.PreProcessFileName) || string.IsNullOrWhiteSpace(querySpecification.PreProcessClassName)) return requestSpecifications;
             if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
             {
+                LogInformation($"If Process file exists then load load the assembly from the file path.");
                 var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PreProcessClassName);
                 if (dll is not null)
                     try
                     {
+                        LogInformation($"Call the Process Input Data method of the external assembly.");
                         return dll.ProcessInputData(key, requestSpecifications, querySpecification, ref isDoNotFireFurtherQuery, ref outPut);
                     }
                     catch (Exception ex)
                     {
-                        HandleException(ex, querySpecification, filePath); ThrowException(ex, querySpecification, filePath);
+                        HandleException(ex, querySpecification, filePath);
+                        ThrowException(ex, querySpecification, filePath);
                     }
                 LogCommonWarning(querySpecification, filePath);
             }
@@ -72,20 +77,25 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         public static dynamic ProcessOutPutData(this DataTable outPut, string key, QuerySpecification querySpecification, List<RequestSpecification> requestSpecifications)
         {
+            LogInformation($"Inside ProcessOutPutData.");
             string filePath;
             dynamic input = null;
-            if (!string.IsNullOrWhiteSpace(querySpecification.PreProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PreProcessClassName))
+            LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
+            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PreProcessClassName);
+                    LogInformation($"If Process file exists then load load the assembly from the file path.");
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
                     if (dll is not null)
                         try
                         {
+                            LogInformation($"Call the Process Output Data method of the external assembly.");
                             input = dll.ProcessOutPutData(key, outPut, requestSpecifications, querySpecification);
                         }
                         catch (Exception ex)
                         {
-                            HandleException(ex, querySpecification, filePath); ThrowException(ex, querySpecification, filePath);
+                            HandleException(ex, querySpecification, filePath);
+                            ThrowException(ex, querySpecification, filePath);
                         }
                     else
                     {
@@ -117,20 +127,25 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         public static dynamic ProcessOutPutData(this DataSet outPut, string key, QuerySpecification querySpecification, List<RequestSpecification> requestSpecifications)
         {
+            LogInformation($"Inside ProcessOutPutData.");
             string filePath;
             dynamic input = null;
-            if (!string.IsNullOrWhiteSpace(querySpecification.PreProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PreProcessClassName))
+            LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
+            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PreProcessClassName);
+                    LogInformation($"If Process file exists then load load the assembly from the file path.");
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
                     if (dll is not null)
                         try
                         {
+                            LogInformation($"Call the Process Output Data method of the external assembly.");
                             input = dll.ProcessOutPutData(key, outPut, requestSpecifications, querySpecification);
                         }
                         catch (Exception ex)
                         {
-                            HandleException(ex, querySpecification, filePath); ThrowException(ex, querySpecification, filePath);
+                            HandleException(ex, querySpecification, filePath);
+                            ThrowException(ex, querySpecification, filePath);
                         }
                     else
                     {
@@ -162,20 +177,25 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         public static dynamic ProcessOutPutDataForExcel(this DataSet outPut, string key, QuerySpecification querySpecification, List<RequestSpecification> requestSpecifications)
         {
+            LogInformation($"Inside ProcessOutPutDataForExcel.");
             string filePath;
             dynamic input = null;
-            if (!string.IsNullOrWhiteSpace(querySpecification.PreProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PreProcessClassName))
+            LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
+            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PreProcessClassName);
+                    LogInformation($"If Process file exists then load load the assembly from the file path.");
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
                     if (dll is not null)
                         try
                         {
+                            LogInformation($"Call the Process Output Data for Excel method of the external assembly.");
                             input = dll.ProcessOutPutDataForExcel(key, outPut, requestSpecifications, querySpecification);
                         }
                         catch (Exception ex)
                         {
-                            HandleException(ex, querySpecification, filePath); ThrowException(ex, querySpecification, filePath);
+                            HandleException(ex, querySpecification, filePath);
+                            ThrowException(ex, querySpecification, filePath);
                         }
                     else
                     {
@@ -189,8 +209,8 @@ namespace tinyWebApi.Common.Extensions
                     input = outPut;
                 }
             if (input is null) input = outPut;
-            var result = (input as object).ToJSON();
-            if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, Encoding.ASCII.GetBytes(result), OutPutType.Excel);
+            var result = ExcelCSVHelper.ExportToExcel(input as DataSet);
+            if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, result, OutPutType.Excel);
             return result;
         }
         /// <summary>
@@ -207,20 +227,25 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         public static dynamic ProcessOutPutDataForExcel(this DataTable outPut, string key, QuerySpecification querySpecification, List<RequestSpecification> requestSpecifications)
         {
+            LogInformation($"Inside ProcessOutPutDataForExcel.");
             string filePath;
             dynamic input = null;
-            if (!string.IsNullOrWhiteSpace(querySpecification.PreProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PreProcessClassName))
+            LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
+            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PreProcessClassName);
+                    LogInformation($"If Process file exists then load load the assembly from the file path.");
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
                     if (dll is not null)
                         try
                         {
+                            LogInformation($"Call the Process Output Data for Excel method of the external assembly.");
                             input = dll.ProcessOutPutDataForExcel(key, outPut, requestSpecifications, querySpecification);
                         }
                         catch (Exception ex)
                         {
-                            HandleException(ex, querySpecification, filePath); ThrowException(ex, querySpecification, filePath);
+                            HandleException(ex, querySpecification, filePath);
+                            ThrowException(ex, querySpecification, filePath);
                         }
                     else
                     {
@@ -234,8 +259,8 @@ namespace tinyWebApi.Common.Extensions
                     input = outPut;
                 }
             if (input is null) input = outPut;
-            var result = (input as object).ToJSON();
-            if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, Encoding.ASCII.GetBytes(result), OutPutType.Excel);
+            var result = ExcelCSVHelper.ExportToExcel(input as DataTable);
+            if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, result, OutPutType.Excel);
             return result;
         }
         /// <summary>
@@ -252,20 +277,25 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         public static dynamic ProcessOutPutDataForCSV(this DataTable outPut, string key, QuerySpecification querySpecification, List<RequestSpecification> requestSpecifications)
         {
+            LogInformation($"Inside ProcessOutPutDataForCSV.");
             string filePath;
             dynamic input = null;
-            if (!string.IsNullOrWhiteSpace(querySpecification.PreProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PreProcessClassName))
+            LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
+            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PreProcessClassName);
+                    LogInformation($"If Process file exists then load load the assembly from the file path.");
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
                     if (dll is not null)
                         try
                         {
+                            LogInformation($"Call the Process Output Data for CSV method of the external assembly.");
                             input = dll.ProcessOutPutDataForCSV(key, outPut, requestSpecifications, querySpecification);
                         }
                         catch (Exception ex)
                         {
-                            HandleException(ex, querySpecification, filePath); ThrowException(ex, querySpecification, filePath);
+                            HandleException(ex, querySpecification, filePath);
+                            ThrowException(ex, querySpecification, filePath);
                         }
                     else
                     {
@@ -279,8 +309,8 @@ namespace tinyWebApi.Common.Extensions
                     input = outPut;
                 }
             if (input is null) input = outPut;
-            var result = (input as object).ToJSON();
-            if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, Encoding.ASCII.GetBytes(result), OutPutType.CSV);
+            var result = (input as DataTable).DataTableToCSV();
+            if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, result, OutPutType.CSV);
             return result;
         }
         /// <summary>
@@ -297,20 +327,25 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         public static dynamic ProcessOutPutDataForPDF(this DataSet outPut, string key, QuerySpecification querySpecification, List<RequestSpecification> requestSpecifications)
         {
+            LogInformation($"Inside ProcessOutPutDataForPDF.");
             string filePath;
             dynamic input = null;
-            if (!string.IsNullOrWhiteSpace(querySpecification.PreProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PreProcessClassName))
+            LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
+            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PreProcessClassName);
+                    LogInformation($"If Process file exists then load load the assembly from the file path.");
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
                     if (dll is not null)
                         try
                         {
+                            LogInformation($"Call the Process Output Data for PDF method of the external assembly.");
                             input = dll.ProcessOutPutDataForPDF(key, outPut, requestSpecifications, querySpecification);
                         }
                         catch (Exception ex)
                         {
-                            HandleException(ex, querySpecification, filePath); ThrowException(ex, querySpecification, filePath);
+                            HandleException(ex, querySpecification, filePath);
+                            ThrowException(ex, querySpecification, filePath);
                         }
                     else
                     {
@@ -324,8 +359,8 @@ namespace tinyWebApi.Common.Extensions
                     input = outPut;
                 }
             if (input is null) input = outPut;
-            var result = (input as object).ToJSON();
-            if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, Encoding.ASCII.GetBytes(result), OutPutType.PDF);
+            var result = PDFHelper.ExportToPDF(input as DataSet);
+            if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, result, OutPutType.PDF);
             return result;
         }
         /// <summary>
@@ -342,20 +377,25 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         public static dynamic ProcessOutPutDataForPDF(this DataTable outPut, string key, QuerySpecification querySpecification, List<RequestSpecification> requestSpecifications)
         {
+            LogInformation($"Inside ProcessOutPutDataForPDF.");
             string filePath;
             dynamic input = null;
-            if (!string.IsNullOrWhiteSpace(querySpecification.PreProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PreProcessClassName))
+            LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
+            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PreProcessClassName);
+                    LogInformation($"If Process file exists then load load the assembly from the file path.");
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
                     if (dll is not null)
                         try
                         {
+                            LogInformation($"Call the Process Output Data for PDF method of the external assembly.");
                             input = dll.ProcessOutPutDataForPDF(key, outPut, requestSpecifications, querySpecification);
                         }
                         catch (Exception ex)
                         {
-                            HandleException(ex, querySpecification, filePath); ThrowException(ex, querySpecification, filePath);
+                            HandleException(ex, querySpecification, filePath);
+                            ThrowException(ex, querySpecification, filePath);
                         }
                     else
                     {
@@ -369,8 +409,10 @@ namespace tinyWebApi.Common.Extensions
                     input = outPut;
                 }
             if (input is null) input = outPut;
-            var result = (input as object).ToJSON();
-            if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, Encoding.ASCII.GetBytes(result), OutPutType.PDF);
+            DataSet ds = new();
+            ds.Tables.Add(input as DataTable);
+            var result = PDFHelper.ExportToPDF(ds);
+            if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, result, OutPutType.PDF);
             return result;
         }
         /// <summary>
@@ -387,19 +429,24 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         public static dynamic ProcessOutPutScalarNonScalar(object input, string key, QuerySpecification querySpecification, List<RequestSpecification> requestSpecifications)
         {
+            LogInformation($"Inside ProcessOutPutScalarNonScalar.");
             string filePath;
-            if (!string.IsNullOrWhiteSpace(querySpecification.PreProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PreProcessClassName))
+            LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
+            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PreProcessClassName);
+                    LogInformation($"If Process file exists then load load the assembly from the file path.");
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
                     if (dll is not null)
                         try
                         {
+                            LogInformation($"Call the Process Output Scalar Non Scalar method of the external assembly.");
                             dll.ProcessOutPutScalarNonScalar(key, requestSpecifications, querySpecification);
                         }
                         catch (Exception ex)
                         {
-                            HandleException(ex, querySpecification, filePath); ThrowException(ex, querySpecification, filePath);
+                            HandleException(ex, querySpecification, filePath);
+                            ThrowException(ex, querySpecification, filePath);
                         }
                     else
                         LogCommonWarning(querySpecification, filePath);
@@ -419,6 +466,7 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         private static void MailOutPut(QuerySpecification querySpecification, dynamic outPut, OutPutType outPutType)
         {
+            LogInformation("Inside MailOutPut, send mail asynchronously if MailerSpecification is not null and IsSendOutputViaEmailAlso = true");
             if (querySpecification.MailerSpecification is not null && querySpecification.IsSendOutputViaEmailAlso)
                 try
                 {

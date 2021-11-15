@@ -11,6 +11,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using tinyWebApi.Common.DataObjects;
+
 namespace tinyWebApi.Common.Helpers
 {
     /// <summary>
@@ -20,7 +22,7 @@ namespace tinyWebApi.Common.Helpers
     public static class ExcelCSVHelper
     {
         /// <summary>
-        ///     Exceport to excel.
+        ///     Export to excel.
         /// </summary>
         /// <param name="dt"> The dt. </param>
         /// <returns>
@@ -28,8 +30,9 @@ namespace tinyWebApi.Common.Helpers
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static byte[] ExceportToExcel(DataTable dt)
+        public static byte[] ExportToExcel(DataTable dt)
         {
+            Global.LogInformation("Inside ExceportToExcel, exporting DataTable to ByteArray.");
             var ds = new DataSet();
             ds.Tables.Add(dt);
             return ExportToExcel(ds);
@@ -45,12 +48,14 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public static byte[] ExportToExcel(DataSet ds)
         {
+            Global.LogInformation("Inside ExceportToExcel, exporting DataSet to ByteArray.");
             using MemoryStream ms = new();
             using (XLWorkbook wb = new())
             {
                 foreach (DataTable dt in ds.Tables) _ = string.IsNullOrWhiteSpace(dt.TableName) ? wb.Worksheets.Add(dt) : wb.Worksheets.Add(dt, dt.TableName);
                 wb.SaveAs(ms);
             }
+            Global.LogInformation("Returning ByteArray.");
             return ms.ToArray();
         }
         /// <summary>
@@ -64,9 +69,11 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public static string DataTableAsXML(this DataTable dt)
         {
+            Global.LogInformation("Inside DataTableAsXML, converting DataTable as XML.");
             if (dt is not null && string.IsNullOrWhiteSpace(dt.TableName)) dt.TableName = "Table";
             using StringWriter sw = new();
             dt.WriteXml(sw);
+            Global.LogInformation("Returning XML string.");
             return sw.ToString();
         }
         /// <summary>
@@ -80,6 +87,7 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public static byte[] GenerateExcel(DataTable dt)
         {
+            Global.LogInformation("Inside GenerateExcel, converting DataTable as ByteArray.");
             var ds = new DataSet();
             ds.Tables.Add(dt);
             return GenerateExcel(ds);
@@ -95,6 +103,7 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public static byte[] GenerateExcel(DataSet ds)
         {
+            Global.LogInformation("Inside GenerateExcel, converting DataSet as ByteArray.");
             using MemoryStream ms = new();
             using (var workbook = SpreadsheetDocument.Create(ms, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook))
             {
@@ -137,6 +146,7 @@ namespace tinyWebApi.Common.Helpers
                     }
                 }
             }
+            Global.LogInformation("Returning ByteArray.");
             return ms.ToArray();
         }
         /// <summary>
@@ -155,6 +165,7 @@ namespace tinyWebApi.Common.Helpers
         {
             try
             {
+                Global.LogInformation("Inside ImportExcelToDataTable, converting excel byte array to DataTable.");
                 if (fileData is not null && fileData.Length > 0)
                 {
                     using XLWorkbook workBook = new(new MemoryStream(fileData));
@@ -183,9 +194,14 @@ namespace tinyWebApi.Common.Helpers
                             }
                         }
                     }
+                    Global.LogInformation("Returning Excel data as DataTable.");
                     return dt;
                 }
-                else return default;
+                else
+                {
+                    Global.LogInformation("Returing defualt of DataTable.");
+                    return default;
+                }
             }
             catch (Exception ex)
             {
@@ -203,6 +219,7 @@ namespace tinyWebApi.Common.Helpers
         [DebuggerHidden]
         public static DataTable ImportCSVToDataTable(byte[] fileData)
         {
+            Global.LogInformation("Inside ImportCSVToDataTable, converting csv byte array to DataTable taking in to consideration the double quote in data.");
             DataTable dt = new();
             StreamReader sr = new(new MemoryStream(fileData));
             var csvParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
@@ -223,6 +240,7 @@ namespace tinyWebApi.Common.Helpers
                 }
                 dt.Rows.Add(row);
             }
+            Global.LogInformation("Returning csv data as DataTable.");
             return dt;
         }
     }

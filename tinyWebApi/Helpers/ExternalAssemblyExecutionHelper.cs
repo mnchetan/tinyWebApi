@@ -33,6 +33,7 @@ namespace tinyWebApi.Common.Helpers
         {
             try
             {
+                Global.LogInformation("Inside LoadPluginFromFile, Load external assembly from the filepath if not already loaded in app domain.");
                 var found = false;
                 Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
                 Assembly asm = null;
@@ -44,6 +45,7 @@ namespace tinyWebApi.Common.Helpers
                     break;
                 }
                 Type type = found ? asm.GetType(className) : Assembly.LoadFrom(filePath).GetType(className);
+                Global.LogInformation("Returning the instance of class from the loaded external assembly.");
                 return (IProcessData)Activator.CreateInstance(type);
             }
             catch (Exception ex)

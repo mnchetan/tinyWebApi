@@ -10,6 +10,8 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
+using tinyWebApi.Common.DataObjects;
+
 namespace tinyWebApi.Common.Exceptions
 {
     /// <summary>
@@ -60,6 +62,7 @@ namespace tinyWebApi.Common.Exceptions
         [DebuggerStepThrough]
         private static async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
+            Global.LogInformation("Inside HandleExceptionAsync, prepare custom exception and return.");
             int statusCode;
             string description, message;
             if (ex is CustomException exception)

@@ -54,6 +54,7 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         internal static DataSet AddToCache(this DataSet data, QuerySpecification querySpecification, ExecutionType executionType)
         {
+            Global.LogInformation("Inside AddToCache, if data exists then delete data and then add new data to cache in thread safe manner and then return the same data back.");
             if (querySpecification.CachingEnabled())
             {
                 lock (_lockObject)
@@ -78,6 +79,7 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         internal static DataTable AddToCache(this DataTable data, QuerySpecification querySpecification, ExecutionType executionType)
         {
+            Global.LogInformation("Inside AddToCache, if data exists then delete data and then add new data to cache in thread safe manner and then return the same data back.");
             if (querySpecification.CachingEnabled())
             {
                 lock (_lockObject)
@@ -101,6 +103,7 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         internal static T ServeFromCache<T>(this QuerySpecification querySpecification, ExecutionType executionType)
         {
+            Global.LogInformation($"Inside ServeFromCache, if data exists return data else return instance of {typeof(T)}.");
             var value = TinyCache.ContainsKey($"{querySpecification.Query}_ {Enum.GetName(executionType)}".ToLower()) && TinyCache.GetValueOrDefault($"{querySpecification.Query}_ {Enum.GetName(executionType)}".ToLower()) != null ? TinyCache.GetValueOrDefault($"{querySpecification.Query}_ {Enum.GetName(executionType)}".ToLower()).CachedData : Activator.CreateInstance<T>();
             return value switch
             {

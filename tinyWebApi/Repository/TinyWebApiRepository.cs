@@ -80,21 +80,32 @@ namespace tinyWebApi.Common
         [DebuggerStepThrough]
         public dynamic Execute(string key, List<RequestSpecification> requestSpecifications, ExecutionType executionType, OutPutType outPutType)
         {
+            Global.LogInformation("Inside Execute query, validate key.");
             if (string.IsNullOrEmpty(key)) throw new ArgumentException($"Key cannot be null or empty.");
             try
             {
+                Global.LogInformation("Gey query specification by query name/key.");
                 var querySpecification = Global.GetQuerySpecificationByQueryName(key);
                 if (querySpecification is null) throw new ArgumentException($"Query not mapped for the key : {key}.");
                 var isDoNotFireFurtherQuery = false;
                 object output = null;
+                Global.LogInformation("Processing input data before firing database queries.");
                 requestSpecifications = requestSpecifications.ProcessInputData(key, querySpecification, ref isDoNotFireFurtherQuery, ref output);
-                if (isDoNotFireFurtherQuery) return output is null ? 0 : output;
+                if (isDoNotFireFurtherQuery)
+                {
+                    Global.LogInformation("Not firing the queries and escaping it.");
+                    return output is null ? 0 : output;
+                }
                 else
                 {
+                    Global.LogInformation("Get parameters.");
                     if (querySpecification.DatabaseSpecification is null) throw new ArgumentException($"Database not mapped for the query name : {key}.");
                     var list = GetParameters(requestSpecifications);
+                    Global.LogInformation("Process parameters.");
                     list = ProcessParameters(querySpecification, list);
+                    Global.LogInformation("Processing query.");
                     querySpecification.Query = ProcessQuery(querySpecification, list, executionType);
+                    Global.LogInformation("Executing query and returning result.");
                     return ExecuteQuery(key, querySpecification, executionType, list, requestSpecifications, outPutType);
                 }
             }
