@@ -1,6 +1,6 @@
-﻿/// <copyright file="queries.dev.json" company="tiny">
-///   Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="queries.dev.json" company="tiny">
+//   Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 {
   "GetEmployeeDetails_Query": {
     "Query": "select employeeid as eid, employeename as ename from dbo.employee",

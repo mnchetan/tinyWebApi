@@ -1,6 +1,6 @@
-﻿/// <copyright file="IDBContextSql.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="IDBContextSql.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -18,6 +18,7 @@ namespace tinyWebApi.Common.IDBContext
         ///     Gets a connection.
         /// </summary>
         /// <param name="querySpecification"> The query specification. </param>
+        /// <param name="isOpenConnection"></param>
         /// <returns>
         ///     The connection.
         /// </returns>
@@ -28,6 +29,7 @@ namespace tinyWebApi.Common.IDBContext
         ///     Gets a connection.
         /// </summary>
         /// <param name="connectionString"> The connection string. </param>
+        /// <param name="isOpenConnection"></param>
         /// <returns>
         ///     The connection.
         /// </returns>

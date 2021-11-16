@@ -2,9 +2,9 @@
 /// 	tinyWebApi.WebApi\install.bat
 /// </file>
 ///
-/// <copyright file="install.bat" company="tiny">
+// <copyright file="install.bat" company="tiny">
 /// 	Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+// </copyright>
 ///
 /// <summary>
 /// 	Install class.

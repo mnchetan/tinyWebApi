@@ -1,9 +1,9 @@
-﻿/// <copyright file="DatabaseSpecification.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the database specification class.
-/// </summary>
+﻿// <copyright file="DatabaseSpecification.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the database specification class.
+// </summary>
 using tinyWebApi.Common.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;

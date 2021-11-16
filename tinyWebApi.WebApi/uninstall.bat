@@ -2,9 +2,9 @@
 /// 	tinyWebApi.WebApi\uninstall.bat
 /// </file>
 ///
-/// <copyright file="uninstall.bat" company="tiny">
+// <copyright file="uninstall.bat" company="tiny">
 /// 	Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+// </copyright>
 ///
 /// <summary>
 /// 	Uninstall class.

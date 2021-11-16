@@ -1,6 +1,6 @@
-﻿/// <copyright file="mailers.dev.json" company="tiny">
-///   Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="mailers.dev.json" company="tiny">
+//   Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 {
   "somemailername1": {
     "SMTP_SERVER": "smtp.server",

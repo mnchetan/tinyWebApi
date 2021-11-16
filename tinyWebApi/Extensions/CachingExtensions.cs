@@ -1,6 +1,6 @@
-﻿/// <copyright file="Exceptions.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="Exceptions.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

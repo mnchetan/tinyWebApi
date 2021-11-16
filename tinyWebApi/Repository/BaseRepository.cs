@@ -1,21 +1,20 @@
-﻿/// <copyright file="BaseRepository.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the base repository class.
-/// </summary>
+﻿// <copyright file="BaseRepository.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the base repository class.
+// </summary>
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using tinyWebApi.Common.DataObjects;
 using tinyWebApi.Common.Enums;
+using tinyWebApi.Common.Extensions;
 using tinyWebApi.Common.Helpers;
 using tinyWebApi.Common.IDBContext;
-using tinyWebApi.Common.Extensions;
 using ora = tinyWebApi.Common.DatabaseManagers.DataBaseManagerOracle;
 using sql = tinyWebApi.Common.DatabaseManagers.DataBaseManagerSql;
 namespace tinyWebApi.Common
@@ -39,8 +38,8 @@ namespace tinyWebApi.Common
         /// </summary>
         /// <param name="sqlContext">    (Immutable) context for the SQL. </param>
         /// <param name="oracleContext"> (Immutable) context for the oracle. </param>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public BaseRepository(IDBContextSql sqlContext, IDBContextOracle oracleContext)
         {
             _sqlContext = sqlContext;
@@ -55,8 +54,8 @@ namespace tinyWebApi.Common
         /// <returns>
         ///     A string.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public static string ProcessQuery(QuerySpecification querySpecification, List<DatabaseParameters> list, ExecutionType executionType)
         {
             Global.LogInformation("Inside ProcessQuery, processing the query to process text based queries for SQL and Oracle.");
@@ -70,7 +69,7 @@ namespace tinyWebApi.Common
                         list.ForEach((item) =>
                         {
                             var val = JsonConvert.ToString(item.Value);
-                            if (!string.IsNullOrEmpty($"{val}") && val.Length > 0 && !val.Contains(",") && item.Type != DatabaseParameterType.Structured && item.Type != DatabaseParameterType.Binary)
+                            if (!string.IsNullOrEmpty($"{val}") && val.Length > 0 && !val.Contains(',') && item.Type != DatabaseParameterType.Structured && item.Type != DatabaseParameterType.Binary)
                             {
                                 val = val.Replace("'", "''");
                                 val = $"'{val}'";
@@ -105,8 +104,8 @@ namespace tinyWebApi.Common
         /// <returns>
         ///     A List&lt;DatabaseParameters&gt;
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public static List<DatabaseParameters> ProcessParameters(QuerySpecification querySpecification, List<DatabaseParameters> list)
         {
             Global.LogInformation("Inside ProcessParameters, processing the process parameters for SQL and Oracle.");
@@ -117,7 +116,7 @@ namespace tinyWebApi.Common
                     var inputParameters = $"{querySpecification.Inputs}".Split("$");
                     foreach (var (dbp, input) in inputParameters.SelectMany(input => list.Where(dbp => $"{input}".Replace(",", "").Replace("@", "").Split("$")[0].Replace("$", "").ToLower() == $"{dbp.Name}".ToLower()).Select(dbp => (dbp, input))))
                     {
-                        if (dbp.Type == DatabaseParameterType.Structured && input.Contains("$"))
+                        if (dbp.Type == DatabaseParameterType.Structured && input.Contains('$'))
                         {
                             var strSplit = $"{input}".Split("$");
                             dbp.Tag = strSplit.Length == 2 ? $"{strSplit[1]}" : "dbo." + input;
@@ -142,13 +141,13 @@ namespace tinyWebApi.Common
                     }
                     foreach (var (dbp, input) in inputs.SelectMany(input => list.Where(dbp => $"{input}".Replace(",", "").Replace(":", "").Split("$")[0].Replace("$", "").ToLower() == $"{dbp.Name}".ToLower()).Select(dbp => (dbp, input))))
                     {
-                        if (dbp.Type == DatabaseParameterType.Structured && input.Contains("$"))
+                        if (dbp.Type == DatabaseParameterType.Structured && input.Contains('$'))
                         {
                             var strSplit = $"{input}".Split("$");
                             if (strSplit.Length == 2) dbp.Tag = $"{strSplit[1]}";
                             l1.Add(dbp);
                         }
-                        else if (dbp.Type == DatabaseParameterType.Structured && !input.Contains("$"))
+                        else if (dbp.Type == DatabaseParameterType.Structured && !input.Contains('$'))
                         {
                             dbp.Value = querySpecification.IsMapUDTAsJSON && dbp.Value is DataTable ? dbp.Value.ToJSON() : querySpecification.IsMapUDTAsXML && dbp.Value is DataTable ? (dbp.Value as DataTable).DataTableAsXML() : throw new NotSupportedException("User defined type support if needed to be used then type name should be specified as $ seperated in the inputs within the queryspecification else should be mapped either as xml or json and should be of type a table/array...");
                             l1.Add(dbp);
@@ -169,8 +168,8 @@ namespace tinyWebApi.Common
         /// <returns>
         ///     A List&lt;DatabaseParameters&gt;
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         private static List<DatabaseParameters> CopyUnMappedDatabaseParameters(List<DatabaseParameters> list, List<DatabaseParameters> l1)
         {
             Global.LogInformation("Inside CopyUnMappedDatabaseParameters, Adding the unmapped database parameters.");
@@ -193,8 +192,8 @@ namespace tinyWebApi.Common
         /// <returns>
         ///     The parameters.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public static List<DatabaseParameters> GetParameters(List<RequestSpecification> requestSpecifications)
         {
             Global.LogInformation("Inside GetParameters, Getting the database parameters from requestspecification.");
@@ -221,8 +220,8 @@ namespace tinyWebApi.Common
         /// <returns>
         ///     A dynamic.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public virtual dynamic ExecuteQuery(string key, QuerySpecification querySpecification, ExecutionType executionType, List<DatabaseParameters> list, List<RequestSpecification> requestSpecifications, OutPutType outPutType = OutPutType.JSON) => (executionType, querySpecification.DatabaseSpecification.DatabaseType, outPutType) switch
         {
             (ExecutionType.DataSetText, DatabaseType.MSSQL, OutPutType.Excel) => querySpecification.CachingEnabled() && querySpecification.AllowServeFromCache(executionType) ? querySpecification.ServeFromCache<DataSet>(executionType).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications) : new sql(_sqlContext, querySpecification).ExecDataSet(querySpecification, list).AddToCache(querySpecification,executionType).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications),

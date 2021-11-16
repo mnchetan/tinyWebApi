@@ -1,6 +1,6 @@
-/// <copyright file="connectionstring.prod.json" company="tiny">
-///   Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+// <copyright file="connectionstring.prod.json" company="tiny">
+//   Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 {
   "db1": {
     "ConnectionString": "sql server connection string",

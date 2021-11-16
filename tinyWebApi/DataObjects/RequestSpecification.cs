@@ -1,6 +1,6 @@
-﻿/// <copyright file="RequestSpecification.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="RequestSpecification.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 using tinyWebApi.Common.Enums;
 using Newtonsoft.Json;
 using System;

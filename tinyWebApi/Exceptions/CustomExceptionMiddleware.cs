@@ -1,9 +1,9 @@
-﻿/// <copyright file="CustomExceptionMiddleware.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the custom exception middleware class.
-/// </summary>
+﻿// <copyright file="CustomExceptionMiddleware.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the custom exception middleware class.
+// </summary>
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
@@ -28,7 +28,7 @@ namespace tinyWebApi.Common.Exceptions
         ///     Initializes a new instance of the tinyWebApi.WebApi.CustomExceptionMiddleware class.
         /// </summary>
         /// <param name="next"> (Immutable) the next. </param>
-        [DebuggerHidden]
+        [DebuggerStepThrough]
         public CustomExceptionMiddleware(RequestDelegate next) => _next = next;
         /// <summary>
         ///     Executes the given operation on a different thread, and waits for the result.
@@ -37,8 +37,8 @@ namespace tinyWebApi.Common.Exceptions
         /// <returns>
         ///     A Task.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public async Task Invoke(HttpContext context)
         {
             try
@@ -58,8 +58,8 @@ namespace tinyWebApi.Common.Exceptions
         /// <returns>
         ///     A Task.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         private static async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
             Global.LogInformation("Inside HandleExceptionAsync, prepare custom exception and return.");

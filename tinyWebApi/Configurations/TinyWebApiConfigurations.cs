@@ -1,10 +1,10 @@
-﻿/// <copyright file="Startup.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     TinyWebApiConfigurations implements ITinyWebApiConfigurations interface.
-///     This is used to push the configurations necessary to inject in the DI for functionaning of the tinyWebApi.
-/// </summary>
+﻿// <copyright file="Startup.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     TinyWebApiConfigurations implements ITinyWebApiConfigurations interface.
+//     This is used to push the configurations necessary to inject in the DI for functionaning of the tinyWebApi.
+// </summary>
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;

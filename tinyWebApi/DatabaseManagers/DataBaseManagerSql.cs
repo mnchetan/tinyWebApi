@@ -1,6 +1,6 @@
-﻿/// <copyright file="DataBaseManagerSql.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="DataBaseManagerSql.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 using tinyWebApi.Common.DataObjects;
 using tinyWebApi.Common.Enums;
 using tinyWebApi.Common.IDBContext;
@@ -60,8 +60,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <param name="querySpecification">    The query specification. </param>
         /// <param name="autoDisposeConnection"> (Optional) True to automatically dispose connection. 
         /// </param>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public DataBaseManagerSql(IDBContextSql context, QuerySpecification querySpecification, bool autoDisposeConnection = true)
         {
             Global.LogInformation("Inside DataBaseManagerSql and setting up the parameters.");
@@ -96,8 +96,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     The new command.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public SqlCommand CreateCommand(string query, CommandType type, List<DatabaseParameters> parameters)
         {
             Global.LogInformation("Inside CreateCommand.");
@@ -118,7 +118,7 @@ namespace tinyWebApi.Common.DatabaseManagers
                         case DatabaseParameterType.Structured when !item.IsOutParameter:
                             {
                                 Global.LogInformation("When parameter tpe is stuctured and is not an out parameter.");
-                                var s = cmd.Parameters.AddWithValue(!string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains("@") ? item.Name : "@" + item.Name, item.Value);
+                                var s = cmd.Parameters.AddWithValue(!string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains('@') ? item.Name : "@" + item.Name, item.Value);
                                 s.TypeName = item.Tag;
                                 s.SqlDbType = SqlDbType.Structured;
                                 break;
@@ -139,7 +139,7 @@ namespace tinyWebApi.Common.DatabaseManagers
                                     p.Direction = ParameterDirection.Input;
                                 }
                                 Global.LogInformation("Setting parameter type and name and ignore the UnKnown as already handled.");
-                                p.ParameterName = !string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains("@") ? item.Name : "@" + item.Name;
+                                p.ParameterName = !string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains('@') ? item.Name : "@" + item.Name;
                                 if (item.Type is not null && item.Type.HasValue && item.Type.Value != DatabaseParameterType.UnKnown) p.DbType = (DbType)(int)item.Type.Value;
                                 break;
                             }
@@ -156,8 +156,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An int.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public int ExecNonQuery(string query, List<DatabaseParameters> parameters)
         {
             try
@@ -183,8 +183,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An int.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public int ExecNonQueryWithCommandOut(string query, List<DatabaseParameters> parameters, out SqlCommand command)
         {
             try
@@ -209,8 +209,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An int.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public int ExecNonQueryProc(string query, List<DatabaseParameters> parameters)
         {
             try
@@ -236,8 +236,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An int.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public int ExecNonQueryProcWithCommandOut(string query, List<DatabaseParameters> parameters, out SqlCommand command)
         {
             try
@@ -262,8 +262,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An object.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public object ExecScalar(string query, List<DatabaseParameters> parameters)
         {
             try
@@ -289,8 +289,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An object.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public object ExecScalarWithCommandOut(string query, List<DatabaseParameters> parameters, out SqlCommand command)
         {
             try
@@ -315,8 +315,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An object.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public object ExecScalarProc(string query, List<DatabaseParameters> parameters)
         {
             try
@@ -342,8 +342,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An object.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public object ExecScalarProcWithCommandOut(string query, List<DatabaseParameters> parameters, out SqlCommand command)
         {
             try
@@ -368,8 +368,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     A SqlDataReader.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public SqlDataReader ExecDataReader(string query, List<DatabaseParameters> parameters)
         {
             try
@@ -395,8 +395,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     A SqlDataReader.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public SqlDataReader ExecDataReaderWithCommandOut(string query, List<DatabaseParameters> parameters, out SqlCommand command)
         {
             try
@@ -421,8 +421,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     A SqlDataReader.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public SqlDataReader ExecDataReaderProc(string query, List<DatabaseParameters> parameters)
         {
             try
@@ -448,8 +448,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     A SqlDataReader.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public SqlDataReader ExecDataReaderProcWithCommandOut(string query, List<DatabaseParameters> parameters, out SqlCommand command)
         {
             try
@@ -474,8 +474,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An XmlReader.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public XmlReader ExecXmlReader(string query, List<DatabaseParameters> parameters)
         {
             try
@@ -501,8 +501,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An XmlReader.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public XmlReader ExecXmlReaderWithCommandOut(string query, List<DatabaseParameters> parameters, out SqlCommand command)
         {
             try
@@ -527,8 +527,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An XmlReader.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public XmlReader ExecXmlReaderProc(string query, List<DatabaseParameters> parameters)
         {
             try
@@ -554,8 +554,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An XmlReader.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public XmlReader ExecXmlReaderProcWithCommandOut(string query, List<DatabaseParameters> parameters, out SqlCommand command)
         {
             try
@@ -580,8 +580,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     A DataSet.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public DataSet ExecDataSet(string query, List<DatabaseParameters> parameters)
         {
             try
@@ -607,8 +607,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     A DataSet.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public DataSet ExecDataSetWithCommandOut(string query, List<DatabaseParameters> parameters, out SqlCommand command)
         {
             try
@@ -633,8 +633,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     A DataSet.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public DataSet ExecDataSetProc(string query, List<DatabaseParameters> parameters)
         {
             try
@@ -827,8 +827,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     An int.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public int ExecNonQueryProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out SqlCommand command) => ExecNonQueryProcWithCommandOut(querySpecification.Query, parameters, out command);
         /// <summary>
         ///     Executes the 'scalar' operation.
@@ -907,8 +907,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     A SqlDataReader.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public SqlDataReader ExecDataReaderProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecDataReaderProc(querySpecification.Query, parameters);
         /// <summary>
         ///     Executes the 'data reader procedure with command out' operation.
@@ -919,8 +919,8 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// <returns>
         ///     A SqlDataReader.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public SqlDataReader ExecDataReaderProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out SqlCommand command) => ExecDataReaderProcWithCommandOut(querySpecification.Query, parameters, out command);
         /// <summary>
         ///     Executes the 'xml reader' operation.

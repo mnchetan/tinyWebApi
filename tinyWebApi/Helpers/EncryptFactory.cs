@@ -1,9 +1,9 @@
-﻿/// <copyright file="EncryptFactory.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the encrypt factory class.
-/// </summary>
+﻿// <copyright file="EncryptFactory.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the encrypt factory class.
+// </summary>
 using System;
 using System.Diagnostics;
 using System.IO;

@@ -1,9 +1,9 @@
-﻿/// <copyright file="tinyWebApiRepository.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the tiny web API repository class.
-/// </summary>
+﻿// <copyright file="tinyWebApiRepository.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the tiny web API repository class.
+// </summary>
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -35,8 +35,8 @@ namespace tinyWebApi.Common
         /// <param name="logger">        (Immutable) the logger. </param>
         /// <param name="sqlContext">    Context for the SQL. </param>
         /// <param name="oracleContext"> Context for the oracle. </param>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public TinyWebApiRepository(ILogger<TinyWebApiRepository> logger, IDBContextSql sqlContext, IDBContextOracle oracleContext) : base(sqlContext, oracleContext) => _logger = logger;
         /// <summary>
         ///     Gets this message.
@@ -48,8 +48,8 @@ namespace tinyWebApi.Common
         /// <returns>
         ///     A dynamic.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public dynamic Get(string key, List<RequestSpecification> requestSpecifications, ExecutionType executionType, OutPutType outPutType) => this.Execute(key, requestSpecifications, executionType, outPutType);
         /// <summary>
         ///     Post this message.
@@ -61,8 +61,8 @@ namespace tinyWebApi.Common
         /// <returns>
         ///     A dynamic.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public dynamic Post(string key, List<RequestSpecification> requestSpecifications, ExecutionType executionType, OutPutType outPutType) => this.Execute(key, requestSpecifications, executionType, outPutType);
         /// <summary>
         ///     Executes.
@@ -76,8 +76,8 @@ namespace tinyWebApi.Common
         /// <returns>
         ///     A dynamic.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public dynamic Execute(string key, List<RequestSpecification> requestSpecifications, ExecutionType executionType, OutPutType outPutType)
         {
             Global.LogInformation("Inside Execute query, validate key.");

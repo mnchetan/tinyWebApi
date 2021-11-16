@@ -1,9 +1,9 @@
-﻿/// <copyright file="MailClient.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the mail client class.
-/// </summary>
+﻿// <copyright file="MailClient.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the mail client class.
+// </summary>
 using tinyWebApi.Common.DataObjects;
 using tinyWebApi.Common.Enums;
 using System;
@@ -137,8 +137,8 @@ namespace tinyWebApi.Common.Helpers
         /// <param name="runAsPassword"> The run as password. </param>
         /// <param name="content">       (Optional) The content. </param>
         /// <param name="type">          (Optional) The type. </param>
-        [DebuggerStepThrough]
         [DebuggerHidden]
+        [DebuggerStepThrough]
         public static void SendMailImpersonated(string from, string to, string cc, string bcc, string subject, string body, bool isBodyHtml, string smtp_server, int smtp_port, string runAsUserName, string runAsDomain, string runAsPassword, Stream content = null, ContentType type = null) => ImpersonationHelper.Execute(() => SendMail(from, to, cc, bcc, subject, body, isBodyHtml, smtp_server, smtp_port, content, type), runAsUserName, runAsDomain, runAsPassword);
         /// <summary>
         ///     Sends a mail impersonated.

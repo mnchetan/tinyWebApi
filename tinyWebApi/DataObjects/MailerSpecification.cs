@@ -1,9 +1,9 @@
-﻿/// <copyright file="MailerSpecification.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the mailer specification class.
-/// </summary>
+﻿// <copyright file="MailerSpecification.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the mailer specification class.
+// </summary>
 using Newtonsoft.Json;
 using System.Diagnostics;
 namespace tinyWebApi.Common.DataObjects

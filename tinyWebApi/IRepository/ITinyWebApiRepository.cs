@@ -1,9 +1,9 @@
-﻿/// <copyright file="ItinyWebApiRepository.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the itiny web API repository class.
-/// </summary>
+﻿// <copyright file="ItinyWebApiRepository.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the itiny web API repository class.
+// </summary>
 using tinyWebApi.Common.DataObjects;
 using tinyWebApi.Common.Enums;
 using System.Collections.Generic;

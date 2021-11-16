@@ -1,6 +1,6 @@
-﻿/// <copyright file="DBContextSql.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="DBContextSql.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -300,8 +300,8 @@ namespace tinyWebApi.Common.DBContext
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         /// <param name="disposing"> True to release both managed and unmanaged resources; false to release only unmanaged resources. </param>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         protected virtual void Dispose(bool disposing)
         {
             Global.LogInformation("Inside Dispose, If not already disposed.");
@@ -327,8 +327,8 @@ namespace tinyWebApi.Common.DBContext
         /// <summary>
         ///     Rollbacks this object.
         /// </summary>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public void Rollback()
         {
             Global.LogInformation("Inside rollback, rollback if transaction is not null.");
@@ -348,8 +348,8 @@ namespace tinyWebApi.Common.DBContext
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         /// <seealso cref="M:IDisposable.Dispose()"/>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public void Dispose()
         {
             Global.LogInformation("Inside Dispose.");

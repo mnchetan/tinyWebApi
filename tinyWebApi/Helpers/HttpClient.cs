@@ -1,9 +1,9 @@
-﻿/// <copyright file="HttpClient.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the HTTP client class.
-/// </summary>
+﻿// <copyright file="HttpClient.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the HTTP client class.
+// </summary>
 using tinyWebApi.Common.DataObjects;
 using Newtonsoft.Json;
 using System;
@@ -30,8 +30,8 @@ namespace tinyWebApi.Common.Helpers
         /// <summary>
         ///     Initializes a new instance of the tinyWebApi.Common.Helpers.HttpClient class.
         /// </summary>
-        [DebuggerStepThrough]
         [DebuggerHidden]
+        [DebuggerStepThrough]
         public HttpClient() => _httpClient = new System.Net.Http.HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });
         /// <summary>
         ///     Gets a t using the given request URI.

@@ -1,9 +1,9 @@
-﻿/// <copyright file="Startup.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     ITinyWebApiConfigurations interface.
-/// </summary>
+﻿// <copyright file="Startup.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     ITinyWebApiConfigurations interface.
+// </summary>
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;

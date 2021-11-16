@@ -1,9 +1,9 @@
-﻿/// <copyright file="Startup.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the extensions class.
-/// </summary>
+﻿// <copyright file="Startup.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the extensions class.
+// </summary>
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -61,8 +61,8 @@ namespace tinyWebApi.WebApi.Configurations
         /// <param name="loggerFactory">The logger factory.</param>
         /// <param name="tinyWebApiConfigurations">The tiny web api configurations.</param>
         /// <returns>An IServiceCollection.</returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public static IServiceCollection AddTinyWebApi(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ILoggerFactory loggerFactory, ITinyWebApiConfigurations tinyWebApiConfigurations)
         {
             if (string.IsNullOrEmpty(tinyWebApiConfigurations.ConfigurationDirectoryPath))
@@ -105,8 +105,8 @@ namespace tinyWebApi.WebApi.Configurations
         /// </summary>
         /// <param name="app"></param>
         /// <param name="webHostEnvironment"></param>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public static void UseTinyWebApi(this IApplicationBuilder app, IWebHostEnvironment webHostEnvironment)
         {
             _ = webHostEnvironment.IsDevelopment() ? app.UseDeveloperExceptionPage() : app.UseHsts();

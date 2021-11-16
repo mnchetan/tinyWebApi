@@ -19,21 +19,21 @@
             Initializes a new instance of the <see cref="T:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility"/> class.
             </summary>
         </member>
-        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.btnClear_Click(System.Object,System.EventArgs)">
+        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.BtnClear_Click(System.Object,System.EventArgs)">
             <summary>
             Handles the Click event of the btnClear control.
             </summary>
             <param name="sender">The source of the event.</param>
             <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
         </member>
-        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.btnDecrypt_Click(System.Object,System.EventArgs)">
+        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.BtnDecrypt_Click(System.Object,System.EventArgs)">
             <summary>
             Handles the Click event of the btnDecrypt control.
             </summary>
             <param name="sender">The source of the event.</param>
             <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
         </member>
-        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.btnEncrypt_Click(System.Object,System.EventArgs)">
+        <member name="M:tinyWebApi.EncryptDecryptUtility.EncryptDecryptUtility.BtnEncrypt_Click(System.Object,System.EventArgs)">
             <summary>
             Handles the Click event of the btnEncrypt control.
             </summary>

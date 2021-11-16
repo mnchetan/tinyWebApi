@@ -1,6 +1,6 @@
-﻿/// <copyright file="Base.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="Base.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 using tinyWebApi.Common.DataObjects;
 using tinyWebApi.Common.Enums;
 using tinyWebApi.Common.Exceptions;
@@ -47,8 +47,8 @@ namespace tinyWebApi.Common.Controllers
         /// <param name="logger">        (Immutable) the logger. </param>
         /// <param name="sqlContext">    (Immutable) context for the SQL. </param>
         /// <param name="oracleContext"> (Immutable) context for the oracle. </param>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
 #pragma warning disable IDE0060 // Remove unused parameter
         public Base(ILogger<Base> logger, IDBContextSql sqlContext, IDBContextOracle oracleContext)
 #pragma warning restore IDE0060 // Remove unused parameter
@@ -69,24 +69,30 @@ namespace tinyWebApi.Common.Controllers
         ///     A T.
         /// </returns>
         /// <seealso cref="M:IBase.ExecuteAsync{T}(Func{T},CancellationToken,string,string,int)"/>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public async Task<T> ExecuteAsync<T>(Func<T> f, CancellationToken cancellation, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumer = 0)
         {
             try
             {
                 SetGlobal();
-                _logger.LogInformation($"Starting invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+#pragma warning disable CA2254 // Template should be a static expression
+                _logger.LogInformation(message: $"Starting invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+#pragma warning restore CA2254 // Template should be a static expression
                 return await Task.Run(f, cancellation);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occured while invoking  method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+#pragma warning disable CA2254 // Template should be a static expression
+                _logger.LogError(ex, message: $"Error occured while invoking  method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+#pragma warning restore CA2254 // Template should be a static expression
                 throw new CustomException((int)HttpStatusCode.InternalServerError, $"Internal Server Error!!!", ex.Message + "");
             }
             finally
             {
-                _logger.LogInformation($"Finishing invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+#pragma warning disable CA2254 // Template should be a static expression
+                _logger.LogInformation(message: $"Finishing invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+#pragma warning restore CA2254 // Template should be a static expression
             }
         }
         /// <summary>
@@ -100,29 +106,37 @@ namespace tinyWebApi.Common.Controllers
         /// <param name="callerFilePath">  (Optional) Full pathname of the caller file. </param>
         /// <param name="callerLineNumer"> (Optional) The caller line numer. </param>
         /// <seealso cref="M:IBase.ExecuteAsync{T}(Action,CancellationToken,string,string,int)"/>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public async void ExecuteAsync<T>(Action a, CancellationToken cancellation, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumer = 0)
         {
             try
             {
                 SetGlobal();
-                _logger.LogInformation($"Starting invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+#pragma warning disable CA2254 // Template should be a static expression
+                _logger.LogInformation(message: $"Starting invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+#pragma warning restore CA2254 // Template should be a static expression
                 await Task.Run(a, cancellation);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occured while invoking  method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+#pragma warning disable CA2254 // Template should be a static expression
+                _logger.LogError(ex, message: $"Error occured while invoking  method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+#pragma warning restore CA2254 // Template should be a static expression
                 throw new CustomException((int)HttpStatusCode.InternalServerError, $"Internal Server Error!!!", ex.Message + "");
             }
             finally
             {
-                _logger.LogInformation($"Finishing invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+#pragma warning disable CA2254 // Template should be a static expression
+                _logger.LogInformation(message: $"Finishing invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+#pragma warning restore CA2254 // Template should be a static expression
             }
         }
         /// <summary>
         /// Sets the global.
         /// </summary>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
         private void SetGlobal()
         {
             _logger.LogInformation("Setting up globals.");
@@ -146,8 +160,8 @@ namespace tinyWebApi.Common.Controllers
         ///     The request specification.
         /// </returns>
         /// <seealso cref="M:IBase.GetRequestSpecification(dynamic,ExecutionType,OutPutType,bool,FileContentType,string,string)"/>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public List<RequestSpecification> GetRequestSpecification(dynamic request, ExecutionType executionType, OutPutType outPutType, bool hasFileContent, FileContentType fileContentType, string fileContentFieldName, string sheetName)
         {
             try
@@ -205,8 +219,8 @@ namespace tinyWebApi.Common.Controllers
         ///     The request specification from query parameters.
         /// </returns>
         /// <seealso cref="M:IBase.GetRequestSpecificationFromQueryParameters()"/>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public List<RequestSpecification> GetRequestSpecificationFromQueryParameters() => (from c in HttpContext.Request.Query select new RequestSpecification() { PropertyName = c.Key, PropertyType = null, PropertyValue = c.Value, CallType = "G" }).ToList();
         /// <summary>
         ///     Gets property type.
@@ -216,8 +230,8 @@ namespace tinyWebApi.Common.Controllers
         /// <returns>
         ///     The property type.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public static Type GetPropertyType(KeyValuePair<string, JToken> property, RequestSpecification r) => r.PropertyType = !r.IsArrayOfMultipleFields ? (r.IsArrayOfSingleField && !r.IsArrayOfMultipleFields ? property.Value.First?.Type : property.Value.Type) switch { JTokenType.Raw or JTokenType.String or JTokenType.TimeSpan or JTokenType.Guid or JTokenType.Uri => typeof(String), JTokenType.Boolean => typeof(Boolean), JTokenType.Date => typeof(DateTime), JTokenType.Integer => typeof(Int64), JTokenType.Float => typeof(Decimal), _ => r.CallType == "P" ? null : typeof(Object), } : typeof(DataTable);
         /// <summary>
         ///     Map out put type.
@@ -228,6 +242,8 @@ namespace tinyWebApi.Common.Controllers
         ///     An IBase.
         /// </returns>
         /// <seealso cref="M:IBase.MapOutPutType(OutPutType,ExecutionType)"/>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
         public IBase MapOutPutType(OutPutType outPutType, ExecutionType executionType)
         {
             _logger.LogInformation("Mapping output type based on execution type.");

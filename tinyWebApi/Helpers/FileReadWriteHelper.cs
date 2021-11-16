@@ -1,6 +1,6 @@
-﻿/// <copyright file="MailerSpecification.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="MailerSpecification.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 using System.IO;
 using System.Text;
 namespace tinyWebApi.Helpers

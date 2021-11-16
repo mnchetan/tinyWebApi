@@ -1,9 +1,9 @@
-﻿/// <copyright file="PDFHelper.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the PDF helper class.
-/// </summary>
+﻿// <copyright file="PDFHelper.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the PDF helper class.
+// </summary>
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;

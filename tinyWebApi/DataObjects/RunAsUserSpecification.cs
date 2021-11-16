@@ -1,9 +1,9 @@
-﻿/// <copyright file="RunAsUserSpecification.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the run as user specification class.
-/// </summary>
+﻿// <copyright file="RunAsUserSpecification.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the run as user specification class.
+// </summary>
 using Newtonsoft.Json;
 using System.Diagnostics;
 namespace tinyWebApi.Common.DataObjects

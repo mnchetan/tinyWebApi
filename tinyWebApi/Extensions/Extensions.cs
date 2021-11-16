@@ -1,6 +1,6 @@
-﻿/// <copyright file="Extensions.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="Extensions.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 using Newtonsoft.Json;
 using System;
 using System.Data;
@@ -24,8 +24,8 @@ namespace tinyWebApi.Common.Extensions
         /// <returns>
         ///     A dynamic.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public static dynamic DataTableToCSV(this DataTable dt)
         {
             Global.LogInformation("Inside DataTableToCSV, Converting DataTable to csv and taking in account the double quotes in data.");
@@ -42,8 +42,8 @@ namespace tinyWebApi.Common.Extensions
         /// <returns>
         ///     Content as a dynamic.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public static dynamic ToJSON(this object content) => JsonConvert.SerializeObject(content, Formatting.Indented);
         /// <summary>
         ///     A DataRow extension method that gets value or default.
@@ -54,8 +54,8 @@ namespace tinyWebApi.Common.Extensions
         /// <returns>
         ///     The value or default.
         /// </returns>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public static T GetValueOrDefault<T>(this DataRow row, string fieldName)
         {
             Global.LogInformation($"Inside GetValueOrDefault, Getting the value for specified DataColumn of the DataRow in scope and if not found the return instance of {typeof(T)}.");

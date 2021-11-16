@@ -1,9 +1,9 @@
-﻿/// <copyright file="tinyWebApiController.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the Tiny Web API controller class.
-/// </summary>
+﻿// <copyright file="tinyWebApiController.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the Tiny Web API controller class.
+// </summary>
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -41,8 +41,8 @@ namespace tinyWebApi.WebApi.Controllers
         /// <param name="logger">        The logger. </param>
         /// <param name="sqlContext">    Context for the SQL. </param>
         /// <param name="oracleContext"> Context for the oracle. </param>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public TinyController(ITinyWebApiRepository repository, ILogger<TinyController> logger, IDBContextSql sqlContext, IDBContextOracle oracleContext) : base(logger, sqlContext, oracleContext)
         {
             r = repository;

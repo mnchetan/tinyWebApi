@@ -1,6 +1,6 @@
-﻿/// <copyright file="Exceptions.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="Exceptions.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 using tinyWebApi.Common.DataObjects;
 using tinyWebApi.Common.Enums;
 using tinyWebApi.Common.Helpers;
@@ -486,15 +486,12 @@ namespace tinyWebApi.Common.Extensions
         /// <summary>
         ///     Handles the exception.
         /// </summary>
-        ///
         /// <remarks>
-        
-        
-        ///
         /// <param name="ex">                 The exception. </param>
         /// <param name="querySpecification"> The query specification. </param>
         /// <param name="filePath">           Full pathname of the file. </param>
         /// <param name="callerName">         (Optional) Name of the caller. </param>
+        /// </remarks>
         [DebuggerStepThrough]
         [DebuggerHidden]
         private static void HandleException(Exception ex, QuerySpecification querySpecification, string filePath, [CallerMemberName] string callerName = "") => LogError($"Some error occured while trying to execute the {callerName} mapped to the file path {filePath} of class name {(callerName.ToLower().Contains("pre") ? querySpecification.PreProcessClassName : querySpecification.PostProcessClassName)}. {System.Environment.NewLine} Error : {ex.Message}", ex);

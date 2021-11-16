@@ -1,9 +1,9 @@
-﻿/// <copyright file="ImpersonationHelper.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the impersonation helper class.
-/// </summary>
+﻿// <copyright file="ImpersonationHelper.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the impersonation helper class.
+// </summary>
 using tinyWebApi.Common.DataObjects;
 using Microsoft.Win32.SafeHandles;
 using Mono.Unix.Native;

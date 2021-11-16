@@ -1,9 +1,9 @@
-﻿/// <copyright file="IProcessData.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Declares the IProcessData interface.
-/// </summary>
+﻿// <copyright file="IProcessData.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Declares the IProcessData interface.
+// </summary>
 using tinyWebApi.Common.DataObjects;
 using System.Collections.Generic;
 using System.Data;

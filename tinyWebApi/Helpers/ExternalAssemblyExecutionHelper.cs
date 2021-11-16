@@ -1,9 +1,9 @@
-﻿/// <copyright file="ExternalAssemblyExecutionHelper.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the external assembly execution helper class.
-/// </summary>
+﻿// <copyright file="ExternalAssemblyExecutionHelper.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the external assembly execution helper class.
+// </summary>
 using tinyWebApi.Common.DataObjects;
 using tinyWebApi.Common.IDataContracts;
 using System;

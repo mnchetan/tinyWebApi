@@ -1,6 +1,6 @@
-﻿/// <copyright file="Global.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="Global.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -37,7 +37,9 @@ namespace tinyWebApi.Common.DataObjects
         /// <param name="objToLog"> (Optional) The object to log. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CA2254 // Template should be a static expression
         public static void LogInformation(string message, object objToLog = null) => Logger?.LogInformation(message, objToLog);
+#pragma warning restore CA2254 // Template should be a static expression
         /// <summary>
         /// Logs the critical.
         /// </summary>
@@ -47,7 +49,9 @@ namespace tinyWebApi.Common.DataObjects
         /// <param name="ex">The ex.</param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CA2254 // Template should be a static expression
         public static void LogCritical(string message, object objToLog = default, EventId eventId = default, Exception ex = default) => Logger?.LogCritical(eventId, ex, message, objToLog);
+#pragma warning restore CA2254 // Template should be a static expression
         /// <summary>
         ///     Logs a trace.
         /// </summary>
@@ -55,7 +59,9 @@ namespace tinyWebApi.Common.DataObjects
         /// <param name="objToLog"> (Optional) The object to log. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CA2254 // Template should be a static expression
         public static void LogTrace(string message, object objToLog = null) => Logger?.LogTrace(message, objToLog);
+#pragma warning restore CA2254 // Template should be a static expression
         /// <summary>
         ///     Logs a warning.
         /// </summary>
@@ -63,7 +69,9 @@ namespace tinyWebApi.Common.DataObjects
         /// <param name="objToLog"> (Optional) The object to log. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CA2254 // Template should be a static expression
         public static void LogWarning(string message, object objToLog = null) => Logger?.LogWarning(message, objToLog);
+#pragma warning restore CA2254 // Template should be a static expression
         /// <summary>
         ///     Logs a critical.
         /// </summary>
@@ -71,7 +79,9 @@ namespace tinyWebApi.Common.DataObjects
         /// <param name="objToLog"> (Optional) The object to log. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CA2254 // Template should be a static expression
         public static void LogCritical(string message, object objToLog = null) => Logger?.LogCritical(message, objToLog);
+#pragma warning restore CA2254 // Template should be a static expression
         /// <summary>
         ///     Logs a debug.
         /// </summary>
@@ -79,7 +89,9 @@ namespace tinyWebApi.Common.DataObjects
         /// <param name="objToLog"> (Optional) The object to log. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CA2254 // Template should be a static expression
         public static void LogDebug(string message, object objToLog = null) => Logger?.LogDebug(message, objToLog);
+#pragma warning restore CA2254 // Template should be a static expression
         /// <summary>
         ///     Logs an error.
         /// </summary>
@@ -88,7 +100,9 @@ namespace tinyWebApi.Common.DataObjects
         /// <param name="objToLog"> (Optional) The object to log. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CA2254 // Template should be a static expression
         public static void LogError(string message, Exception ex, object objToLog = null) => Logger?.LogError(message, ex, objToLog);
+#pragma warning restore CA2254 // Template should be a static expression
         /// <summary>
         ///     Gets the environment.
         ///     Default environment is "Development".

@@ -27,7 +27,7 @@ namespace tinyWebApi.EncryptDecryptUtility
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        private void btnClear_Click(object sender, EventArgs e)
+        private void BtnClear_Click(object sender, EventArgs e)
         {
             txtPlainText.Text = "";
             txtKey.Text = "";
@@ -40,7 +40,7 @@ namespace tinyWebApi.EncryptDecryptUtility
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        private void btnDecrypt_Click(object sender, EventArgs e)
+        private void BtnDecrypt_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtPlainText.Text)) {
                 MessageBox.Show("Please provide plain text to decrypt.");
@@ -66,7 +66,7 @@ namespace tinyWebApi.EncryptDecryptUtility
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        private void btnEncrypt_Click(object sender, EventArgs e)
+        private void BtnEncrypt_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtPlainText.Text))
             {

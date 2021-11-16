@@ -1,9 +1,9 @@
-﻿/// <copyright file="DatabaseParameters.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the database parameters class.
-/// </summary>
+﻿// <copyright file="DatabaseParameters.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the database parameters class.
+// </summary>
 using tinyWebApi.Common.Enums;
 using System.Diagnostics;
 namespace tinyWebApi.Common.DataObjects

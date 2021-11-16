@@ -1,6 +1,6 @@
-﻿/// <copyright file="ExecutionType.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="ExecutionType.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 namespace tinyWebApi.Common.Enums
 {
     /// <summary>

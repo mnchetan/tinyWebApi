@@ -1,6 +1,6 @@
-﻿/// <copyright file="IDBContextOracle.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="IDBContextOracle.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Data;
@@ -77,6 +77,7 @@ namespace tinyWebApi.Common.IDBContext
         ///     Gets a connection.
         /// </summary>
         /// <param name="connectionString"> The connection string. </param>
+        /// <param name="isOpenConnection"></param>
         /// <returns>
         ///     The connection.
         /// </returns>

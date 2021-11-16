@@ -1,19 +1,14 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using static tiny.Extensions;
 using tinyWebApi.WebApi;
-/// <copyright file="Program.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
-/// <summary>
-///     Implements the program class.
-/// </summary>
+using static tiny.Extensions;
+// <copyright file="Program.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+// <summary>
+//     Implements the program class.
+// </summary>
 using static tinyWebApi.WebApi.Configurations.Extensions;
 var filePath = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName, "appsettings.json");
 if (File.Exists(filePath))

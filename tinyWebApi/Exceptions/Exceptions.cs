@@ -1,6 +1,6 @@
-﻿/// <copyright file="Exceptions.cs" company="tiny">
-///     Copyright (c) 2021 tiny. All rights reserved.
-/// </copyright>
+﻿// <copyright file="Exceptions.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
 using System;
 using System.Diagnostics;
 namespace tinyWebApi.Common.Exceptions
@@ -43,8 +43,8 @@ namespace tinyWebApi.Common.Exceptions
         /// <param name="code">        The code. </param>
         /// <param name="message">     The message. </param>
         /// <param name="description"> The description. </param>
-        [DebuggerHidden]
         [DebuggerStepThrough]
+        [DebuggerHidden]
         public CustomException(int code, string message, string description)
         {
             Code = code;
