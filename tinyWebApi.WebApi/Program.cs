@@ -2,7 +2,6 @@ using Newtonsoft.Json;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using tinyWebApi.WebApi;
-using static tiny.Extensions;
 // <copyright file="Program.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
@@ -33,7 +32,7 @@ if (File.Exists(filePath))
             Host.CreateDefaultBuilder(args).ConfigureAppConfiguration((h, c) =>
             {
                 c.Build();
-            }).ConfigureTinyLogger().ConfigureWebHostDefaults(w =>
+            }).ConfigureWebHostDefaults(w =>
             {
                 w.UseStartup<Startup>();
             }).Build().Run();
@@ -44,7 +43,7 @@ if (File.Exists(filePath))
             {
                 case not null when args.Length > 0:
                     {
-                        CreateDefaultBuilderAndTinyLogger(args).ConfigureWebHostDefaults(wb =>
+                        Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(wb =>
                         {
                             wb.UseUrls(url is string ? (url as string) : "http://localhost:5000");
                             wb.UseStartup<Startup>();
@@ -55,7 +54,7 @@ if (File.Exists(filePath))
                     Host.CreateDefaultBuilder(args).ConfigureAppConfiguration((hbc, icb) =>
                     {
                         icb.Build();
-                    }).ConfigureTinyLogger().ConfigureWebHostDefaults(wb =>
+                    }).ConfigureWebHostDefaults(wb =>
                     {
                         wb.UseUrls(url is string ? (url as string) : "http://localhost:5000");
                         wb.UseStartup<Startup>();
@@ -65,7 +64,7 @@ if (File.Exists(filePath))
                     Host.CreateDefaultBuilder(args).ConfigureAppConfiguration((h, c) =>
                     {
                         c.Build();
-                    }).ConfigureTinyLogger().ConfigureWebHostDefaults(w =>
+                    }).ConfigureWebHostDefaults(w =>
                     {
                         w.UseStartup<Startup>();
                     }).Build().Run();
@@ -73,6 +72,6 @@ if (File.Exists(filePath))
             }
         }
     }
-    else CreateDefaultBuilderAndTinyLogger(args).ConfigureWebHostDefaults(wb => wb.UseStartup<Startup>()).Build().Run();
+    else Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(wb => wb.UseStartup<Startup>()).Build().Run();
 }
 else Environment.FailFast($"Missing appsettings.json file at path : {filePath} and hence unable to start tinyWebApi.");
