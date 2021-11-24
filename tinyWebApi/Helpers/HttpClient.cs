@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Mime;
+using System.IO;
 // namespace: tinyWebApi.Common.Helpers
 //
 // summary:	.
@@ -59,6 +60,34 @@ namespace tinyWebApi.Common.Helpers
                 data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             }
             return JsonConvert.DeserializeObject<T>(data);
+        }
+        /// <summary>
+        ///     Gets a byte[] using the given request URI.
+        /// </summary>
+        /// <param name="requestUri"> URI of the request. </param>
+        /// <returns>
+        ///     A byte[].
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public byte[] GetAsBytes<T>(Uri requestUri)
+        {
+            Global.LogInformation("Inside GetAsBytes, get byte array using httpclient synchronously.");
+            return _httpClient.GetByteArrayAsync(requestUri).GetAwaiter().GetResult();
+        }
+        /// <summary>
+        ///     Gets a System.IO.Stream using the given request URI.
+        /// </summary>
+        /// <param name="requestUri"> URI of the request. </param>
+        /// <returns>
+        ///     A System.IO.Stream.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public Stream GetAsStream<T>(Uri requestUri)
+        {
+            Global.LogInformation("Inside GetAsStream, get data stream using httpclient synchronously.");
+            return _httpClient.GetStreamAsync(requestUri).GetAwaiter().GetResult();
         }
         /// <summary>
         ///     Gets an asynchronous.
@@ -188,6 +217,288 @@ namespace tinyWebApi.Common.Helpers
         {
             Global.LogInformation("Inside Post, post data using httpclient asynchronously.");
             var response = await _httpClient.PostAsync(requestUri, CreateHttpContent(content));
+            string data;
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                data = await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
+            {
+                Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
+                data = await response.Content.ReadAsStringAsync();
+            }
+            return JsonConvert.DeserializeObject<T1>(data);
+        }
+        /// <summary>
+        ///     Put this message.
+        /// </summary>
+        /// <typeparam name="T"> Generic type parameter. </typeparam>
+        /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="content">    The content. </param>
+        /// <returns>
+        ///     A T.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public T Put<T>(Uri requestUri, T content)
+        {
+            Global.LogInformation("Inside Put, Put data using httpclient synchronously.");
+            var response = _httpClient.PutAsync(requestUri, CreateHttpContent(content)).GetAwaiter().GetResult();
+            string data;
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
+                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            return JsonConvert.DeserializeObject<T>(data);
+        }
+        /// <summary>
+        ///     Put this message.
+        /// </summary>
+        /// <typeparam name="T1"> Generic type parameter. </typeparam>
+        /// <typeparam name="T2"> Generic type parameter. </typeparam>
+        /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="content">    The content. </param>
+        /// <returns>
+        ///     A T.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public T1 Put<T1, T2>(Uri requestUri, T2 content)
+        {
+            Global.LogInformation("Inside Put, Put data using httpclient synchronously.");
+            var response = _httpClient.PutAsync(requestUri, CreateHttpContent(content)).GetAwaiter().GetResult();
+            string data;
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
+                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            return JsonConvert.DeserializeObject<T1>(data);
+        }
+        /// <summary>
+        ///     Puts an asynchronous.
+        /// </summary>
+        /// <typeparam name="T"> Generic type parameter. </typeparam>
+        /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="content">    The content. </param>
+        /// <returns>
+        ///     A T.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public async Task<T> PutAsync<T>(Uri requestUri, T content)
+        {
+            Global.LogInformation("Inside Put, Put data using httpclient asynchronously.");
+            var response = await _httpClient.PutAsync(requestUri, CreateHttpContent(content));
+            string data;
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                data = await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
+            {
+                Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
+                data = await response.Content.ReadAsStringAsync();
+            }
+            return JsonConvert.DeserializeObject<T>(data);
+        }
+        /// <summary>
+        ///     Puts an asynchronous.
+        /// </summary>
+        /// <typeparam name="T1"> Generic type parameter. </typeparam>
+        /// <typeparam name="T2"> Generic type parameter. </typeparam>
+        /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="content">    The content. </param>
+        /// <returns>
+        ///     A T.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public async Task<T1> PutAsync<T1, T2>(Uri requestUri, T2 content)
+        {
+            Global.LogInformation("Inside Put, Put data using httpclient asynchronously.");
+            var response = await _httpClient.PutAsync(requestUri, CreateHttpContent(content));
+            string data;
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                data = await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
+            {
+                Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
+                data = await response.Content.ReadAsStringAsync();
+            }
+            return JsonConvert.DeserializeObject<T1>(data);
+        }
+        /// <summary>
+        ///     Deletes a t using the given request URI.
+        /// </summary>
+        /// <typeparam name="T"> Generic type parameter. </typeparam>
+        /// <param name="requestUri"> URI of the request. </param>
+        /// <returns>
+        ///     A T.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public T Delete<T>(Uri requestUri)
+        {
+            Global.LogInformation("Inside Delete, Delete data using httpclient synchronously.");
+            var response = _httpClient.DeleteAsync(requestUri).GetAwaiter().GetResult();
+            string data;
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
+                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            return JsonConvert.DeserializeObject<T>(data);
+        }
+        /// <summary>
+        ///     Deletes an asynchronous.
+        /// </summary>
+        /// <typeparam name="T"> Generic type parameter. </typeparam>
+        /// <param name="requestUri"> URI of the request. </param>
+        /// <returns>
+        ///     The async&lt; t&gt;
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public async Task<T> DeleteAsync<T>(Uri requestUri)
+        {
+            Global.LogInformation("Inside Delete, Delete data using httpclient asynchronously.");
+            var response = _httpClient.DeleteAsync(requestUri).GetAwaiter().GetResult();
+            string data;
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                data = await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
+            {
+                Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
+                data = await response.Content.ReadAsStringAsync();
+            }
+            return JsonConvert.DeserializeObject<T>(data);
+        }
+        /// <summary>
+        ///     Patch this message.
+        /// </summary>
+        /// <typeparam name="T"> Generic type parameter. </typeparam>
+        /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="content">    The content. </param>
+        /// <returns>
+        ///     A T.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public T Patch<T>(Uri requestUri, T content)
+        {
+            Global.LogInformation("Inside Patch, Patch data using httpclient synchronously.");
+            var response = _httpClient.PatchAsync(requestUri, CreateHttpContent(content)).GetAwaiter().GetResult();
+            string data;
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
+                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            return JsonConvert.DeserializeObject<T>(data);
+        }
+        /// <summary>
+        ///     Patch this message.
+        /// </summary>
+        /// <typeparam name="T1"> Generic type parameter. </typeparam>
+        /// <typeparam name="T2"> Generic type parameter. </typeparam>
+        /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="content">    The content. </param>
+        /// <returns>
+        ///     A T.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public T1 Patch<T1, T2>(Uri requestUri, T2 content)
+        {
+            Global.LogInformation("Inside Patch, Patch data using httpclient synchronously.");
+            var response = _httpClient.PatchAsync(requestUri, CreateHttpContent(content)).GetAwaiter().GetResult();
+            string data;
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
+                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            return JsonConvert.DeserializeObject<T1>(data);
+        }
+        /// <summary>
+        ///     Patchs an asynchronous.
+        /// </summary>
+        /// <typeparam name="T"> Generic type parameter. </typeparam>
+        /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="content">    The content. </param>
+        /// <returns>
+        ///     A T.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public async Task<T> PatchAsync<T>(Uri requestUri, T content)
+        {
+            Global.LogInformation("Inside Patch, Patch data using httpclient asynchronously.");
+            var response = await _httpClient.PatchAsync(requestUri, CreateHttpContent(content));
+            string data;
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                data = await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
+            {
+                Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
+                data = await response.Content.ReadAsStringAsync();
+            }
+            return JsonConvert.DeserializeObject<T>(data);
+        }
+        /// <summary>
+        ///     Patchs an asynchronous.
+        /// </summary>
+        /// <typeparam name="T1"> Generic type parameter. </typeparam>
+        /// <typeparam name="T2"> Generic type parameter. </typeparam>
+        /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="content">    The content. </param>
+        /// <returns>
+        ///     A T.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public async Task<T1> PatchAsync<T1, T2>(Uri requestUri, T2 content)
+        {
+            Global.LogInformation("Inside Patch, Patch data using httpclient asynchronously.");
+            var response = await _httpClient.PatchAsync(requestUri, CreateHttpContent(content));
             string data;
             try
             {
