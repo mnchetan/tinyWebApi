@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Mime;
 using System.IO;
+using System.Threading;
 // namespace: tinyWebApi.Common.Helpers
 //
 // summary:	.
@@ -39,25 +40,26 @@ namespace tinyWebApi.Common.Helpers
         /// </summary>
         /// <typeparam name="T"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public T Get<T>(Uri requestUri)
+        public T Get<T>(Uri requestUri, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Get, get data using httpclient synchronously.");
-            var response = _httpClient.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead).GetAwaiter().GetResult();
+            var response = _httpClient.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead, cancellationToken).GetAwaiter().GetResult();
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             return JsonConvert.DeserializeObject<T>(data);
         }
@@ -65,54 +67,57 @@ namespace tinyWebApi.Common.Helpers
         ///     Gets a byte[] using the given request URI.
         /// </summary>
         /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A byte[].
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public byte[] GetAsBytes<T>(Uri requestUri)
+        public byte[] GetAsBytes<T>(Uri requestUri, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside GetAsBytes, get byte array using httpclient synchronously.");
-            return _httpClient.GetByteArrayAsync(requestUri).GetAwaiter().GetResult();
+            return _httpClient.GetByteArrayAsync(requestUri, cancellationToken).GetAwaiter().GetResult();
         }
         /// <summary>
         ///     Gets a System.IO.Stream using the given request URI.
         /// </summary>
         /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A System.IO.Stream.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public Stream GetAsStream<T>(Uri requestUri)
+        public Stream GetAsStream<T>(Uri requestUri, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside GetAsStream, get data stream using httpclient synchronously.");
-            return _httpClient.GetStreamAsync(requestUri).GetAwaiter().GetResult();
+            return _httpClient.GetStreamAsync(requestUri, cancellationToken).GetAwaiter().GetResult();
         }
         /// <summary>
         ///     Gets an asynchronous.
         /// </summary>
         /// <typeparam name="T"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     The async&lt; t&gt;
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public async Task<T> GetAsync<T>(Uri requestUri)
+        public async Task<T> GetAsync<T>(Uri requestUri, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Get, get data using httpclient asynchronously.");
-            var response = _httpClient.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead).GetAwaiter().GetResult();
+            var response = _httpClient.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead, cancellationToken).GetAwaiter().GetResult();
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             return JsonConvert.DeserializeObject<T>(data);
         }
@@ -122,25 +127,26 @@ namespace tinyWebApi.Common.Helpers
         /// <typeparam name="T"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
         /// <param name="content">    The content. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public T Post<T>(Uri requestUri, T content)
+        public T Post<T>(Uri requestUri, T content, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Post, post data using httpclient synchronously.");
-            var response = _httpClient.PostAsync(requestUri, CreateHttpContent(content)).GetAwaiter().GetResult();
+            var response = _httpClient.PostAsync(requestUri, CreateHttpContent(content), cancellationToken).GetAwaiter().GetResult();
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             return JsonConvert.DeserializeObject<T>(data);
         }
@@ -151,25 +157,26 @@ namespace tinyWebApi.Common.Helpers
         /// <typeparam name="T2"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
         /// <param name="content">    The content. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public T1 Post<T1, T2>(Uri requestUri, T2 content)
+        public T1 Post<T1, T2>(Uri requestUri, T2 content, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Post, post data using httpclient synchronously.");
-            var response = _httpClient.PostAsync(requestUri, CreateHttpContent(content)).GetAwaiter().GetResult();
+            var response = _httpClient.PostAsync(requestUri, CreateHttpContent(content), cancellationToken).GetAwaiter().GetResult();
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             return JsonConvert.DeserializeObject<T1>(data);
         }
@@ -179,25 +186,26 @@ namespace tinyWebApi.Common.Helpers
         /// <typeparam name="T"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
         /// <param name="content">    The content. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public async Task<T> PostAsync<T>(Uri requestUri, T content)
+        public async Task<T> PostAsync<T>(Uri requestUri, T content, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Post, post data using httpclient asynchronously.");
-            var response = await _httpClient.PostAsync(requestUri, CreateHttpContent(content));
+            var response = await _httpClient.PostAsync(requestUri, CreateHttpContent(content), cancellationToken);
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             return JsonConvert.DeserializeObject<T>(data);
         }
@@ -208,25 +216,26 @@ namespace tinyWebApi.Common.Helpers
         /// <typeparam name="T2"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
         /// <param name="content">    The content. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public async Task<T1> PostAsync<T1, T2>(Uri requestUri, T2 content)
+        public async Task<T1> PostAsync<T1, T2>(Uri requestUri, T2 content, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Post, post data using httpclient asynchronously.");
-            var response = await _httpClient.PostAsync(requestUri, CreateHttpContent(content));
+            var response = await _httpClient.PostAsync(requestUri, CreateHttpContent(content), cancellationToken);
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             return JsonConvert.DeserializeObject<T1>(data);
         }
@@ -236,25 +245,26 @@ namespace tinyWebApi.Common.Helpers
         /// <typeparam name="T"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
         /// <param name="content">    The content. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public T Put<T>(Uri requestUri, T content)
+        public T Put<T>(Uri requestUri, T content, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Put, Put data using httpclient synchronously.");
-            var response = _httpClient.PutAsync(requestUri, CreateHttpContent(content)).GetAwaiter().GetResult();
+            var response = _httpClient.PutAsync(requestUri, CreateHttpContent(content), cancellationToken).GetAwaiter().GetResult();
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             return JsonConvert.DeserializeObject<T>(data);
         }
@@ -265,25 +275,26 @@ namespace tinyWebApi.Common.Helpers
         /// <typeparam name="T2"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
         /// <param name="content">    The content. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public T1 Put<T1, T2>(Uri requestUri, T2 content)
+        public T1 Put<T1, T2>(Uri requestUri, T2 content, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Put, Put data using httpclient synchronously.");
-            var response = _httpClient.PutAsync(requestUri, CreateHttpContent(content)).GetAwaiter().GetResult();
+            var response = _httpClient.PutAsync(requestUri, CreateHttpContent(content), cancellationToken).GetAwaiter().GetResult();
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             return JsonConvert.DeserializeObject<T1>(data);
         }
@@ -293,25 +304,26 @@ namespace tinyWebApi.Common.Helpers
         /// <typeparam name="T"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
         /// <param name="content">    The content. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public async Task<T> PutAsync<T>(Uri requestUri, T content)
+        public async Task<T> PutAsync<T>(Uri requestUri, T content, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Put, Put data using httpclient asynchronously.");
-            var response = await _httpClient.PutAsync(requestUri, CreateHttpContent(content));
+            var response = await _httpClient.PutAsync(requestUri, CreateHttpContent(content), cancellationToken);
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             return JsonConvert.DeserializeObject<T>(data);
         }
@@ -322,25 +334,26 @@ namespace tinyWebApi.Common.Helpers
         /// <typeparam name="T2"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
         /// <param name="content">    The content. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public async Task<T1> PutAsync<T1, T2>(Uri requestUri, T2 content)
+        public async Task<T1> PutAsync<T1, T2>(Uri requestUri, T2 content, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Put, Put data using httpclient asynchronously.");
-            var response = await _httpClient.PutAsync(requestUri, CreateHttpContent(content));
+            var response = await _httpClient.PutAsync(requestUri, CreateHttpContent(content), cancellationToken);
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             return JsonConvert.DeserializeObject<T1>(data);
         }
@@ -349,25 +362,26 @@ namespace tinyWebApi.Common.Helpers
         /// </summary>
         /// <typeparam name="T"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public T Delete<T>(Uri requestUri)
+        public T Delete<T>(Uri requestUri, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Delete, Delete data using httpclient synchronously.");
-            var response = _httpClient.DeleteAsync(requestUri).GetAwaiter().GetResult();
+            var response = _httpClient.DeleteAsync(requestUri, cancellationToken).GetAwaiter().GetResult();
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             return JsonConvert.DeserializeObject<T>(data);
         }
@@ -376,25 +390,26 @@ namespace tinyWebApi.Common.Helpers
         /// </summary>
         /// <typeparam name="T"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     The async&lt; t&gt;
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public async Task<T> DeleteAsync<T>(Uri requestUri)
+        public async Task<T> DeleteAsync<T>(Uri requestUri, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Delete, Delete data using httpclient asynchronously.");
-            var response = _httpClient.DeleteAsync(requestUri).GetAwaiter().GetResult();
+            var response = _httpClient.DeleteAsync(requestUri, cancellationToken).GetAwaiter().GetResult();
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             return JsonConvert.DeserializeObject<T>(data);
         }
@@ -404,25 +419,26 @@ namespace tinyWebApi.Common.Helpers
         /// <typeparam name="T"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
         /// <param name="content">    The content. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public T Patch<T>(Uri requestUri, T content)
+        public T Patch<T>(Uri requestUri, T content, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Patch, Patch data using httpclient synchronously.");
-            var response = _httpClient.PatchAsync(requestUri, CreateHttpContent(content)).GetAwaiter().GetResult();
+            var response = _httpClient.PatchAsync(requestUri, CreateHttpContent(content), cancellationToken).GetAwaiter().GetResult();
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             return JsonConvert.DeserializeObject<T>(data);
         }
@@ -433,25 +449,26 @@ namespace tinyWebApi.Common.Helpers
         /// <typeparam name="T2"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
         /// <param name="content">    The content. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public T1 Patch<T1, T2>(Uri requestUri, T2 content)
+        public T1 Patch<T1, T2>(Uri requestUri, T2 content, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Patch, Patch data using httpclient synchronously.");
-            var response = _httpClient.PatchAsync(requestUri, CreateHttpContent(content)).GetAwaiter().GetResult();
+            var response = _httpClient.PatchAsync(requestUri, CreateHttpContent(content), cancellationToken).GetAwaiter().GetResult();
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
             return JsonConvert.DeserializeObject<T1>(data);
         }
@@ -461,25 +478,26 @@ namespace tinyWebApi.Common.Helpers
         /// <typeparam name="T"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
         /// <param name="content">    The content. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public async Task<T> PatchAsync<T>(Uri requestUri, T content)
+        public async Task<T> PatchAsync<T>(Uri requestUri, T content, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Patch, Patch data using httpclient asynchronously.");
-            var response = await _httpClient.PatchAsync(requestUri, CreateHttpContent(content));
+            var response = await _httpClient.PatchAsync(requestUri, CreateHttpContent(content), cancellationToken);
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             return JsonConvert.DeserializeObject<T>(data);
         }
@@ -490,25 +508,26 @@ namespace tinyWebApi.Common.Helpers
         /// <typeparam name="T2"> Generic type parameter. </typeparam>
         /// <param name="requestUri"> URI of the request. </param>
         /// <param name="content">    The content. </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>
         ///     A T.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public async Task<T1> PatchAsync<T1, T2>(Uri requestUri, T2 content)
+        public async Task<T1> PatchAsync<T1, T2>(Uri requestUri, T2 content, CancellationToken cancellationToken)
         {
             Global.LogInformation("Inside Patch, Patch data using httpclient asynchronously.");
-            var response = await _httpClient.PatchAsync(requestUri, CreateHttpContent(content));
+            var response = await _httpClient.PatchAsync(requestUri, CreateHttpContent(content), cancellationToken);
             string data;
             try
             {
                 response.EnsureSuccessStatusCode();
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             catch (Exception ex)
             {
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
-                data = await response.Content.ReadAsStringAsync();
+                data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
             return JsonConvert.DeserializeObject<T1>(data);
         }
