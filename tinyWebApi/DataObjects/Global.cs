@@ -123,7 +123,7 @@ namespace tinyWebApi.Common.DataObjects
         {
             get
             {
-                Global.LogInformation("Returning the RunAsUserSpecification from JSON file or Pre-Configured code or merge of both and if not available then default.");
+                LogInformation("Returning the RunAsUserSpecification from JSON file or Pre-Configured code or merge of both and if not available then default.");
                 Dictionary<string, RunAsUserSpecification> result = new();
                 if (File.Exists(TinyWebApiConfigurations.RunAsUserJSONFilePath))
                     result = JsonConvert.DeserializeObject<Dictionary<string, RunAsUserSpecification>>(tinyWebApi.Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.RunAsUserJSONFilePath));
@@ -144,7 +144,7 @@ namespace tinyWebApi.Common.DataObjects
         {
             get
             {
-                Global.LogInformation("Returning the DatabaseSpecification from JSON file or Pre-Configured code or merge of both and if not available then default.");
+                LogInformation("Returning the DatabaseSpecification from JSON file or Pre-Configured code or merge of both and if not available then default.");
                 Dictionary<string, DatabaseSpecification> result = new();
                 if (File.Exists(TinyWebApiConfigurations.ConnectionStringJSONFilePath))
                     result = JsonConvert.DeserializeObject<Dictionary<string, DatabaseSpecification>>(tinyWebApi.Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.ConnectionStringJSONFilePath));
@@ -165,7 +165,7 @@ namespace tinyWebApi.Common.DataObjects
         {
             get
             {
-                Global.LogInformation("Returning the MailerSpecifications from JSON file or Pre-Configured code or merge of both and if not available then default.");
+                LogInformation("Returning the MailerSpecifications from JSON file or Pre-Configured code or merge of both and if not available then default.");
                 Dictionary<string, MailerSpecification> result = new();
                 if (File.Exists(TinyWebApiConfigurations.MailerJSONFilePath))
                     result = JsonConvert.DeserializeObject<Dictionary<string, MailerSpecification>>(tinyWebApi.Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.MailerJSONFilePath));
@@ -186,7 +186,7 @@ namespace tinyWebApi.Common.DataObjects
         {
             get
             {
-                Global.LogInformation("Returning the QuerySpecifications from JSON file or Pre-Configured code or merge of both and if not available then default.");
+                LogInformation("Returning the QuerySpecifications from JSON file or Pre-Configured code or merge of both and if not available then default.");
                 Dictionary<string, QuerySpecification> result = new();
                 if (File.Exists(TinyWebApiConfigurations.QueriesJSONFilePath))
                     result = JsonConvert.DeserializeObject<Dictionary<string, QuerySpecification>>(tinyWebApi.Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.QueriesJSONFilePath));
