@@ -6,7 +6,7 @@ namespace tinyWebApi.Helpers
     /// <summary>
     /// Extended File System Watcher
     /// </summary>
-    public class FileSystemWatcherEx : FileSystemWatcher
+    public class FileSystemWatcherEx : FileSystemWatcher, IDisposable
     {
         private FileSystemWatcher objWatcher { get; set; }
         /// <summary>
@@ -177,6 +177,14 @@ namespace tinyWebApi.Helpers
         /// </summary>
         public event RenamedEventHandler? RenamedEx;
 #pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+        /// <summary>
+        /// Dispose the File System Watcher Extended object.
+        /// </summary>
+        public new void Dispose()
+        {
+            SharedObject = null;
+            base.Dispose();
+        }
     }
     /// <summary>
     /// Extended Error Event Args to return shared object. 
