@@ -23,7 +23,6 @@ namespace tinyWebApi.Helpers
         public bool IsNotifyFirstChangeOnly { get; set; }
         /// <summary>
         /// Starts watching the file within a specified directory.
-        /// If IsNotifyFirstChangeOnly is true then EnableRaisingEvents will be enabled immidiately.
         /// </summary>
         /// <param name="directory"></param>
         /// <param name="fileName"></param>
@@ -37,8 +36,7 @@ namespace tinyWebApi.Helpers
             objWatcher.Changed += ObjWatcher_Changed;
             objWatcher.Renamed += ObjWatcher_Renamed;
             objWatcher.Error += ObjWatcher_Error;
-            if (IsNotifyFirstChangeOnly) 
-                objWatcher.EnableRaisingEvents = true;
+            objWatcher.EnableRaisingEvents = true;
         }
         /// <summary>
         /// Recieve error notification.
