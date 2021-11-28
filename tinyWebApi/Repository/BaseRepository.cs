@@ -134,7 +134,7 @@ namespace tinyWebApi.Common
                         {
                             DatabaseParameters dbp = new();
                             dbp.IsOutParameter = true;
-                            dbp.Name = $"{output}".Replace(",", "");
+                            dbp.Name = $"{output}".Contains(":") ? $"{output}".Split(":")[0].Replace(":", "") : $"{output}".Replace(",", "");
                             dbp.Type = DatabaseParameterType.RefCursor;
                             l1.Add(dbp);
                         }
@@ -224,7 +224,7 @@ namespace tinyWebApi.Common
         [DebuggerHidden]
         public virtual dynamic ExecuteQuery(string key, QuerySpecification querySpecification, ExecutionType executionType, List<DatabaseParameters> list, List<RequestSpecification> requestSpecifications, OutPutType outPutType = OutPutType.JSON) => (executionType, querySpecification.DatabaseSpecification.DatabaseType, outPutType) switch
         {
-            (ExecutionType.DataSetText, DatabaseType.MSSQL, OutPutType.Excel) => querySpecification.CachingEnabled() && querySpecification.AllowServeFromCache(executionType) ? querySpecification.ServeFromCache<DataSet>(executionType).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications) : new sql(_sqlContext, querySpecification).ExecDataSet(querySpecification, list).AddToCache(querySpecification,executionType).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications),
+            (ExecutionType.DataSetText, DatabaseType.MSSQL, OutPutType.Excel) => querySpecification.CachingEnabled() && querySpecification.AllowServeFromCache(executionType) ? querySpecification.ServeFromCache<DataSet>(executionType).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications) : new sql(_sqlContext, querySpecification).ExecDataSet(querySpecification, list).AddToCache(querySpecification, executionType).ProcessOutPutDataForExcel(key, querySpecification, requestSpecifications),
             (ExecutionType.DataSetText, DatabaseType.MSSQL, OutPutType.PDF) => querySpecification.CachingEnabled() && querySpecification.AllowServeFromCache(executionType) ? querySpecification.ServeFromCache<DataSet>(executionType).ProcessOutPutDataForPDF(key, querySpecification, requestSpecifications) : new sql(_sqlContext, querySpecification).ExecDataSet(querySpecification, list).AddToCache(querySpecification, executionType).ProcessOutPutDataForPDF(key, querySpecification, requestSpecifications),
             (ExecutionType.DataSetText, DatabaseType.MSSQL, OutPutType.CSV) => querySpecification.CachingEnabled() && querySpecification.AllowServeFromCache(executionType) ? querySpecification.ServeFromCache<DataTable>(executionType).ProcessOutPutDataForCSV(key, querySpecification, requestSpecifications) : new sql(_sqlContext, querySpecification).ExecDataSet(querySpecification, list).Tables[0].AddToCache(querySpecification, executionType).ProcessOutPutDataForCSV(key, querySpecification, requestSpecifications),
             (ExecutionType.DataSetText, DatabaseType.MSSQL, OutPutType.JSON) => querySpecification.CachingEnabled() && querySpecification.AllowServeFromCache(executionType) ? querySpecification.ServeFromCache<DataSet>(executionType).ProcessOutPutData(key, querySpecification, requestSpecifications) : new sql(_sqlContext, querySpecification).ExecDataSet(querySpecification, list).AddToCache(querySpecification, executionType).ProcessOutPutData(key, querySpecification, requestSpecifications),
