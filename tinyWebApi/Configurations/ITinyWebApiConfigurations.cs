@@ -27,6 +27,7 @@ namespace tinyWebApi.Configurations
         /// <summary>
         /// Gets the queries JSON file path.
         /// </summary>
+        [DebuggerHidden]
         public string QueriesJSONFilePath => !string.IsNullOrEmpty(QueriesJSONFileNameWithoutExtension) ? Path.Combine(Global.ConfigurationDirectoryPath, $"{QueriesJSONFileNameWithoutExtension}{(string.IsNullOrEmpty(Global.Environment) ? "" : "." + Global.Environment)}.json") : "";
         /// <summary>
         /// Gets or sets the connection strings file name without extension.
@@ -36,6 +37,7 @@ namespace tinyWebApi.Configurations
         /// <summary>
         /// Gets the connection string JSON file path.
         /// </summary>
+        [DebuggerHidden]
         public string ConnectionStringJSONFilePath => !string.IsNullOrEmpty(ConnectionStringJSONFileNameWithoutExtension) ? Path.Combine(Global.ConfigurationDirectoryPath, $"{ConnectionStringJSONFileNameWithoutExtension}{(string.IsNullOrEmpty(Global.Environment) ? "" : "." + Global.Environment)}.json") : "";
         /// <summary>
         /// Gets or sets the mailers file name without extension.
@@ -45,6 +47,7 @@ namespace tinyWebApi.Configurations
         /// <summary>
         /// Gets the mailer JSON file path.
         /// </summary>
+        [DebuggerHidden]
         public string MailerJSONFilePath => !string.IsNullOrEmpty(MailerJSONFileNameWithoutExtension) ? Path.Combine(Global.ConfigurationDirectoryPath, $"{MailerJSONFileNameWithoutExtension}{(string.IsNullOrEmpty(Global.Environment) ? "" : $".{Global.Environment}")}.json") : "";
         /// <summary>
         /// Gets or sets the run as user file name without extension.
@@ -54,6 +57,7 @@ namespace tinyWebApi.Configurations
         /// <summary>
         /// Gets the run as user JSON file path.
         /// </summary>
+        [DebuggerHidden]
         public string RunAsUserJSONFilePath => !string.IsNullOrEmpty(RunAsUserJSONFileNameWithoutExtension) ? Path.Combine(Global.ConfigurationDirectoryPath, $"{RunAsUserJSONFileNameWithoutExtension}{(string.IsNullOrEmpty(Global.Environment) ? "" : "." + Global.Environment)}.json") : "";
         /// <summary>
         /// Gets or sets the query specifications.

@@ -170,7 +170,7 @@ namespace tinyWebApi.Common.Helpers
             else SendMail(querySpecification, content, outPutType == OutPutType.CSV ? new ContentType(TextCSV) { Name = querySpecification.MailerSpecification.AttachmentName.ResolveValues() + CSVExtension } : outPutType == OutPutType.Excel ? new ContentType(ApplicationExcel) { Name = querySpecification.MailerSpecification.AttachmentName.ResolveValues() + ExcelExtension } : outPutType == OutPutType.PDF ? new ContentType(ApplicationPDF) { Name = querySpecification.MailerSpecification.AttachmentName.ResolveValues() + PDFExtension } : new ContentType(TextJSON) { Name = querySpecification.MailerSpecification.AttachmentName.ResolveValues() + JSONExtension });
         }
         /// <summary>
-        ///     A string extension method that resolve values.
+        ///     A string extension method that resolve values and formats the date time.
         /// </summary>
         /// <param name="value"> The value to act on. </param>
         /// <returns>
@@ -178,7 +178,7 @@ namespace tinyWebApi.Common.Helpers
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        private static string ResolveValues(this string value)
+        public static string ResolveValues(this string value)
         {
             Global.LogInformation("Inside ResolveValues, resolving mail template for $ seperated date time formats.");
             if (value is null) return value;
