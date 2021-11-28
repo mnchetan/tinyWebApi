@@ -21,7 +21,7 @@ namespace tinyWebApi.WebApi
         /// <param name="services"> The services. </param>
         public void ConfigureServices(IServiceCollection services) =>
 #pragma warning disable ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
-            _ = services.AddTinyWebApi(services.BuildServiceProvider().GetRequiredService<IConfiguration>(), services.BuildServiceProvider().GetRequiredService<IWebHostEnvironment>(), services.BuildServiceProvider().GetRequiredService<ILoggerFactory>(), new TinyWebApiConfigurations()
+            _ = services.AddTinyWebApi(services.BuildServiceProvider().GetRequiredService<IConfiguration>(), services.BuildServiceProvider().GetRequiredService<IWebHostEnvironment>(), new TinyWebApiConfigurations()
 #pragma warning restore ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
             {
                 ConfigurationDirectoryPath = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).DirectoryName,
