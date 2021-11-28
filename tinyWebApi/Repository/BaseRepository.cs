@@ -134,7 +134,7 @@ namespace tinyWebApi.Common
                         {
                             DatabaseParameters dbp = new();
                             dbp.IsOutParameter = true;
-                            dbp.Name = $"{output}".Contains(":") ? $"{output}".Split(":")[0].Replace(":", "") : $"{output}".Replace(",", "");
+                            dbp.Name = $"{output}".Contains(":") ? $"{output}".Split(":")[0].Replace(":", "").Trim() : $"{output}".Replace(",", "");
                             dbp.Type = DatabaseParameterType.RefCursor;
                             l1.Add(dbp);
                         }
