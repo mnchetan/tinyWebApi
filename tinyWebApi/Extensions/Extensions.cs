@@ -90,7 +90,7 @@ namespace tinyWebApi.Common.Extensions
         [DebuggerHidden]
         public static List<dynamic> AsDynamicEnumerable(this DataTable dt)
         {
-            List<dynamic> expandoList = new List<dynamic>();
+            List<dynamic> expandoList = new();
             foreach (var (row, expandoDict) in from DataRow row in dt.Rows//create a new ExpandoObject() at each row
                                                let expandoDict = new ExpandoObject() as IDictionary<string, object>
                                                select (row, expandoDict))
