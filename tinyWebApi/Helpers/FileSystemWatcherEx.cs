@@ -209,6 +209,24 @@ namespace tinyWebApi.Helpers
             base.Dispose();
             GC.SuppressFinalize(this);
         }
+        /// <summary>
+        /// Extended File System Event Handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public delegate void FileSystemEventHandlerEx(object sender, FileSystemEventArgsEx e);
+        /// <summary>
+        /// Extended Error Event Handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public delegate void ErrorEventHandlerEx(object sender, ErrorEventArgsEx e);
+        /// <summary>
+        /// Extended Renamed Event Handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public delegate void RenamedEventHandler(object sender, RenamedEventArgsEx e);
     }
     /// <summary>
     /// Extended Error Event Args to return shared object. 
@@ -309,22 +327,4 @@ namespace tinyWebApi.Helpers
         [DebuggerHidden]
         public Guid Guid { get; set; }
     }
-    /// <summary>
-    /// Extended File System Event Handler
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    public delegate void FileSystemEventHandlerEx(object sender, FileSystemEventArgsEx e);
-    /// <summary>
-    /// Extended Error Event Handler
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    public delegate void ErrorEventHandlerEx(object sender, ErrorEventArgsEx e);
-    /// <summary>
-    /// Extended Renamed Event Handler
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    public delegate void RenamedEventHandler(object sender, RenamedEventArgsEx e);
 }
