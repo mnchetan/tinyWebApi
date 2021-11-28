@@ -1,48 +1,63 @@
-﻿using System;
+﻿// <copyright file="Extensions.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+using System;
+using System.Diagnostics;
 using System.IO;
-
 namespace tinyWebApi.Helpers
 {
     /// <summary>
     /// Extended File System Watcher
     /// </summary>
+    [DebuggerStepThrough]
     public class FileSystemWatcherEx : FileSystemWatcher, IDisposable
     {
-        private FileSystemWatcher objWatcher { get; set; }
+        /// <summary>
+        /// File System Watcher Object
+        /// </summary>
+        [DebuggerHidden]
+        private FileSystemWatcher ObjWatcher { get; set; }
         /// <summary>
         /// Shared Object to be passed on along with generated events.
         /// </summary>
+        [DebuggerHidden]
         public object SharedObject { get; set; }
         /// <summary>
         /// Unique identifier to identify the monitoring job.
         /// </summary>
+        [DebuggerHidden]
         public Guid Guid { get; set; } = Guid.NewGuid();
         /// <summary>
         /// Automatically disables the raising of events after first change occurs.
         /// </summary>
+        [DebuggerHidden]
         public bool IsNotifyFirstChangeOnly { get; set; }
         /// <summary>
         /// Starts watching the file within a specified directory.
         /// </summary>
         /// <param name="directory"></param>
         /// <param name="fileName"></param>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public void StartWatching(string directory, string fileName)
         {
-            objWatcher = new();
-            objWatcher.Path = directory;
-            objWatcher.Filter = fileName;
-            objWatcher.Created += ObjWatcher_Created;
-            objWatcher.Deleted += ObjWatcher_Deleted;
-            objWatcher.Changed += ObjWatcher_Changed;
-            objWatcher.Renamed += ObjWatcher_Renamed;
-            objWatcher.Error += ObjWatcher_Error;
-            objWatcher.EnableRaisingEvents = true;
+            ObjWatcher = new();
+            ObjWatcher.Path = directory;
+            ObjWatcher.Filter = fileName;
+            ObjWatcher.Created += ObjWatcher_Created;
+            ObjWatcher.Deleted += ObjWatcher_Deleted;
+            ObjWatcher.Changed += ObjWatcher_Changed;
+            ObjWatcher.Renamed += ObjWatcher_Renamed;
+            ObjWatcher.Error += ObjWatcher_Error;
+            ObjWatcher.EnableRaisingEvents = true;
         }
         /// <summary>
         /// Recieve error notification.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         private void ObjWatcher_Error(object sender, ErrorEventArgs e)
         {
             try
@@ -50,14 +65,14 @@ namespace tinyWebApi.Helpers
                 if (ErrorEx is not null)
                 {
                     if (IsNotifyFirstChangeOnly)
-                        objWatcher.EnableRaisingEvents = false;
+                        ObjWatcher.EnableRaisingEvents = false;
                     ErrorEx(this, new ErrorEventArgsEx(e) { SharedObject = this.SharedObject, Guid = this.Guid });
                 }
             }
             catch
             {
                 if (IsNotifyFirstChangeOnly)
-                    objWatcher.EnableRaisingEvents = false;
+                    ObjWatcher.EnableRaisingEvents = false;
                 throw;
             }
         }
@@ -66,6 +81,8 @@ namespace tinyWebApi.Helpers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         private void ObjWatcher_Created(object sender, FileSystemEventArgs e)
         {
             try
@@ -73,14 +90,14 @@ namespace tinyWebApi.Helpers
                 if (CreatedEx is not null)
                 {
                     if (IsNotifyFirstChangeOnly)
-                        objWatcher.EnableRaisingEvents = false;
+                        ObjWatcher.EnableRaisingEvents = false;
                     CreatedEx(this, new FileSystemEventArgsEx(e) { SharedObject = this.SharedObject, Guid = this.Guid });
                 }
             }
             catch
             {
                 if (IsNotifyFirstChangeOnly)
-                    objWatcher.EnableRaisingEvents = false;
+                    ObjWatcher.EnableRaisingEvents = false;
                 throw;
             }
         }
@@ -89,6 +106,8 @@ namespace tinyWebApi.Helpers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         private void ObjWatcher_Deleted(object sender, FileSystemEventArgs e)
         {
             try
@@ -96,14 +115,14 @@ namespace tinyWebApi.Helpers
                 if (DeletedEx is not null)
                 {
                     if (IsNotifyFirstChangeOnly)
-                        objWatcher.EnableRaisingEvents = false;
+                        ObjWatcher.EnableRaisingEvents = false;
                     DeletedEx(this, new FileSystemEventArgsEx(e) { SharedObject = this.SharedObject, Guid = this.Guid });
                 }
             }
             catch
             {
                 if (IsNotifyFirstChangeOnly)
-                    objWatcher.EnableRaisingEvents = false;
+                    ObjWatcher.EnableRaisingEvents = false;
                 throw;
             }
         }
@@ -112,6 +131,8 @@ namespace tinyWebApi.Helpers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         private void ObjWatcher_Changed(object sender, FileSystemEventArgs e)
         {
             try
@@ -119,14 +140,14 @@ namespace tinyWebApi.Helpers
                 if (ChangedEx is not null)
                 {
                     if (IsNotifyFirstChangeOnly)
-                        objWatcher.EnableRaisingEvents = false;
+                        ObjWatcher.EnableRaisingEvents = false;
                     ChangedEx(this, new FileSystemEventArgsEx(e) { SharedObject = this.SharedObject, Guid = this.Guid });
                 }
             }
             catch
             {
                 if (IsNotifyFirstChangeOnly)
-                    objWatcher.EnableRaisingEvents = false;
+                    ObjWatcher.EnableRaisingEvents = false;
                 throw;
             }
         }
@@ -135,6 +156,8 @@ namespace tinyWebApi.Helpers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         private void ObjWatcher_Renamed(object sender, RenamedEventArgs e)
         {
             try
@@ -142,14 +165,14 @@ namespace tinyWebApi.Helpers
                 if (RenamedEx is not null)
                 {
                     if (IsNotifyFirstChangeOnly)
-                        objWatcher.EnableRaisingEvents = false;
+                        ObjWatcher.EnableRaisingEvents = false;
                     RenamedEx(this, new RenamedEventArgsEx(e) { SharedObject = this.SharedObject, Guid = this.Guid });
                 }
             }
             catch
             {
                 if (IsNotifyFirstChangeOnly)
-                    objWatcher.EnableRaisingEvents = false;
+                    ObjWatcher.EnableRaisingEvents = false;
                 throw;
             }
         }
@@ -178,10 +201,13 @@ namespace tinyWebApi.Helpers
         /// <summary>
         /// Dispose the File System Watcher Extended object.
         /// </summary>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public new void Dispose()
         {
             SharedObject = null;
             base.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
     /// <summary>
@@ -193,19 +219,25 @@ namespace tinyWebApi.Helpers
         /// Extended File System Event Args constructor.
         /// </summary>
         /// <param name="ex"></param>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public ErrorEventArgsEx(ErrorEventArgs ex) : base(ex.GetException()) { }
         /// <summary>
         /// Extended Error Event Args constructor.
         /// </summary>
         /// <param name="exception"></param>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public ErrorEventArgsEx(Exception exception) : base(exception) { }
         /// <summary>
         /// Shared Objected to be returned back.
         /// </summary>
+        [DebuggerHidden]
         public dynamic SharedObject { get; set; }
         /// <summary>
         /// Unique Guid for the call.
         /// </summary>
+        [DebuggerHidden]
         public Guid Guid { get; set; }
     }
     /// <summary>
@@ -217,6 +249,8 @@ namespace tinyWebApi.Helpers
         /// Extended File System Event Args constructor.
         /// </summary>
         /// <param name="ex"></param>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public RenamedEventArgsEx(RenamedEventArgs ex) : base(ex.ChangeType, ex.FullPath, ex.Name, ex.OldName) { }
         /// <summary>
         /// Extended Renamed Event Args constructor.
@@ -226,15 +260,19 @@ namespace tinyWebApi.Helpers
         /// <param name="name"></param>
         /// <param name="oldName"></param>
 #pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public RenamedEventArgsEx(WatcherChangeTypes changeType, string directory, string? name, string? oldName) : base(changeType, directory, name, oldName) { }
 #pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         /// <summary>
         /// Shared Objected to be returned back.
         /// </summary>
+        [DebuggerHidden]
         public dynamic SharedObject { get; set; }
         /// <summary>
         /// Unique Guid for the call.
         /// </summary>
+        [DebuggerHidden]
         public Guid Guid { get; set; }
     }
     /// <summary>
@@ -246,6 +284,8 @@ namespace tinyWebApi.Helpers
         /// Extended File System Event Args constructor.
         /// </summary>
         /// <param name="ex"></param>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public FileSystemEventArgsEx(FileSystemEventArgs ex) : base(ex.ChangeType, ex.FullPath, ex.Name) { }
         /// <summary>
         /// Extended File System Event Args constructor.
@@ -254,15 +294,19 @@ namespace tinyWebApi.Helpers
         /// <param name="directory"></param>
         /// <param name="name"></param>
 #pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+        [DebuggerHidden]
+        [DebuggerStepThrough]
         public FileSystemEventArgsEx(WatcherChangeTypes changeType, string directory, string? name) : base(changeType, directory, name) { }
 #pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         /// <summary>
         /// Shared Objected to be returned back.
         /// </summary>
+        [DebuggerHidden]
         public dynamic SharedObject { get; set; }
         /// <summary>
         /// Unique Guid for the call.
         /// </summary>
+        [DebuggerHidden]
         public Guid Guid { get; set; }
     }
     /// <summary>

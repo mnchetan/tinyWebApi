@@ -13,6 +13,8 @@ using System.Data;
 using System.Diagnostics;
 using System.Text;
 using System.Xml;
+using System.Linq;
+
 namespace tinyWebApi.Common.DatabaseManagers
 {
     /// <summary>
@@ -882,7 +884,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public int ExecNonQuery(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecNonQuery(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML);
+        public int ExecNonQuery(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecNonQuery(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle);
         /// <summary>
         ///     Executes the 'non query with command out' operation.
         /// </summary>
@@ -894,7 +896,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public int ExecNonQueryWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecNonQueryWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML, out command);
+        public int ExecNonQueryWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecNonQueryWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command);
         /// <summary>
         ///     Executes the 'non query procedure' operation.
         /// </summary>
@@ -905,7 +907,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public int ExecNonQueryProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecNonQueryProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML);
+        public int ExecNonQueryProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecNonQueryProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle);
         /// <summary>
         ///     Executes the 'non query procedure with command out' operation.
         /// </summary>
@@ -917,7 +919,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public int ExecNonQueryProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecNonQueryProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML, out command);
+        public int ExecNonQueryProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecNonQueryProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command);
         /// <summary>
         ///     Executes the 'scalar' operation.
         /// </summary>
@@ -928,7 +930,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public object ExecScalar(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecScalar(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML);
+        public object ExecScalar(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecScalar(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle);
         /// <summary>
         ///     Executes the 'scalar with command out' operation.
         /// </summary>
@@ -940,7 +942,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public object ExecScalarWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecScalarWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML, out command);
+        public object ExecScalarWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecScalarWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command);
         /// <summary>
         ///     Executes the 'scalar procedure' operation.
         /// </summary>
@@ -951,7 +953,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public object ExecScalarProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecScalarProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML);
+        public object ExecScalarProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecScalarProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle);
         /// <summary>
         ///     Executes the 'scalar procedure with command out' operation.
         /// </summary>
@@ -963,7 +965,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public object ExecScalarProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecScalarProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML, out command);
+        public object ExecScalarProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecScalarProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command);
         /// <summary>
         ///     Executes the 'data reader' operation.
         /// </summary>
@@ -974,7 +976,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public OracleDataReader ExecDataReader(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecDataReader(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML);
+        public OracleDataReader ExecDataReader(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecDataReader(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle);
         /// <summary>
         ///     Executes the 'data reader with command out' operation.
         /// </summary>
@@ -986,7 +988,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public OracleDataReader ExecDataReaderWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecDataReaderWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML, out command);
+        public OracleDataReader ExecDataReaderWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecDataReaderWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command);
         /// <summary>
         ///     Executes the 'data reader procedure' operation.
         /// </summary>
@@ -997,7 +999,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public OracleDataReader ExecDataReaderProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecDataReaderProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML);
+        public OracleDataReader ExecDataReaderProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecDataReaderProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle);
         /// <summary>
         ///     Executes the 'data reader procedure with command out' operation.
         /// </summary>
@@ -1009,7 +1011,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public OracleDataReader ExecDataReaderProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecDataReaderProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML, out command);
+        public OracleDataReader ExecDataReaderProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecDataReaderProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command);
         /// <summary>
         ///     Executes the 'xml reader' operation.
         /// </summary>
@@ -1020,7 +1022,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public XmlReader ExecXmlReader(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecXmlReader(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML);
+        public XmlReader ExecXmlReader(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecXmlReader(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle);
         /// <summary>
         ///     Executes the 'xml reader with command out' operation.
         /// </summary>
@@ -1032,7 +1034,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public XmlReader ExecXmlReaderWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecXmlReaderWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML, out command);
+        public XmlReader ExecXmlReaderWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecXmlReaderWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command);
         /// <summary>
         ///     Executes the 'xml reader procedure' operation.
         /// </summary>
@@ -1043,7 +1045,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public XmlReader ExecXmlReaderProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecXmlReaderProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML);
+        public XmlReader ExecXmlReaderProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecXmlReaderProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle);
         /// <summary>
         ///     Executes the 'xml reader procedure with command out' operation.
         /// </summary>
@@ -1056,7 +1058,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public XmlReader ExecXmlReaderProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecXmlReaderProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML, out command);
+        public XmlReader ExecXmlReaderProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecXmlReaderProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command);
         /// <summary>
         ///     Executes the 'data set' operation.
         /// </summary>
@@ -1067,7 +1069,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataSet ExecDataSet(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecDataSet(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML);
+        public DataSet ExecDataSet(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => SetInt64ColumnType(ExecDataSet(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle), querySpecification);
         /// <summary>
         ///     Executes the 'data set with command out' operation.
         /// </summary>
@@ -1079,7 +1081,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataSet ExecDataSetWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecDataSetWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML, out command);
+        public DataSet ExecDataSetWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => SetInt64ColumnType(ExecDataSetWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command), querySpecification);
         /// <summary>
         ///     Executes the 'data set procedure' operation.
         /// </summary>
@@ -1090,7 +1092,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataSet ExecDataSetProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecDataSetProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML);
+        public DataSet ExecDataSetProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => SetInt64ColumnType(ExecDataSetProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle), querySpecification);
         /// <summary>
         ///     Executes the 'data set procedure with command out' operation.
         /// </summary>
@@ -1102,7 +1104,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataSet ExecDataSetProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecDataSetProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML, out command);
+        public DataSet ExecDataSetProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => SetInt64ColumnType(ExecDataSetProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command), querySpecification);
         /// <summary>
         ///     Executes the 'data table' operation.
         /// </summary>
@@ -1113,7 +1115,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataTable ExecDataTable(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecDataTable(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML);
+        public DataTable ExecDataTable(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => SetInt64ColumnType(ExecDataTable(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle), querySpecification);
         /// <summary>
         ///     Executes the 'data table with command out' operation.
         /// </summary>
@@ -1125,7 +1127,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataTable ExecDataTableWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecDataTableWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML, out command);
+        public DataTable ExecDataTableWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => SetInt64ColumnType(ExecDataTableWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command), querySpecification);
         /// <summary>
         ///     Executes the 'data table procedure' operation.
         /// </summary>
@@ -1136,7 +1138,7 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataTable ExecDataTableProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => ExecDataTableProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML);
+        public DataTable ExecDataTableProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => SetInt64ColumnType(ExecDataTableProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle), querySpecification);
         /// <summary>
         ///     Executes the 'data table procedure with command out' operation.
         /// </summary>
@@ -1148,7 +1150,109 @@ namespace tinyWebApi.Common.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataTable ExecDataTableProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => ExecDataTableProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON, querySpecification.IsMapUDTAsXML, out command);
+        public DataTable ExecDataTableProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => SetInt64ColumnType(ExecDataTableProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command), querySpecification);
+        /// <summary>
+        /// Set Int64 as column type for specified columns in Data Table as Oracle does not differentiate between intergers and decimals and makes every number column as decimal.
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="querySpecification"></param>
+        /// <returns></returns>
+        private static DataTable SetInt64ColumnType(DataTable dt, QuerySpecification querySpecification)
+        {
+            try
+            {
+                if (dt is not null && dt.Columns.Count > 0)
+                {
+                    var dt1 = dt.Clone();
+                    var outPut = querySpecification.Outputs_RefCursor_InSequence_CommaSeperated_WithIntFieldsSeperatedByColon_NotRequiredForMSSQL;
+                    if (!string.IsNullOrWhiteSpace(outPut) && outPut.Contains(','))
+                    {
+                        var rcs = outPut.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                        if (rcs is not null && rcs.Length > 0)
+                        {
+                            var fields = rcs[0].Split(':');
+                            if (fields is not null && fields.Length > 0)
+                            {
+                                foreach (var item in fields.Skip(1))
+                                {
+                                    foreach (var dataColumn in from DataColumn dataColumn in dt1.Columns
+                                                               where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
+                                                               select dataColumn)
+                                    {
+                                        dataColumn.DataType = typeof(long);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    foreach (DataRow row in dt.Rows)
+                        dt1.ImportRow(row);
+                    dt.Dispose();
+                    return dt1;
+                }
+            }
+            catch { }
+            return dt;
+        }
+        /// <summary>
+        /// Set Int64 as column type for specified columns in Data Set as Oracle does not differentiate between intergers and decimals and makes every number column as decimal.
+        /// </summary>
+        /// <param name="ds"></param>
+        /// <param name="querySpecification"></param>
+        /// <returns></returns>
+        private static DataSet SetInt64ColumnType(DataSet ds, QuerySpecification querySpecification)
+        {
+            try
+            {
+                if (ds is not null && ds.Tables.Count > 0)
+                {
+                    var ds1 = ds.Clone();
+                    var outPut = querySpecification.Outputs_RefCursor_InSequence_CommaSeperated_WithIntFieldsSeperatedByColon_NotRequiredForMSSQL;
+                    if (!string.IsNullOrWhiteSpace(outPut) && outPut.Contains(','))
+                    {
+                        var rcs = outPut.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                        if (rcs is not null && rcs.Length > 0)
+                        {
+                            if (ds1.Tables.Count == rcs.Length)
+                            {
+                                int level = 0;
+                                foreach (DataTable dt in ds1.Tables)
+                                {
+                                    if (dt.Columns.Count > 0)
+                                    {
+                                        var fields = rcs[level].Split(':');
+                                        if (fields is not null && fields.Length > 0)
+                                        {
+                                            foreach (var item in fields.Skip(1))
+                                            {
+                                                foreach (var dataColumn in from DataColumn dataColumn in dt.Columns
+                                                                           where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
+                                                                           select dataColumn)
+                                                {
+                                                    dataColumn.DataType = typeof(long);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    level++;
+                                }
+                            }
+                        }
+                    }
+                    int lev = 0;
+                    foreach (DataTable dt in ds.Tables)
+                    {
+                        foreach (DataRow row in ds.Tables[lev].Rows)
+                            ds1.Tables[lev].ImportRow(row);
+                        lev++;
+                    }
+                    ds.Dispose();
+                    return ds1;
+                }
+            }
+            catch { }
+            return ds;
+        }
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>

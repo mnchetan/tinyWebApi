@@ -113,7 +113,7 @@ namespace tinyWebApi.Common
             switch (querySpecification.DatabaseSpecification.DatabaseType)
             {
                 case DatabaseType.MSSQL:
-                    var inputParameters = $"{querySpecification.Inputs}".Split("$");
+                    var inputParameters = $"{querySpecification.InputFieldNamesInSequence_UDTDollarSeperatedByType}".Split("$");
                     foreach (var (dbp, input) in inputParameters.SelectMany(input => list.Where(dbp => $"{input}".Replace(",", "").Replace("@", "").Split("$")[0].Replace("$", "").ToLower() == $"{dbp.Name}".ToLower()).Select(dbp => (dbp, input))))
                     {
                         if (dbp.Type == DatabaseParameterType.Structured && input.Contains('$'))
@@ -126,15 +126,15 @@ namespace tinyWebApi.Common
                     l1 = CopyUnMappedDatabaseParameters(list, l1);
                     break;
                 case DatabaseType.ORACLE:
-                    var inputs = $"{querySpecification.Inputs}".Split("$");
-                    var outPutParameters = $"{querySpecification.Outputs}".Split(',');
+                    var inputs = $"{querySpecification.InputFieldNamesInSequence_UDTDollarSeperatedByType}".Split("$");
+                    var outPutParameters = $"{querySpecification.Outputs_RefCursor_InSequence_CommaSeperated_WithIntFieldsSeperatedByColon_NotRequiredForMSSQL}".Split(',');
                     foreach (var output in outPutParameters)
                     {
                         if (!string.IsNullOrEmpty(output))
                         {
                             DatabaseParameters dbp = new();
                             dbp.IsOutParameter = true;
-                            dbp.Name = $"{output}".Replace("$", "");
+                            dbp.Name = $"{output}".Replace(",", "");
                             dbp.Type = DatabaseParameterType.RefCursor;
                             l1.Add(dbp);
                         }
@@ -149,7 +149,7 @@ namespace tinyWebApi.Common
                         }
                         else if (dbp.Type == DatabaseParameterType.Structured && !input.Contains('$'))
                         {
-                            dbp.Value = querySpecification.IsMapUDTAsJSON && dbp.Value is DataTable ? dbp.Value.ToJSON() : querySpecification.IsMapUDTAsXML && dbp.Value is DataTable ? (dbp.Value as DataTable).DataTableAsXML() : throw new NotSupportedException("User defined type support if needed to be used then type name should be specified as $ seperated in the inputs within the queryspecification else should be mapped either as xml or json and should be of type a table/array...");
+                            dbp.Value = querySpecification.IsMapUDTAsJSON_ApplicableForOracle && dbp.Value is DataTable ? dbp.Value.ToJSON() : querySpecification.IsMapUDTAsXML_ApplicableForOracle && dbp.Value is DataTable ? (dbp.Value as DataTable).DataTableAsXML() : throw new NotSupportedException("User defined type support if needed to be used then type name should be specified as $ seperated in the inputs within the queryspecification else should be mapped either as xml or json and should be of type a table/array...");
                             l1.Add(dbp);
                         }
                     }

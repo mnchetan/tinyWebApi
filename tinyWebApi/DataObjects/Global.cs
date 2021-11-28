@@ -286,7 +286,7 @@ namespace tinyWebApi.Common.DataObjects
         ///     The logger.
         /// </value>
         [DebuggerHidden]
-        public static ILogger Logger { get; internal set; } = LoggerFactory?.CreateLogger("StaticGenericLogger");
+        public static ILogger Logger { get; internal set; }
         /// <summary>
         /// Gets or sets the tiny web api configurations.
         /// </summary>
@@ -295,10 +295,5 @@ namespace tinyWebApi.Common.DataObjects
         /// </value>
         [DebuggerHidden]
         public static ITinyWebApiConfigurations TinyWebApiConfigurations { get; set; }
-        /// <summary>
-        /// Gets the logger factory.
-        /// </summary>
-        [DebuggerHidden]
-        public static ILoggerFactory LoggerFactory { get; internal set; }
     }
 }

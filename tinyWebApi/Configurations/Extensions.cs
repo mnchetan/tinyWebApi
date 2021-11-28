@@ -59,18 +59,17 @@ namespace tinyWebApi.WebApi.Configurations
         /// <param name="services">The services.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="webHostEnvironment">The web host environment.</param>
-        /// <param name="loggerFactory">The logger factory.</param>
         /// <param name="tinyWebApiConfigurations">The tiny web api configurations.</param>
         /// <returns>An IServiceCollection.</returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static IServiceCollection AddTinyWebApi(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ILoggerFactory loggerFactory, ITinyWebApiConfigurations tinyWebApiConfigurations)
+        public static IServiceCollection AddTinyWebApi(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ITinyWebApiConfigurations tinyWebApiConfigurations)
         {
             if (string.IsNullOrEmpty(tinyWebApiConfigurations.ConfigurationDirectoryPath))
             {
                 tinyWebApiConfigurations.ConfigurationDirectoryPath = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).DirectoryName;
             }
-            (Global.Configuration, Global.WebHostingEnvironment, Global.TinyWebApiConfigurations, Global.LoggerFactory) = (configuration, webHostEnvironment, tinyWebApiConfigurations, loggerFactory);
+            (Global.Configuration, Global.WebHostingEnvironment, Global.TinyWebApiConfigurations) = (configuration, webHostEnvironment, tinyWebApiConfigurations);
             if (!((!string.IsNullOrEmpty(tinyWebApiConfigurations.QueriesJSONFileNameWithoutExtension) && File.Exists(tinyWebApiConfigurations.QueriesJSONFilePath)) || (tinyWebApiConfigurations.QuerySpecifications is not null && tinyWebApiConfigurations.QuerySpecifications.Count > 0)))
             {
                 throw new Exception("QueriesJSONFileNameWithoutExtension needs to be specified and queries.<environment>.json should be present in the ContenRootPath or near executing assembly or QuerySpecifications need to be filled.");

@@ -3,10 +3,13 @@
 // </copyright>
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using tinyWebApi.Common.DataObjects;
 
 namespace tinyWebApi.Common.Extensions
@@ -77,6 +80,31 @@ namespace tinyWebApi.Common.Extensions
                 }
             }
             else return default;
+        }
+        /// <summary>
+        /// Enumerate Data Table as List of dynamic.
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public static List<dynamic> AsDynamicEnumerable(this DataTable dt)
+        {
+            List<dynamic> expandoList = new List<dynamic>();
+            foreach (var (row, expandoDict) in from DataRow row in dt.Rows//create a new ExpandoObject() at each row
+                                               let expandoDict = new ExpandoObject() as IDictionary<string, object>
+                                               select (row, expandoDict))
+            {
+                foreach (DataColumn col in dt.Columns)
+                {
+                    //put every column of this row into the new dictionary
+                    expandoDict.Add(Regex.Replace(col.ColumnName, "[^a-zA-Z0-9_.]+", string.Empty, RegexOptions.Compiled), row[col.ColumnName] is not null && row[col.ColumnName] != DBNull.Value ? Convert.ToString(row[col.ColumnName]) : string.Empty);
+                }
+                //add this "row" to the list
+                expandoList.Add(expandoDict);
+            }
+
+            return expandoList;
         }
     }
 }

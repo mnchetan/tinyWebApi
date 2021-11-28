@@ -39,11 +39,11 @@ namespace tinyWebApi.Common.Extensions
             LogInformation($"Inside ProcessInputData.");
             string filePath;
             LogInformation($"Return requestSpecifications as it is if PreProcessFileName or class name is empty or null.");
-            if (string.IsNullOrWhiteSpace(querySpecification.PreProcessFileName) || string.IsNullOrWhiteSpace(querySpecification.PreProcessClassName)) return requestSpecifications;
+            if (string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PreProcessing) || string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PreProcessing)) return requestSpecifications;
             if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
             {
                 LogInformation($"If Process file exists then load load the assembly from the file path.");
-                var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PreProcessClassName);
+                var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PreProcessing);
                 if (dll is not null)
                     try
                     {
@@ -81,11 +81,11 @@ namespace tinyWebApi.Common.Extensions
             string filePath;
             dynamic input = null;
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
-            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
+            if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
                     LogInformation($"If Process file exists then load load the assembly from the file path.");
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing);
                     if (dll is not null)
                         try
                         {
@@ -131,11 +131,11 @@ namespace tinyWebApi.Common.Extensions
             string filePath;
             dynamic input = null;
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
-            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
+            if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
                     LogInformation($"If Process file exists then load load the assembly from the file path.");
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing);
                     if (dll is not null)
                         try
                         {
@@ -181,11 +181,11 @@ namespace tinyWebApi.Common.Extensions
             string filePath;
             dynamic input = null;
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
-            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
+            if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
                     LogInformation($"If Process file exists then load load the assembly from the file path.");
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing);
                     if (dll is not null)
                         try
                         {
@@ -231,11 +231,11 @@ namespace tinyWebApi.Common.Extensions
             string filePath;
             dynamic input = null;
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
-            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
+            if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
                     LogInformation($"If Process file exists then load load the assembly from the file path.");
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing);
                     if (dll is not null)
                         try
                         {
@@ -281,11 +281,11 @@ namespace tinyWebApi.Common.Extensions
             string filePath;
             dynamic input = null;
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
-            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
+            if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
                     LogInformation($"If Process file exists then load load the assembly from the file path.");
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing);
                     if (dll is not null)
                         try
                         {
@@ -331,11 +331,11 @@ namespace tinyWebApi.Common.Extensions
             string filePath;
             dynamic input = null;
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
-            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
+            if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
                     LogInformation($"If Process file exists then load load the assembly from the file path.");
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing);
                     if (dll is not null)
                         try
                         {
@@ -381,11 +381,11 @@ namespace tinyWebApi.Common.Extensions
             string filePath;
             dynamic input = null;
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
-            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
+            if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
                     LogInformation($"If Process file exists then load load the assembly from the file path.");
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing);
                     if (dll is not null)
                         try
                         {
@@ -432,11 +432,11 @@ namespace tinyWebApi.Common.Extensions
             LogInformation($"Inside ProcessOutPutScalarNonScalar.");
             string filePath;
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
-            if (!string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName))
+            if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
                     LogInformation($"If Process file exists then load load the assembly from the file path.");
-                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.PostProcessClassName);
+                    var dll = ExternalAssemblyExecutionHelper.LoadPluginFromFile(filePath, querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing);
                     if (dll is not null)
                         try
                         {
@@ -482,7 +482,7 @@ namespace tinyWebApi.Common.Extensions
         /// <param name="callerName">         (Optional) Name of the caller. </param>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        private static void LogCommonWarning(QuerySpecification querySpecification, string filePath, [CallerMemberName] string callerName = "") => LogWarning($"Class {(callerName.ToLower().Contains("pre") ? querySpecification.PreProcessClassName : querySpecification.PostProcessClassName)} mapped to the file path {filePath} could not be found or some other issue.");
+        private static void LogCommonWarning(QuerySpecification querySpecification, string filePath, [CallerMemberName] string callerName = "") => LogWarning($"Class {(callerName.ToLower().Contains("pre") ? querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PreProcessing : querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing)} mapped to the file path {filePath} could not be found or some other issue.");
         /// <summary>
         ///     Handles the exception.
         /// </summary>
@@ -494,7 +494,7 @@ namespace tinyWebApi.Common.Extensions
         /// </remarks>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        private static void HandleException(Exception ex, QuerySpecification querySpecification, string filePath, [CallerMemberName] string callerName = "") => LogError($"Some error occured while trying to execute the {callerName} mapped to the file path {filePath} of class name {(callerName.ToLower().Contains("pre") ? querySpecification.PreProcessClassName : querySpecification.PostProcessClassName)}. {System.Environment.NewLine} Error : {ex.Message}", ex);
+        private static void HandleException(Exception ex, QuerySpecification querySpecification, string filePath, [CallerMemberName] string callerName = "") => LogError($"Some error occured while trying to execute the {callerName} mapped to the file path {filePath} of class name {(callerName.ToLower().Contains("pre") ? querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PreProcessing : querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing)}. {System.Environment.NewLine} Error : {ex.Message}", ex);
         /// <summary>
         ///     Throw exception.
         /// </summary>
@@ -504,7 +504,7 @@ namespace tinyWebApi.Common.Extensions
         /// <param name="callerName">         (Optional) Name of the caller. </param>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        private static void ThrowException(Exception ex, QuerySpecification querySpecification, string filePath, [CallerMemberName] string callerName = "") => throw new Exception($"Some error occured while trying to execute the {callerName} mapped to the file path {filePath} of class name {(callerName.ToLower().Contains("pre") ? querySpecification.PreProcessClassName : querySpecification.PostProcessClassName)}. {System.Environment.NewLine} Error : {ex.Message}");
+        private static void ThrowException(Exception ex, QuerySpecification querySpecification, string filePath, [CallerMemberName] string callerName = "") => throw new Exception($"Some error occured while trying to execute the {callerName} mapped to the file path {filePath} of class name {(callerName.ToLower().Contains("pre") ? querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PreProcessing : querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing)}. {System.Environment.NewLine} Error : {ex.Message}");
         /// <summary>
         ///     Gets process file path.
         /// </summary>
@@ -516,6 +516,6 @@ namespace tinyWebApi.Common.Extensions
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        private static string GetProcessFilePath(QuerySpecification querySpecification, [CallerMemberName] string callerName = "") => callerName.ToLower().Contains("pre") ? !string.IsNullOrWhiteSpace(querySpecification.PreProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PreProcessClassName) && string.IsNullOrWhiteSpace(querySpecification.PreProcessFilePath) ? Path.Combine(ConfigurationDirectoryPath, querySpecification.PreProcessFileName) : Path.Combine(querySpecification.PreProcessFilePath, querySpecification.PreProcessFileName) : !string.IsNullOrWhiteSpace(querySpecification.PostProcessFileName) && !string.IsNullOrWhiteSpace(querySpecification.PostProcessClassName) && string.IsNullOrWhiteSpace(querySpecification.PostProcessFilePath) ? Path.Combine(ConfigurationDirectoryPath, querySpecification.PostProcessFileName) : Path.Combine(querySpecification.PostProcessFilePath, querySpecification.PostProcessFileName);
+        private static string GetProcessFilePath(QuerySpecification querySpecification, [CallerMemberName] string callerName = "") => callerName.ToLower().Contains("pre") ? !string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PreProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PreProcessing) && string.IsNullOrWhiteSpace(querySpecification.ExternalDllPathImplementingIProcessDataInterface_PreProcessing) ? Path.Combine(ConfigurationDirectoryPath, querySpecification.ExternalDllNameImplementingIProcessDataInterface_PreProcessing) : Path.Combine(querySpecification.ExternalDllPathImplementingIProcessDataInterface_PreProcessing, querySpecification.ExternalDllNameImplementingIProcessDataInterface_PreProcessing) : !string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing) && string.IsNullOrWhiteSpace(querySpecification.ExternalDllPathImplementingIProcessDataInterface_PostProcessing) ? Path.Combine(ConfigurationDirectoryPath, querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) : Path.Combine(querySpecification.ExternalDllPathImplementingIProcessDataInterface_PostProcessing, querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing);
     }
 }

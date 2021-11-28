@@ -51,7 +51,7 @@ namespace tinyWebApi.Common.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "InputFieldNamesInSequence_UDTDollarSeperatedByType", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
-        public string Inputs { get; set; }
+        public string InputFieldNamesInSequence_UDTDollarSeperatedByType { get; set; }
         /// <summary>
         ///     Gets the outputs.
         /// </summary>
@@ -60,8 +60,8 @@ namespace tinyWebApi.Common.DataObjects
         ///     The outputs.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "Outputs_RefCursor_InSequence_ColonSeperated_NotRequiredForMSSQL", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
-        public string Outputs { get; set; }
+        [JsonProperty(PropertyName = "Outputs_RefCursor_InSequence_CommaSeperated_WithIntFieldsSeperatedByColon_NotRequiredForMSSQL", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+        public string Outputs_RefCursor_InSequence_CommaSeperated_WithIntFieldsSeperatedByColon_NotRequiredForMSSQL { get; set; }
         /// <summary>
         ///     Gets the database.
         /// </summary>
@@ -79,7 +79,7 @@ namespace tinyWebApi.Common.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "IsMapUDTAsJSON_ApplicableForOracle", Required = Required.Default)]
-        public bool IsMapUDTAsJSON { get; set; }
+        public bool IsMapUDTAsJSON_ApplicableForOracle { get; set; }
         /// <summary>
         ///     Gets a value indicating whether this object is map udt as XML.
         /// </summary>
@@ -88,7 +88,7 @@ namespace tinyWebApi.Common.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "IsMapUDTAsXML_ApplicableForOracle", Required = Required.Default)]
-        public bool IsMapUDTAsXML { get; set; }
+        public bool IsMapUDTAsXML_ApplicableForOracle { get; set; }
         /// <summary>
         ///     Gets the full pathname of the pre process file default is the configuration path.
         /// </summary>
@@ -97,7 +97,7 @@ namespace tinyWebApi.Common.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "ExternalDllPathImplementingIProcessDataInterface_PreProcessing", Required = Required.Default)]
-        public string PreProcessFilePath { get; set; }
+        public string ExternalDllPathImplementingIProcessDataInterface_PreProcessing { get; set; }
         /// <summary>
         ///     Gets the filename of the pre process file.
         /// </summary>
@@ -106,7 +106,7 @@ namespace tinyWebApi.Common.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "ExternalDllNameImplementingIProcessDataInterface_PreProcessing", Required = Required.Default)]
-        public string PreProcessFileName { get; set; }
+        public string ExternalDllNameImplementingIProcessDataInterface_PreProcessing { get; set; }
         /// <summary>
         ///     Gets the name of the pre process class.
         /// </summary>
@@ -115,7 +115,7 @@ namespace tinyWebApi.Common.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PreProcessing", Required = Required.Default)]
-        public string PreProcessClassName { get; set; }
+        public string FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PreProcessing { get; set; }
         /// <summary>
         ///     Gets the full pathname of the post process file default is the configuration path.
         /// </summary>
@@ -124,7 +124,7 @@ namespace tinyWebApi.Common.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "ExternalDllPathImplementingIProcessDataInterface_PostProcessing", Required = Required.Default)]
-        public string PostProcessFilePath { get; set; }
+        public string ExternalDllPathImplementingIProcessDataInterface_PostProcessing { get; set; }
         /// <summary>
         ///     Gets the filename of the post process file.
         /// </summary>
@@ -133,7 +133,7 @@ namespace tinyWebApi.Common.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "ExternalDllNameImplementingIProcessDataInterface_PostProcessing", Required = Required.Default)]
-        public string PostProcessFileName { get; set; }
+        public string ExternalDllNameImplementingIProcessDataInterface_PostProcessing { get; set; }
         /// <summary>
         ///     Gets the name of the post process class.
         /// </summary>
@@ -142,7 +142,7 @@ namespace tinyWebApi.Common.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing", Required = Required.Default)]
-        public string PostProcessClassName { get; set; }
+        public string FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing { get; set; }
         /// <summary>
         ///     Gets a value indicating whether this object is send output via email also.
         /// </summary>
