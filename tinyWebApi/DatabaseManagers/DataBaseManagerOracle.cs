@@ -54,6 +54,9 @@ namespace tinyWebApi.Common.DatabaseManagers
         ///     (Immutable) true to automatically dispose connection.
         /// </summary>
         private readonly bool _autoDisposeConnection = false;
+        /// <summary>
+        /// Disposed flag
+        /// </summary>
         private bool _disposed;
         /// <summary>
         ///     Initializes a new instance of the tinyWebApi.Common.DatabaseManagers.DataBaseManagerOracle class.
