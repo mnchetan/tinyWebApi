@@ -1165,22 +1165,19 @@ namespace tinyWebApi.Common.DatabaseManagers
                 {
                     var dt1 = dt.Clone();
                     var outPut = querySpecification.Outputs_RefCursor_InSequence_CommaSeperated_WithIntFieldsSeperatedByColon_NotRequiredForMSSQL;
-                    if (!string.IsNullOrWhiteSpace(outPut) && outPut.Contains(','))
+                    var rcs = outPut.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                    if (rcs is not null && rcs.Length > 0)
                     {
-                        var rcs = outPut.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                        if (rcs is not null && rcs.Length > 0)
+                        var fields = rcs[0].Split(':');
+                        if (fields is not null && fields.Length > 0)
                         {
-                            var fields = rcs[0].Split(':');
-                            if (fields is not null && fields.Length > 0)
+                            foreach (var item in fields.Skip(1))
                             {
-                                foreach (var item in fields.Skip(1))
+                                foreach (var dataColumn in from DataColumn dataColumn in dt1.Columns
+                                                           where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
+                                                           select dataColumn)
                                 {
-                                    foreach (var dataColumn in from DataColumn dataColumn in dt1.Columns
-                                                               where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
-                                                               select dataColumn)
-                                    {
-                                        dataColumn.DataType = typeof(long);
-                                    }
+                                    dataColumn.DataType = typeof(long);
                                 }
                             }
                         }
@@ -1208,34 +1205,31 @@ namespace tinyWebApi.Common.DatabaseManagers
                 {
                     var ds1 = ds.Clone();
                     var outPut = querySpecification.Outputs_RefCursor_InSequence_CommaSeperated_WithIntFieldsSeperatedByColon_NotRequiredForMSSQL;
-                    if (!string.IsNullOrWhiteSpace(outPut) && outPut.Contains(','))
+                    var rcs = outPut.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                    if (rcs is not null && rcs.Length > 0)
                     {
-                        var rcs = outPut.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                        if (rcs is not null && rcs.Length > 0)
+                        if (ds1.Tables.Count == rcs.Length)
                         {
-                            if (ds1.Tables.Count == rcs.Length)
+                            int level = 0;
+                            foreach (DataTable dt in ds1.Tables)
                             {
-                                int level = 0;
-                                foreach (DataTable dt in ds1.Tables)
+                                if (dt.Columns.Count > 0)
                                 {
-                                    if (dt.Columns.Count > 0)
+                                    var fields = rcs[level].Split(':');
+                                    if (fields is not null && fields.Length > 0)
                                     {
-                                        var fields = rcs[level].Split(':');
-                                        if (fields is not null && fields.Length > 0)
+                                        foreach (var item in fields.Skip(1))
                                         {
-                                            foreach (var item in fields.Skip(1))
+                                            foreach (var dataColumn in from DataColumn dataColumn in dt.Columns
+                                                                       where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
+                                                                       select dataColumn)
                                             {
-                                                foreach (var dataColumn in from DataColumn dataColumn in dt.Columns
-                                                                           where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
-                                                                           select dataColumn)
-                                                {
-                                                    dataColumn.DataType = typeof(long);
-                                                }
+                                                dataColumn.DataType = typeof(long);
                                             }
                                         }
                                     }
-                                    level++;
                                 }
+                                level++;
                             }
                         }
                     }

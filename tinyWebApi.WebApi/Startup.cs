@@ -19,6 +19,8 @@ namespace tinyWebApi.WebApi
         ///     This method gets called by the runtime. Use this method to add services to the container.
         /// </summary>
         /// <param name="services"> The services. </param>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
         public void ConfigureServices(IServiceCollection services) =>
 #pragma warning disable ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
             _ = services.AddTinyWebApi(services.BuildServiceProvider().GetRequiredService<IConfiguration>(), services.BuildServiceProvider().GetRequiredService<IWebHostEnvironment>(), new TinyWebApiConfigurations()
