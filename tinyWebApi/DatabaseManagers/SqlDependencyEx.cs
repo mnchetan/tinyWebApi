@@ -190,6 +190,7 @@ namespace tinyWebApi.Helpers
     /// <summary>
     /// Extended Error Event Args to return shared object. 
     /// </summary>
+    [DebuggerStepThrough]
     public class SqlNotificationEventArgsEx
     {
         /// <summary>
@@ -198,6 +199,8 @@ namespace tinyWebApi.Helpers
         /// <param name="e"></param>
         /// <param name="sharedObject"></param>
         /// <param name="guid"></param>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
         public SqlNotificationEventArgsEx(SqlNotificationEventArgs e, dynamic sharedObject, Guid guid)
         {
             SqlNotificationEventArgs = e;

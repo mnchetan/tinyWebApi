@@ -192,6 +192,7 @@ namespace tinyWebApi.Helpers
     /// <summary>
     /// Extended Error Event Args to return shared object. 
     /// </summary>
+    [DebuggerStepThrough]
     public class OracleNotificationEventArgsEx
     {
         /// <summary>
@@ -200,6 +201,8 @@ namespace tinyWebApi.Helpers
         /// <param name="e"></param>
         /// <param name="sharedObject"></param>
         /// <param name="guid"></param>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
         public OracleNotificationEventArgsEx(OracleNotificationEventArgs e, dynamic sharedObject, Guid guid)
         {
             OracleNotificationEventArgs = e;
