@@ -239,6 +239,7 @@ namespace tinyWebApi.Helpers
     /// <summary>
     /// Extended Error Event Args to return shared object. 
     /// </summary>
+    [DebuggerStepThrough]
     public class ErrorEventArgsEx : ErrorEventArgs
     {
         /// <summary>
@@ -269,6 +270,7 @@ namespace tinyWebApi.Helpers
     /// <summary>
     /// Extended Renamed Event Args to return shared object. 
     /// </summary>
+    [DebuggerStepThrough]
     public class RenamedEventArgsEx : RenamedEventArgs
     {
         /// <summary>
@@ -304,6 +306,7 @@ namespace tinyWebApi.Helpers
     /// <summary>
     /// Extended File System Event Args to return shared object. 
     /// </summary>
+    [DebuggerStepThrough]
     public class FileSystemEventArgsEx : FileSystemEventArgs
     {
         /// <summary>
