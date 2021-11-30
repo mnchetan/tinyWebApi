@@ -10,14 +10,13 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using tiny.Logger;
+//using tiny.Logger;
 using tinyWebApi.Common;
 using tinyWebApi.Common.DataObjects;
 using tinyWebApi.Common.DBContext;
@@ -57,14 +56,13 @@ namespace tinyWebApi.WebApi.Configurations
         /// ITinyWebApiConfigurations needs to be passed on as mandatory parameter.
         /// </summary>
         /// <param name="services">The services.</param>
-        /// <param name="configuration">The configuration.</param>
-        /// <param name="webHostEnvironment">The web host environment.</param>
         /// <param name="tinyWebApiConfigurations">The tiny web api configurations.</param>
         /// <returns>An IServiceCollection.</returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static IServiceCollection AddTinyWebApi(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, ITinyWebApiConfigurations tinyWebApiConfigurations)
+        public static IServiceCollection AddTinyWebApi(this IServiceCollection services, ITinyWebApiConfigurations tinyWebApiConfigurations)
         {
+            var (configuration, webHostEnvironment) = (services.BuildServiceProvider().GetRequiredService<IConfiguration>(), services.BuildServiceProvider().GetRequiredService<IWebHostEnvironment>());
             if (string.IsNullOrEmpty(tinyWebApiConfigurations.ConfigurationDirectoryPath))
             {
                 tinyWebApiConfigurations.ConfigurationDirectoryPath = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).DirectoryName;
@@ -98,7 +96,7 @@ namespace tinyWebApi.WebApi.Configurations
                 options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
-            services.AddTinyLogger(new LoggerOption("logs",Level:LogLevel.Trace)).AddTinyLoggerConsole();
+            //services.AddTinyLogger(new LoggerOption("logs",Level:LogLevel.Trace)).AddTinyLoggerConsole();
             return services;
         }
         /// <summary>
