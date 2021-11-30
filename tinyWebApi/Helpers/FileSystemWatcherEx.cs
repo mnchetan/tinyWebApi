@@ -41,9 +41,17 @@ namespace tinyWebApi.Helpers
         [DebuggerStepThrough]
         public void StartWatching(string directory, string fileName)
         {
-            ObjWatcher = new();
+            if (ObjWatcher is null)
+            {
+                ObjWatcher = new();
+            }
             ObjWatcher.Path = directory;
             ObjWatcher.Filter = fileName;
+            ObjWatcher.Created -= ObjWatcher_Created;
+            ObjWatcher.Deleted -= ObjWatcher_Deleted;
+            ObjWatcher.Changed -= ObjWatcher_Changed;
+            ObjWatcher.Renamed -= ObjWatcher_Renamed;
+            ObjWatcher.Error -= ObjWatcher_Error;
             ObjWatcher.Created += ObjWatcher_Created;
             ObjWatcher.Deleted += ObjWatcher_Deleted;
             ObjWatcher.Changed += ObjWatcher_Changed;

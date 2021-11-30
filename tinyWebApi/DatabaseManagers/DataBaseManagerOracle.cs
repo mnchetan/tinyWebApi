@@ -135,7 +135,7 @@ namespace tinyWebApi.Common.DatabaseManagers
                     {
                         case DatabaseParameterType.Structured when !item.IsOutParameter:
                             {
-                                Global.LogInformation("When parameter tpe is stuctured and is not an out parameter.");
+                                Global.LogInformation("When parameter type is stuctured and is not an out parameter.");
                                 if (isMapUDTAsJSON || isMapUDTAsXML)
                                 {
                                     Global.LogInformation("When isMapUDTAsJSON or isMapUDTAsXML is true.");

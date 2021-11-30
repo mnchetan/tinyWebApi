@@ -117,7 +117,7 @@ namespace tinyWebApi.Common.DatabaseManagers
                     {
                         case DatabaseParameterType.Structured when !item.IsOutParameter:
                             {
-                                Global.LogInformation("When parameter tpe is stuctured and is not an out parameter.");
+                                Global.LogInformation("When parameter type is stuctured and is not an out parameter.");
                                 var s = cmd.Parameters.AddWithValue(!string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains('@') ? item.Name : "@" + item.Name, item.Value);
                                 s.TypeName = item.Tag;
                                 s.SqlDbType = SqlDbType.Structured;
