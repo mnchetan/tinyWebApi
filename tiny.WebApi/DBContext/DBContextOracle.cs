@@ -215,15 +215,21 @@ namespace tiny.WebApi.DBContext
         /// Oracle Transaction.
         /// </summary>
         [DebuggerHidden]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public OracleTransaction Transaction { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// The connection string
         /// </summary>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private string _connectionString;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Oracle Connection
         /// </summary>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private OracleConnection _connection;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
@@ -245,7 +251,9 @@ namespace tiny.WebApi.DBContext
                         Global.LogInformation("Close connection when open, dispose and set as null.");
                         if (_connection.State == ConnectionState.Open) _connection.Close();
                         _connection.Dispose();
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                         _connection = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                     }
                     Global.LogInformation("Releasing lock.");
                 }
@@ -265,7 +273,9 @@ namespace tiny.WebApi.DBContext
                 Global.LogInformation("Rolling back transaction.");
                 Transaction.Rollback();
                 Global.LogInformation("Transaction rolled back.");
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                 Transaction = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
             }
         }
         /// <summary>

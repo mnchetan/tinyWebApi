@@ -4,8 +4,8 @@
 // <summary>
 //     Implements the database parameters class.
 // </summary>
-using tiny.WebApi.Enums;
 using System.Diagnostics;
+using tiny.WebApi.Enums;
 namespace tiny.WebApi.DataObjects
 {
     /// <summary>
@@ -21,14 +21,15 @@ namespace tiny.WebApi.DataObjects
         ///     The name.
         /// </value>
         [DebuggerHidden]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string Name { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets or sets the value.
         /// </summary>
         /// <value>
         ///     The value.
         /// </value>
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         [DebuggerHidden]
         public object? Value { get; set; }
         /// <summary>
@@ -45,7 +46,6 @@ namespace tiny.WebApi.DataObjects
         /// <value>
         ///     True if this object is out parameter, false if not.
         /// </value>
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         [DebuggerHidden]
         public bool IsOutParameter { get; set; }
         /// <summary>
@@ -63,6 +63,8 @@ namespace tiny.WebApi.DataObjects
         ///     The tag value is used to store the UDT type.
         /// </value>
         [DebuggerHidden]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string Tag { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     }
 }

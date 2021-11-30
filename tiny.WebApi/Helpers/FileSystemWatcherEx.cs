@@ -16,12 +16,16 @@ namespace tiny.WebApi.Helpers
         /// File System Watcher Object
         /// </summary>
         [DebuggerHidden]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private FileSystemWatcher ObjWatcher { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Shared Object to be passed on along with generated events.
         /// </summary>
         [DebuggerHidden]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public object SharedObject { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Unique identifier to identify the monitoring job.
         /// </summary>
@@ -184,7 +188,6 @@ namespace tiny.WebApi.Helpers
                 throw;
             }
         }
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         /// <summary>
         /// Extended changed event.
         /// </summary>
@@ -205,7 +208,6 @@ namespace tiny.WebApi.Helpers
         /// Extended renamed event.
         /// </summary>
         public event RenamedEventHandler? RenamedEx;
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         /// <summary>
         /// Dispose the File System Watcher Extended object.
         /// </summary>
@@ -213,7 +215,9 @@ namespace tiny.WebApi.Helpers
         [DebuggerStepThrough]
         public new void Dispose()
         {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
             SharedObject = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
             base.Dispose();
             GC.SuppressFinalize(this);
         }
@@ -248,14 +252,18 @@ namespace tiny.WebApi.Helpers
         /// <param name="ex"></param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public ErrorEventArgsEx(ErrorEventArgs ex) : base(ex.GetException()) { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Extended Error Event Args constructor.
         /// </summary>
         /// <param name="exception"></param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public ErrorEventArgsEx(Exception exception) : base(exception) { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Shared Objected to be returned back.
         /// </summary>
@@ -279,7 +287,9 @@ namespace tiny.WebApi.Helpers
         /// <param name="ex"></param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public RenamedEventArgsEx(RenamedEventArgs ex) : base(ex.ChangeType, ex.FullPath, ex.Name, ex.OldName) { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Extended Renamed Event Args constructor.
         /// </summary>
@@ -287,11 +297,11 @@ namespace tiny.WebApi.Helpers
         /// <param name="directory"></param>
         /// <param name="name"></param>
         /// <param name="oldName"></param>
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public RenamedEventArgsEx(WatcherChangeTypes changeType, string directory, string? name, string? oldName) : base(changeType, directory, name, oldName) { }
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Shared Objected to be returned back.
         /// </summary>
@@ -315,18 +325,20 @@ namespace tiny.WebApi.Helpers
         /// <param name="ex"></param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public FileSystemEventArgsEx(FileSystemEventArgs ex) : base(ex.ChangeType, ex.FullPath, ex.Name) { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Extended File System Event Args constructor.
         /// </summary>
         /// <param name="changeType"></param>
         /// <param name="directory"></param>
         /// <param name="name"></param>
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public FileSystemEventArgsEx(WatcherChangeTypes changeType, string directory, string? name) : base(changeType, directory, name) { }
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Shared Objected to be returned back.
         /// </summary>

@@ -1,13 +1,13 @@
-using Newtonsoft.Json;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using tiny.WebApi.TestWebApi;
 // <copyright file="Program.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
 // <summary>
 //     Implements the program class.
 // </summary>
+using Newtonsoft.Json;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using tiny.WebApi.TestWebApi;
 using static tiny.WebApi.Configurations.Extensions;
 #pragma warning disable CS8604 // Possible null reference argument.
 var filePath = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName, "appsettings.json");

@@ -2,7 +2,7 @@
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
 // <summary>
-//     Itiny.WebApiConfigurations interface.
+//     ITinyWebApiConfigurations interface.
 // </summary>
 using System.Collections.Generic;
 using System.Diagnostics;

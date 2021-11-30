@@ -1,9 +1,6 @@
 ﻿// <copyright file="Exceptions.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
-using tiny.WebApi.DataObjects;
-using tiny.WebApi.Enums;
-using tiny.WebApi.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,6 +9,9 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using tiny.WebApi.DataObjects;
+using tiny.WebApi.Enums;
+using tiny.WebApi.Helpers;
 using static tiny.WebApi.DataObjects.Global;
 namespace tiny.WebApi.Extensions
 {
@@ -79,7 +79,9 @@ namespace tiny.WebApi.Extensions
         {
             LogInformation($"Inside ProcessOutPutData.");
             string filePath;
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             dynamic input = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
             if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
@@ -129,7 +131,9 @@ namespace tiny.WebApi.Extensions
         {
             LogInformation($"Inside ProcessOutPutData.");
             string filePath;
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             dynamic input = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
             if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
@@ -179,7 +183,9 @@ namespace tiny.WebApi.Extensions
         {
             LogInformation($"Inside ProcessOutPutDataForExcel.");
             string filePath;
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             dynamic input = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
             if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
@@ -209,7 +215,9 @@ namespace tiny.WebApi.Extensions
                     input = outPut;
                 }
             if (input is null) input = outPut;
+#pragma warning disable CS8604 // Possible null reference argument.
             var result = ExcelCSVHelper.ExportToExcel(input as DataSet);
+#pragma warning restore CS8604 // Possible null reference argument.
             if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, result, OutPutType.Excel);
             return result;
         }
@@ -229,7 +237,9 @@ namespace tiny.WebApi.Extensions
         {
             LogInformation($"Inside ProcessOutPutDataForExcel.");
             string filePath;
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             dynamic input = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
             if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
@@ -259,7 +269,9 @@ namespace tiny.WebApi.Extensions
                     input = outPut;
                 }
             if (input is null) input = outPut;
+#pragma warning disable CS8604 // Possible null reference argument.
             var result = ExcelCSVHelper.ExportToExcel(input as DataTable);
+#pragma warning restore CS8604 // Possible null reference argument.
             if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, result, OutPutType.Excel);
             return result;
         }
@@ -279,8 +291,10 @@ namespace tiny.WebApi.Extensions
         {
             LogInformation($"Inside ProcessOutPutDataForCSV.");
             string filePath;
-            dynamic input = null;
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+            dynamic input = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
                 {
@@ -309,7 +323,9 @@ namespace tiny.WebApi.Extensions
                     input = outPut;
                 }
             if (input is null) input = outPut;
+#pragma warning disable CS8604 // Possible null reference argument.
             var result = (input as DataTable).DataTableToCSV();
+#pragma warning restore CS8604 // Possible null reference argument.
             if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, result, OutPutType.CSV);
             return result;
         }
@@ -329,7 +345,9 @@ namespace tiny.WebApi.Extensions
         {
             LogInformation($"Inside ProcessOutPutDataForPDF.");
             string filePath;
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             dynamic input = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
             if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
@@ -359,7 +377,9 @@ namespace tiny.WebApi.Extensions
                     input = outPut;
                 }
             if (input is null) input = outPut;
+#pragma warning disable CS8604 // Possible null reference argument.
             var result = PDFHelper.ExportToPDF(input as DataSet);
+#pragma warning restore CS8604 // Possible null reference argument.
             if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, result, OutPutType.PDF);
             return result;
         }
@@ -379,7 +399,9 @@ namespace tiny.WebApi.Extensions
         {
             LogInformation($"Inside ProcessOutPutDataForPDF.");
             string filePath;
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             dynamic input = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             LogInformation($"Return output data as it is if PostProcessFileName or class name is empty or null.");
             if (!string.IsNullOrWhiteSpace(querySpecification.ExternalDllNameImplementingIProcessDataInterface_PostProcessing) && !string.IsNullOrWhiteSpace(querySpecification.FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing))
                 if (File.Exists(filePath = GetProcessFilePath(querySpecification)))
@@ -410,7 +432,9 @@ namespace tiny.WebApi.Extensions
                 }
             if (input is null) input = outPut;
             DataSet ds = new();
+#pragma warning disable CS8604 // Possible null reference argument.
             ds.Tables.Add(input as DataTable);
+#pragma warning restore CS8604 // Possible null reference argument.
             var result = PDFHelper.ExportToPDF(ds);
             if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, result, OutPutType.PDF);
             return result;
@@ -453,7 +477,9 @@ namespace tiny.WebApi.Extensions
                 }
                 else
                     LogWarning($"dll does not exists : {filePath}");
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
             if (querySpecification.IsAllowSendingJSONInMail) MailOutPut(querySpecification, null, OutPutType.PDF);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
             return input;
         }
         /// <summary>
@@ -470,7 +496,9 @@ namespace tiny.WebApi.Extensions
             if (querySpecification.MailerSpecification is not null && querySpecification.IsSendOutputViaEmailAlso)
                 try
                 {
+#pragma warning disable CS8604 // Possible null reference argument.
                     _ = Task.Run(() => MailClient.SendMail(querySpecification, outPut is null ? null : new MemoryStream(outPut), outPutType)).ConfigureAwait(false);
+#pragma warning restore CS8604 // Possible null reference argument.
                 }
                 catch { }
         }

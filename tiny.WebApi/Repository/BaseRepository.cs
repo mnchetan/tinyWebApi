@@ -149,7 +149,9 @@ namespace tiny.WebApi
                         }
                         else if (dbp.Type == DatabaseParameterType.Structured && !input.Contains('$'))
                         {
+#pragma warning disable CS8604 // Possible null reference argument.
                             dbp.Value = querySpecification.IsMapUDTAsJSON_ApplicableForOracle && dbp.Value is DataTable ? dbp.Value.ToJSON() : querySpecification.IsMapUDTAsXML_ApplicableForOracle && dbp.Value is DataTable ? (dbp.Value as DataTable).DataTableAsXML() : throw new NotSupportedException("User defined type support if needed to be used then type name should be specified as $ seperated in the inputs within the queryspecification else should be mapped either as xml or json and should be of type a table/array...");
+#pragma warning restore CS8604 // Possible null reference argument.
                             l1.Add(dbp);
                         }
                     }

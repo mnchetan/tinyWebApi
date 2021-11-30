@@ -10,9 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using tiny.WebApi.Configurations;
-using System.Linq;
 namespace tiny.WebApi.DataObjects
 {
     /// <summary>
@@ -29,7 +29,11 @@ namespace tiny.WebApi.DataObjects
         ///     The full path name of the configuration directory.
         /// </value>
         [DebuggerHidden]
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         public static string ConfigurationDirectoryPath => !string.IsNullOrEmpty(Configuration?.GetSection("ConfigurationDirectoryPath").Value) && Directory.Exists(Configuration?.GetSection("ConfigurationDirectoryPath").Value) ? Configuration?.GetSection("AllowedCorsHosts").Value : !string.IsNullOrEmpty(TinyWebApiConfigurations.ConfigurationDirectoryPath) && Directory.Exists(TinyWebApiConfigurations.ConfigurationDirectoryPath) ? TinyWebApiConfigurations.ConfigurationDirectoryPath : new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).DirectoryName;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8603 // Possible null reference return.
         /// <summary>
         ///     Logs an information.
         /// </summary>
@@ -37,7 +41,9 @@ namespace tiny.WebApi.DataObjects
         /// <param name="objToLog"> (Optional) The object to log. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void LogInformation(string message, object objToLog = null) => Logger?.LogInformation(message, objToLog);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         /// Logs the critical.
         /// </summary>
@@ -47,7 +53,9 @@ namespace tiny.WebApi.DataObjects
         /// <param name="ex">The ex.</param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void LogCritical(string message, object objToLog = default, EventId eventId = default, Exception ex = default) => Logger?.LogCritical(eventId, ex, message, objToLog);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Logs a trace.
         /// </summary>
@@ -55,7 +63,9 @@ namespace tiny.WebApi.DataObjects
         /// <param name="objToLog"> (Optional) The object to log. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void LogTrace(string message, object objToLog = null) => Logger?.LogTrace(message, objToLog);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Logs a warning.
         /// </summary>
@@ -63,7 +73,9 @@ namespace tiny.WebApi.DataObjects
         /// <param name="objToLog"> (Optional) The object to log. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void LogWarning(string message, object objToLog = null) => Logger?.LogWarning(message, objToLog);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Logs a critical.
         /// </summary>
@@ -71,7 +83,9 @@ namespace tiny.WebApi.DataObjects
         /// <param name="objToLog"> (Optional) The object to log. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void LogCritical(string message, object objToLog = null) => Logger?.LogCritical(message, objToLog);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Logs a debug.
         /// </summary>
@@ -79,7 +93,9 @@ namespace tiny.WebApi.DataObjects
         /// <param name="objToLog"> (Optional) The object to log. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void LogDebug(string message, object objToLog = null) => Logger?.LogDebug(message, objToLog);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Logs an error.
         /// </summary>
@@ -88,7 +104,9 @@ namespace tiny.WebApi.DataObjects
         /// <param name="objToLog"> (Optional) The object to log. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void LogError(string message, Exception ex, object objToLog = null) => Logger?.LogError(message, ex, objToLog);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Gets the environment.
         ///     Default environment is "Development".
@@ -97,7 +115,9 @@ namespace tiny.WebApi.DataObjects
         ///     The environment.
         /// </value>
         [DebuggerHidden]
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         public static string Environment => string.IsNullOrEmpty(WebHostingEnvironment.EnvironmentName) ? "Development" : WebHostingEnvironment.EnvironmentName;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         /// <summary>
         ///     Gets the run as user specifications.
         /// </summary>
@@ -111,12 +131,22 @@ namespace tiny.WebApi.DataObjects
             {
                 LogInformation("Returning the RunAsUserSpecification from JSON file or Pre-Configured code or merge of both and if not available then default.");
                 Dictionary<string, RunAsUserSpecification> result = new();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 if (File.Exists(TinyWebApiConfigurations.RunAsUserJSONFilePath))
-                    result = JsonConvert.DeserializeObject<Dictionary<string, RunAsUserSpecification>>(tiny.WebApi.Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.RunAsUserJSONFilePath));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+                    result = JsonConvert.DeserializeObject<Dictionary<string, RunAsUserSpecification>>(Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.RunAsUserJSONFilePath));
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 if (TinyWebApiConfigurations.RunAsUserSpecifications is not null && TinyWebApiConfigurations.RunAsUserSpecifications.Count > 0)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                     foreach (var item in TinyWebApiConfigurations.RunAsUserSpecifications.Where(item => !result.ContainsKey(item.Key)))
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                         result.Add(item.Key, item.Value);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8603 // Possible null reference return.
                 return result;
+#pragma warning restore CS8603 // Possible null reference return.
             }
         }
         /// <summary>
@@ -132,12 +162,22 @@ namespace tiny.WebApi.DataObjects
             {
                 LogInformation("Returning the DatabaseSpecification from JSON file or Pre-Configured code or merge of both and if not available then default.");
                 Dictionary<string, DatabaseSpecification> result = new();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 if (File.Exists(TinyWebApiConfigurations.ConnectionStringJSONFilePath))
-                    result = JsonConvert.DeserializeObject<Dictionary<string, DatabaseSpecification>>(tiny.WebApi.Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.ConnectionStringJSONFilePath));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+                    result = JsonConvert.DeserializeObject<Dictionary<string, DatabaseSpecification>>(Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.ConnectionStringJSONFilePath));
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 if (TinyWebApiConfigurations.DatabaseSpecifications is not null && TinyWebApiConfigurations.DatabaseSpecifications.Count > 0)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                     foreach (var item in TinyWebApiConfigurations.DatabaseSpecifications.Where(item => !result.ContainsKey(item.Key)))
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                         result.Add(item.Key, item.Value);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8603 // Possible null reference return.
                 return result;
+#pragma warning restore CS8603 // Possible null reference return.
             }
         }
         /// <summary>
@@ -153,12 +193,22 @@ namespace tiny.WebApi.DataObjects
             {
                 LogInformation("Returning the MailerSpecifications from JSON file or Pre-Configured code or merge of both and if not available then default.");
                 Dictionary<string, MailerSpecification> result = new();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 if (File.Exists(TinyWebApiConfigurations.MailerJSONFilePath))
-                    result = JsonConvert.DeserializeObject<Dictionary<string, MailerSpecification>>(tiny.WebApi.Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.MailerJSONFilePath));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+                    result = JsonConvert.DeserializeObject<Dictionary<string, MailerSpecification>>(Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.MailerJSONFilePath));
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 if (TinyWebApiConfigurations.MailerSpecifications is not null && TinyWebApiConfigurations.MailerSpecifications.Count > 0)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                     foreach (var item in TinyWebApiConfigurations.MailerSpecifications.Where(item => !result.ContainsKey(item.Key)))
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                         result.Add(item.Key, item.Value);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8603 // Possible null reference return.
                 return result;
+#pragma warning restore CS8603 // Possible null reference return.
             }
         }
         /// <summary>
@@ -174,12 +224,22 @@ namespace tiny.WebApi.DataObjects
             {
                 LogInformation("Returning the QuerySpecifications from JSON file or Pre-Configured code or merge of both and if not available then default.");
                 Dictionary<string, QuerySpecification> result = new();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 if (File.Exists(TinyWebApiConfigurations.QueriesJSONFilePath))
-                    result = JsonConvert.DeserializeObject<Dictionary<string, QuerySpecification>>(tiny.WebApi.Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.QueriesJSONFilePath));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+                    result = JsonConvert.DeserializeObject<Dictionary<string, QuerySpecification>>(Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.QueriesJSONFilePath));
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 if (TinyWebApiConfigurations.QuerySpecifications is not null && TinyWebApiConfigurations.QuerySpecifications.Count > 0)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                     foreach (var item in TinyWebApiConfigurations.QuerySpecifications.Where(item => !result.ContainsKey(item.Key)))
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                         result.Add(item.Key, item.Value);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8603 // Possible null reference return.
                 return result;
+#pragma warning restore CS8603 // Possible null reference return.
             }
         }
         /// <summary>
@@ -191,7 +251,9 @@ namespace tiny.WebApi.DataObjects
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8603 // Possible null reference return.
         public static DatabaseSpecification GetDatabaseSpecificationByDatabaseName(string name) => DatabaseSpecifications.GetValueOrDefault(name);
+#pragma warning restore CS8603 // Possible null reference return.
         /// <summary>
         ///     Gets mailer specification by mailer name.
         /// </summary>
@@ -201,7 +263,9 @@ namespace tiny.WebApi.DataObjects
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8603 // Possible null reference return.
         public static MailerSpecification GetMailerSpecificationByMailerName(string name) => MailerSpecifications.GetValueOrDefault(name);
+#pragma warning restore CS8603 // Possible null reference return.
         /// <summary>
         ///     Gets run as user specification by user name.
         /// </summary>
@@ -211,7 +275,9 @@ namespace tiny.WebApi.DataObjects
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8603 // Possible null reference return.
         public static RunAsUserSpecification GetRunAsUserSpecificationByUserName(string name) => RunAsUserSpecifications.GetValueOrDefault(name);
+#pragma warning restore CS8603 // Possible null reference return.
         /// <summary>
         ///     Gets query specification by query name.
         /// </summary>
@@ -221,7 +287,9 @@ namespace tiny.WebApi.DataObjects
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8603 // Possible null reference return.
         public static QuerySpecification GetQuerySpecificationByQueryName(string name) => QuerySpecifications.GetValueOrDefault(name);
+#pragma warning restore CS8603 // Possible null reference return.
         /// <summary>
         ///     Gets or sets the configuration.
         /// </summary>
@@ -229,7 +297,6 @@ namespace tiny.WebApi.DataObjects
         ///     The configuration.
         /// </value>
         [DebuggerHidden]
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         public static IConfiguration? Configuration { get; set; }
         /// <summary>
         ///     Gets or sets the web hosting environment.
@@ -238,7 +305,6 @@ namespace tiny.WebApi.DataObjects
         ///     The configuration.
         /// </value>
         [DebuggerHidden]
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         public static IHostEnvironment? WebHostingEnvironment { get; set; }
         /// <summary>
         ///     Gets the service IP.
@@ -246,9 +312,8 @@ namespace tiny.WebApi.DataObjects
         /// <value>
         ///     The service IP.
         /// </value>
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         [DebuggerHidden]
-        public static IPAddress ServiceIP { get; internal set; }
+        public static IPAddress? ServiceIP { get; internal set; }
         /// <summary>
         ///     Gets a context for the current HTTP.
         /// </summary>
@@ -256,7 +321,7 @@ namespace tiny.WebApi.DataObjects
         ///     The current HTTP context.
         /// </value>
         [DebuggerHidden]
-        public static HttpContext CurrentHttpContext { get; internal set; }
+        public static HttpContext? CurrentHttpContext { get; internal set; }
         /// <summary>
         ///     Gets the service port.
         /// </summary>
@@ -272,7 +337,7 @@ namespace tiny.WebApi.DataObjects
         ///     The logger.
         /// </value>
         [DebuggerHidden]
-        public static ILogger Logger { get; internal set; }
+        public static ILogger? Logger { get; internal set; }
         /// <summary>
         /// Gets or sets the tiny web api configurations.
         /// </summary>
@@ -280,6 +345,6 @@ namespace tiny.WebApi.DataObjects
         ///     The tiny web api configurations.
         /// </value>
         [DebuggerHidden]
-        public static ITinyWebApiConfigurations TinyWebApiConfigurations { get; set; }
+        public static ITinyWebApiConfigurations? TinyWebApiConfigurations { get; set; }
     }
 }

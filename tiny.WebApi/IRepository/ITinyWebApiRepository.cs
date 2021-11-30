@@ -4,10 +4,10 @@
 // <summary>
 //     Implements the itiny web API repository class.
 // </summary>
-using tiny.WebApi.DataObjects;
-using tiny.WebApi.Enums;
 using System.Collections.Generic;
 using System.Diagnostics;
+using tiny.WebApi.DataObjects;
+using tiny.WebApi.Enums;
 namespace tiny.WebApi.IRepository
 {
     /// <summary>

@@ -4,8 +4,6 @@
 // <summary>
 //     Implements the mail client class.
 // </summary>
-using tiny.WebApi.DataObjects;
-using tiny.WebApi.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,6 +11,8 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Net.Mime;
+using tiny.WebApi.DataObjects;
+using tiny.WebApi.Enums;
 namespace tiny.WebApi.Helpers
 {
     /// <summary>
@@ -73,7 +73,9 @@ namespace tiny.WebApi.Helpers
         /// <param name="type">        (Optional) The type. </param>
         [DebuggerStepThrough]
         [DebuggerHidden]
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void SendMail(string from, string to, string cc, string bcc, string subject, string body, bool isBodyHtml, string smtp_server, int smtp_port, Stream content = null, ContentType type = null)
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         {
             Global.LogInformation("Inside SendMail, send mail asynchronously.");
             try
@@ -139,7 +141,9 @@ namespace tiny.WebApi.Helpers
         /// <param name="type">          (Optional) The type. </param>
         [DebuggerHidden]
         [DebuggerStepThrough]
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void SendMailImpersonated(string from, string to, string cc, string bcc, string subject, string body, bool isBodyHtml, string smtp_server, int smtp_port, string runAsUserName, string runAsDomain, string runAsPassword, Stream content = null, ContentType type = null) => ImpersonationHelper.Execute(() => SendMail(from, to, cc, bcc, subject, body, isBodyHtml, smtp_server, smtp_port, content, type), runAsUserName, runAsDomain, runAsPassword);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Sends a mail impersonated.
         /// </summary>
@@ -155,7 +159,9 @@ namespace tiny.WebApi.Helpers
         /// <param name="type">                (Optional) The type. </param>
         [DebuggerStepThrough]
         [DebuggerHidden]
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void SendMailImpersonated(string from, string to, string cc, string bcc, string subject, string body, bool isBodyHtml, MailerSpecification mailerSpecification, Stream content = null, ContentType type = null) => ImpersonationHelper.Execute(() => SendMail(from, to, cc, bcc, subject, body, isBodyHtml, mailerSpecification.SMTP_SERVER, mailerSpecification.SMTP_PORT, content, type), mailerSpecification.RunAsUserSpecification.RunAsUserName, mailerSpecification.RunAsUserSpecification.RunAsDomain, mailerSpecification.RunAsUserSpecification.IsRunAsPasswordEncrypted ? EncryptFactory.Decrypt(mailerSpecification.RunAsUserSpecification.RunAsPassword, mailerSpecification.RunAsUserSpecification.EncryptionKey) : mailerSpecification.RunAsUserSpecification.RunAsPassword);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Sends a mail.
         /// </summary>
@@ -181,7 +187,9 @@ namespace tiny.WebApi.Helpers
         public static string ResolveValues(this string value)
         {
             Global.LogInformation("Inside ResolveValues, resolving mail template for $ seperated date time formats.");
+#pragma warning disable CS8603 // Possible null reference return.
             if (value is null) return value;
+#pragma warning restore CS8603 // Possible null reference return.
             var v = value;
             var list = new List<string>();
             foreach (var s in from char v1 in v let s = v.IndexOf("$") select s)

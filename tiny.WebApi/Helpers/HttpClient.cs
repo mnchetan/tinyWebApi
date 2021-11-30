@@ -4,19 +4,16 @@
 // <summary>
 //     Implements the HTTP client class.
 // </summary>
-using tiny.WebApi.DataObjects;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Mime;
 using System.IO;
+using System.Net.Http;
+using System.Net.Mime;
+using System.Text;
 using System.Threading;
-// namespace: tiny.WebApi.Helpers
-//
-// summary:	.
+using System.Threading.Tasks;
+using tiny.WebApi.DataObjects;
 namespace tiny.WebApi.Helpers
 {
     /// <summary>
@@ -61,7 +58,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Gets a byte[] using the given request URI.
@@ -119,7 +118,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Post this message.
@@ -148,7 +149,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Post this message.
@@ -178,7 +181,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T1>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Posts an asynchronous.
@@ -207,7 +212,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Posts an asynchronous.
@@ -237,7 +244,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T1>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Put this message.
@@ -266,7 +275,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Put this message.
@@ -296,7 +307,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T1>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Puts an asynchronous.
@@ -325,7 +338,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Puts an asynchronous.
@@ -355,7 +370,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T1>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Deletes a t using the given request URI.
@@ -383,7 +400,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Deletes an asynchronous.
@@ -411,7 +430,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Patch this message.
@@ -440,7 +461,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Patch this message.
@@ -470,7 +493,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T1>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Patchs an asynchronous.
@@ -499,7 +524,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Patchs an asynchronous.
@@ -529,7 +556,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogError($"Error while triggering call. {Environment.NewLine} Error : {ex.Message}", ex);
                 data = await response.Content.ReadAsStringAsync(cancellationToken);
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T1>(data);
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Creates HTTP content.

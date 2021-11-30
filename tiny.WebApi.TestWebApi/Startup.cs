@@ -6,7 +6,6 @@
 // </summary>
 using System.Diagnostics;
 using tiny.WebApi.Configurations;
-
 namespace tiny.WebApi.TestWebApi
 {
     /// <summary>

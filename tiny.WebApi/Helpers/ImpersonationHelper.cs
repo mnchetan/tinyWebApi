@@ -4,7 +4,6 @@
 // <summary>
 //     Implements the impersonation helper class.
 // </summary>
-using tiny.WebApi.DataObjects;
 using Microsoft.Win32.SafeHandles;
 using Mono.Unix.Native;
 using System;
@@ -12,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
+using tiny.WebApi.DataObjects;
 namespace tiny.WebApi.Helpers
 {
     /// <summary>
@@ -89,7 +89,9 @@ namespace tiny.WebApi.Helpers
                 T result;
                 try
                 {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                     var oldUser = Syscall.getpwnam(Global.CurrentHttpContext?.User?.Identity?.Name.Split("@", StringSplitOptions.None)[0].Replace("@", ""));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                     var newUser = Syscall.getpwnam(runAsUserName);
                     _ = Syscall.seteuid(newUser.pw_uid);
                     _ = Syscall.setegid(newUser.pw_gid);
@@ -130,7 +132,9 @@ namespace tiny.WebApi.Helpers
             {
                 try
                 {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                     var oldUser = Syscall.getpwnam(Global.CurrentHttpContext?.User?.Identity?.Name.Split("@", StringSplitOptions.None)[0].Replace("@", ""));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                     var newUser = Syscall.getpwnam(runAsUserName);
                     _ = Syscall.seteuid(newUser.pw_uid);
                     _ = Syscall.setegid(newUser.pw_gid);

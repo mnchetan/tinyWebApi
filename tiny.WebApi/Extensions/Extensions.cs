@@ -11,7 +11,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using tiny.WebApi.DataObjects;
-
 namespace tiny.WebApi.Extensions
 {
     /// <summary>
@@ -35,7 +34,9 @@ namespace tiny.WebApi.Extensions
             StringBuilder sb = new();
             var columnNames = dt.Columns.Cast<DataColumn>().Select(o => o.ColumnName.Replace("\"", "\"\""));
             _ = sb.AppendLine(string.Join(",", columnNames));
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             foreach (var fields in from DataRow row in dt.Rows let fields = row.ItemArray.Select(fields => string.Concat("\"", fields.ToString().Replace("\"", "\"\""), "\"")).ToList() select fields) _ = sb.AppendLine(string.Join(",", fields));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             return Encoding.UTF8.GetBytes(sb.ToString());
         }
         /// <summary>
@@ -75,11 +76,15 @@ namespace tiny.WebApi.Extensions
                         }
                         catch
                         {
+#pragma warning disable CS8603 // Possible null reference return.
                             return default;
+#pragma warning restore CS8603 // Possible null reference return.
                         }
                 }
             }
+#pragma warning disable CS8603 // Possible null reference return.
             else return default;
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         /// Enumerate Data Table as List of dynamic.

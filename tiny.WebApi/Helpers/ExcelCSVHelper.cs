@@ -12,7 +12,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using tiny.WebApi.DataObjects;
-
 namespace tiny.WebApi.Helpers
 {
     /// <summary>
@@ -72,7 +71,9 @@ namespace tiny.WebApi.Helpers
             Global.LogInformation("Inside DataTableAsXML, converting DataTable as XML.");
             if (dt is not null && string.IsNullOrWhiteSpace(dt.TableName)) dt.TableName = "Table";
             using StringWriter sw = new();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             dt.WriteXml(sw);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             Global.LogInformation("Returning XML string.");
             return sw.ToString();
         }
@@ -185,7 +186,7 @@ namespace tiny.WebApi.Helpers
                                 {
                                     XLDataType.DateTime => double.TryParse(Convert.ToString(cell.Value), out double v) ? DateTime.FromOADate(v) : Convert.ToString(cell.Value),
                                     XLDataType.Number => double.TryParse(Convert.ToString(cell.Value), out double v) ? v : Convert.ToString(cell.Value),
-                                    XLDataType.Boolean => bool.TryParse(Convert.ToString(cell.Value), out Boolean v) ? v : Convert.ToString(cell.Value),
+                                    XLDataType.Boolean => bool.TryParse(Convert.ToString(cell.Value), out bool v) ? v : Convert.ToString(cell.Value),
                                     XLDataType.TimeSpan => TimeSpan.TryParse(Convert.ToString(cell.Value), out TimeSpan v) ? v : Convert.ToString(cell.Value),
                                     XLDataType.Text => Convert.ToString(cell.Value),
                                     _ => default
@@ -200,7 +201,9 @@ namespace tiny.WebApi.Helpers
                 else
                 {
                     Global.LogInformation("Returing defualt of DataTable.");
+#pragma warning disable CS8603 // Possible null reference return.
                     return default;
+#pragma warning restore CS8603 // Possible null reference return.
                 }
             }
             catch (Exception ex)
@@ -223,11 +226,15 @@ namespace tiny.WebApi.Helpers
             DataTable dt = new();
             StreamReader sr = new(new MemoryStream(fileData));
             var csvParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
+#pragma warning disable CS8604 // Possible null reference argument.
             var c = csvParser.Split(sr.ReadLine());
+#pragma warning restore CS8604 // Possible null reference argument.
             foreach (var item in c) dt.Columns.Add(item);
             while (!sr.EndOfStream)
             {
+#pragma warning disable CS8604 // Possible null reference argument.
                 string[] X = csvParser.Split(sr.ReadLine());
+#pragma warning restore CS8604 // Possible null reference argument.
                 var row = dt.NewRow();
                 for (int i = 0; i < X.Length; i++)
                 {

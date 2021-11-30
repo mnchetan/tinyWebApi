@@ -1,9 +1,12 @@
-﻿namespace tiny.WebApi.EncryptDecryptUtility
+﻿// <copyright file="Base.cs" company="tiny">
+//     Copyright (c) 2021 tiny. All rights reserved.
+// </copyright>
+namespace tiny.WebApi.EncryptDecryptUtility
 {
     /// <summary>
     /// Class EncryptDecryptUtility
     /// </summary>
-    partial class EncryptDecryptUtility
+partial class EncryptDecryptUtility
     {
         /// <summary>
         ///  Required designer variable.

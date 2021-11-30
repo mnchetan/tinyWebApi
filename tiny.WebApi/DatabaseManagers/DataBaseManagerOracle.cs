@@ -1,20 +1,19 @@
 ﻿// <copyright file="DataBaseManagerOracle.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
-using tiny.WebApi.DataObjects;
-using tiny.WebApi.Enums;
-using tiny.WebApi.Helpers;
-using tiny.WebApi.IDBContext;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Xml;
-using System.Linq;
-
+using tiny.WebApi.DataObjects;
+using tiny.WebApi.Enums;
+using tiny.WebApi.Helpers;
+using tiny.WebApi.IDBContext;
 namespace tiny.WebApi.DatabaseManagers
 {
     /// <summary>
@@ -42,7 +41,9 @@ namespace tiny.WebApi.DatabaseManagers
         /// <value>
         ///     The transaction.
         /// </value>
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         private OracleTransaction Trans { get; set; } = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Gets the transaction.
         /// </summary>
@@ -89,7 +90,9 @@ namespace tiny.WebApi.DatabaseManagers
         /// (Immutable) true to automatically dispose connection. default is false.
         ///  Auto disposition of connections will work only with close database architecture calls that is not with ExecuteReader and ExecuteXMLReader also only when Transaction is not required.
         /// </param>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public DataBaseManagerOracle(IDBContextOracle context, string connectionString, bool autoDisposeConnection = false)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             Global.LogInformation("Inside DataBaseManagerOracle and setting up the parameters.");
             _context = context;
@@ -142,7 +145,9 @@ namespace tiny.WebApi.DatabaseManagers
                                     if (_conn.State != ConnectionState.Open) { _conn.Open(); }
                                     Global.LogInformation("Setting up clob object.");
                                     OracleClob clob = new(_conn);
+#pragma warning disable CS8604 // Possible null reference argument.
                                     var arr = Encoding.Unicode.GetBytes(item.Value as string);
+#pragma warning restore CS8604 // Possible null reference argument.
                                     clob.Write(arr, 0, arr.Length);
                                     _ = cmd.Parameters.Add(!string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains(':') ? item.Name.Replace(":", "") : item.Name, OracleDbType.Clob, clob, ParameterDirection.Input);
                                 }
@@ -160,7 +165,9 @@ namespace tiny.WebApi.DatabaseManagers
                                 if (_conn.State != ConnectionState.Open) { _conn.Open(); }
                                 Global.LogInformation("Setting up bindary object.");
                                 OracleBlob blob = new(_conn);
+#pragma warning disable CS8604 // Possible null reference argument.
                                 var arr = Encoding.Unicode.GetBytes(item.Value as string);
+#pragma warning restore CS8604 // Possible null reference argument.
                                 blob.Write(arr, 0, arr.Length);
                                 _ = cmd.Parameters.Add(!string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains(':') ? item.Name.Replace(":", "") : item.Name, OracleDbType.Blob, blob, ParameterDirection.Input);
                                 break;
@@ -1192,7 +1199,9 @@ namespace tiny.WebApi.DatabaseManagers
                 }
             }
             catch { }
+#pragma warning disable CS8603 // Possible null reference return.
             return dt;
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         /// Set Int64 as column type for specified columns in Data Set as Oracle does not differentiate between intergers and decimals and makes every number column as decimal.
@@ -1248,7 +1257,9 @@ namespace tiny.WebApi.DatabaseManagers
                 }
             }
             catch { }
+#pragma warning disable CS8603 // Possible null reference return.
             return ds;
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -1283,7 +1294,9 @@ namespace tiny.WebApi.DatabaseManagers
                         Global.LogInformation("Close connection when open, dispose and set as null.");
                         if (_conn.State == ConnectionState.Open) _conn.Close();
                         _conn.Dispose();
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                         _conn = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                     }
                     Global.LogInformation("Releasing lock.");
                 }
@@ -1303,7 +1316,11 @@ namespace tiny.WebApi.DatabaseManagers
                 Global.LogInformation("Rolling back transaction.");
                 Trans.Rollback();
                 Global.LogInformation("Transaction rolled back.");
+#pragma warning disable CS8601 // Possible null reference assignment.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                 _context.Transaction = Trans = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning restore CS8601 // Possible null reference assignment.
             }
         }
         /// <summary>
@@ -1319,7 +1336,11 @@ namespace tiny.WebApi.DatabaseManagers
                 Global.LogInformation("Commiting transaction.");
                 Trans.Commit();
                 Global.LogInformation("Transaction committed.");
+#pragma warning disable CS8601 // Possible null reference assignment.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                 _context.Transaction = Trans = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning restore CS8601 // Possible null reference assignment.
             }
         }
         /// <summary>
@@ -1335,7 +1356,9 @@ namespace tiny.WebApi.DatabaseManagers
             Global.LogInformation("Inside Begin transaction.");
             Rollback();
             Global.LogInformation("Beginning transaction.");
+#pragma warning disable CS8601 // Possible null reference assignment.
             _context.Transaction = Trans = _conn?.BeginTransaction(IsolationLevel.ReadUncommitted);
+#pragma warning restore CS8601 // Possible null reference assignment.
             Global.LogInformation("Transaction begun.");
             return Transaction;
         }

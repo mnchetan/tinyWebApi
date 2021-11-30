@@ -1,13 +1,13 @@
 ﻿// <copyright file="IBase.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
-using tiny.WebApi.DataObjects;
-using tiny.WebApi.Enums;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using tiny.WebApi.DataObjects;
+using tiny.WebApi.Enums;
 namespace tiny.WebApi.IDataContracts
 {
     /// <summary>

@@ -4,10 +4,10 @@
 // <summary>
 //     Implements the query specification class.
 // </summary>
-using tiny.WebApi.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Diagnostics;
+using tiny.WebApi.Enums;
 namespace tiny.WebApi.DataObjects
 {
     /// <summary>
@@ -19,11 +19,15 @@ namespace tiny.WebApi.DataObjects
         /// <summary>
         ///     The database specification.
         /// </summary>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private DatabaseSpecification databaseSpecification;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     The mailer specification.
         /// </summary>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private MailerSpecification mailerSpecification;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the query name.
         /// </summary>
@@ -32,7 +36,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "Query", Required = Required.Always, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string Query { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the type of the execution.
         /// </summary>
@@ -51,7 +57,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "InputFieldNamesInSequence_UDTDollarSeperatedByType", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string InputFieldNamesInSequence_UDTDollarSeperatedByType { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the outputs.
         /// </summary>
@@ -61,7 +69,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "Outputs_RefCursor_InSequence_CommaSeperated_WithIntFieldsSeperatedByColon_NotRequiredForMSSQL", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string Outputs_RefCursor_InSequence_CommaSeperated_WithIntFieldsSeperatedByColon_NotRequiredForMSSQL { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the database.
         /// </summary>
@@ -70,7 +80,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "Database", Required = Required.Always, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string Database { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets a value indicating whether this object is map udt as JSON.
         /// </summary>
@@ -97,7 +109,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "ExternalDllPathImplementingIProcessDataInterface_PreProcessing", Required = Required.Default)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string ExternalDllPathImplementingIProcessDataInterface_PreProcessing { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the filename of the pre process file.
         /// </summary>
@@ -106,7 +120,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "ExternalDllNameImplementingIProcessDataInterface_PreProcessing", Required = Required.Default)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string ExternalDllNameImplementingIProcessDataInterface_PreProcessing { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the name of the pre process class.
         /// </summary>
@@ -115,7 +131,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PreProcessing", Required = Required.Default)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PreProcessing { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the full pathname of the post process file default is the configuration path.
         /// </summary>
@@ -124,7 +142,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "ExternalDllPathImplementingIProcessDataInterface_PostProcessing", Required = Required.Default)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string ExternalDllPathImplementingIProcessDataInterface_PostProcessing { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the filename of the post process file.
         /// </summary>
@@ -133,7 +153,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "ExternalDllNameImplementingIProcessDataInterface_PostProcessing", Required = Required.Default)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string ExternalDllNameImplementingIProcessDataInterface_PostProcessing { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the name of the post process class.
         /// </summary>
@@ -142,7 +164,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing", Required = Required.Default)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets a value indicating whether this object is send output via email also.
         /// </summary>
@@ -160,7 +184,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "Mailer", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string Mailer { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets a value indicating whether this object is allow sending JSON in mail.
         /// </summary>

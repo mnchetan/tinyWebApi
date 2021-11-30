@@ -1,15 +1,15 @@
 ﻿// <copyright file="DataBaseManagerSql.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
-using tiny.WebApi.DataObjects;
-using tiny.WebApi.Enums;
-using tiny.WebApi.IDBContext;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Xml;
+using tiny.WebApi.DataObjects;
+using tiny.WebApi.Enums;
+using tiny.WebApi.IDBContext;
 namespace tiny.WebApi.DatabaseManagers
 {
     /// <summary>
@@ -37,7 +37,9 @@ namespace tiny.WebApi.DatabaseManagers
         /// <value>
         ///     The transaction.
         /// </value>
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         private SqlTransaction Trans { get; set; } = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Gets the transaction.
         /// </summary>
@@ -79,7 +81,9 @@ namespace tiny.WebApi.DatabaseManagers
         /// <param name="autoDisposeConnection"> (Optional) True to automatically dispose connection. default is false.
         ///                                       Auto disposition of connections will work only with close database architecture calls that is not with ExecuteReader and ExecuteXMLReader also only when Transaction is not required.
         /// </param>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public DataBaseManagerSql(IDBContextSql context, string connectionString, bool autoDisposeConnection = false)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             Global.LogInformation("Inside DataBaseManagerSql and setting up the parameters.");
             _context = context;
@@ -1093,7 +1097,9 @@ namespace tiny.WebApi.DatabaseManagers
                         Global.LogInformation("Close connection when open, dispose and set as null.");
                         if (_conn.State == ConnectionState.Open) _conn.Close();
                         _conn.Dispose();
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                         _conn = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                     }
                     Global.LogInformation("Releasing lock.");
                 }
@@ -1113,7 +1119,11 @@ namespace tiny.WebApi.DatabaseManagers
                 Global.LogInformation("Rolling back transaction.");
                 Trans.Rollback();
                 Global.LogInformation("Transaction rolled back.");
+#pragma warning disable CS8601 // Possible null reference assignment.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                 _context.Transaction = Trans = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning restore CS8601 // Possible null reference assignment.
             }
         }
         /// <summary>
@@ -1129,7 +1139,11 @@ namespace tiny.WebApi.DatabaseManagers
                 Global.LogInformation("Commiting transaction.");
                 Trans.Commit();
                 Global.LogInformation("Transaction committed.");
+#pragma warning disable CS8601 // Possible null reference assignment.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                 _context.Transaction = Trans = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning restore CS8601 // Possible null reference assignment.
             }
         }
         /// <summary>
@@ -1145,7 +1159,9 @@ namespace tiny.WebApi.DatabaseManagers
             Global.LogInformation("Inside Begin transaction.");
             Rollback();
             Global.LogInformation("Beginning transaction.");
+#pragma warning disable CS8601 // Possible null reference assignment.
             _context.Transaction = Trans = _conn?.BeginTransaction(IsolationLevel.ReadUncommitted);
+#pragma warning restore CS8601 // Possible null reference assignment.
             Global.LogInformation("Transaction begun.");
             return Transaction;
         }

@@ -13,7 +13,6 @@ using System.IO;
 using System.Linq;
 using tiny.WebApi.DataObjects;
 using tiny.WebApi.Extensions;
-
 namespace tiny.WebApi.Helpers
 {
     /// <summary>

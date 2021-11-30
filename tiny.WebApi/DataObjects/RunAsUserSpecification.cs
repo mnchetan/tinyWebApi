@@ -22,7 +22,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "RunAsDomain", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string RunAsDomain { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the name of the run as user.
         /// </summary>
@@ -31,7 +33,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "RunAsUserName", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string RunAsUserName { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the run as password.
         /// </summary>
@@ -40,7 +44,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "RunAsPassword", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string RunAsPassword { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets a value indicating whether this object is run as password encrypted.
         /// </summary>
@@ -58,6 +64,8 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "EncryptionKey", Required = Required.Default)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string EncryptionKey { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     }
 }

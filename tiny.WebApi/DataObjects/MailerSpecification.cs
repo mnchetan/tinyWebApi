@@ -17,7 +17,9 @@ namespace tiny.WebApi.DataObjects
         /// <summary>
         ///     The run as user specification.
         /// </summary>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private RunAsUserSpecification runAsUSerSpecification;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the SMTP server.
         /// </summary>
@@ -26,7 +28,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "SMTP_SERVER", Required = Required.Always, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string SMTP_SERVER { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the SMTP port.
         /// </summary>
@@ -64,7 +68,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "RunAsUser", Required = Required.Default)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string RunAsUser { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the run as user specification.
         /// </summary>
@@ -88,7 +94,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "From", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string From { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets to.
         /// </summary>
@@ -97,7 +105,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "To", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string To { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the Cc.
         /// </summary>
@@ -106,7 +116,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "CC", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string CC { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the Bcc.
         /// </summary>
@@ -115,7 +127,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "BCC", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string BCC { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the subject.
         /// </summary>
@@ -124,7 +138,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "Subject", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string Subject { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the body.
         /// </summary>
@@ -133,7 +149,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "Body", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string Body { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the name of the attachment.
         /// </summary>
@@ -142,7 +160,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "AttachmentName", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string AttachmentName { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets a value indicating whether this object is body HTML.
         /// </summary>

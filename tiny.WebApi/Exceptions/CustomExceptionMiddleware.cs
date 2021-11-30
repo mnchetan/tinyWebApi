@@ -11,7 +11,6 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using tiny.WebApi.DataObjects;
-
 namespace tiny.WebApi.Exceptions
 {
     /// <summary>

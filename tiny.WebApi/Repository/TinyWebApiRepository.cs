@@ -88,9 +88,13 @@ namespace tiny.WebApi
                 var querySpecification = Global.GetQuerySpecificationByQueryName(key);
                 if (querySpecification is null) throw new ArgumentException($"Query not mapped for the key : {key}.");
                 var isDoNotFireFurtherQuery = false;
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                 object output = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 Global.LogInformation("Processing input data before firing database queries.");
+#pragma warning disable CS8601 // Possible null reference assignment.
                 requestSpecifications = requestSpecifications.ProcessInputData(key, querySpecification, ref isDoNotFireFurtherQuery, ref output);
+#pragma warning restore CS8601 // Possible null reference assignment.
                 if (isDoNotFireFurtherQuery)
                 {
                     Global.LogInformation("Not firing the queries and escaping it.");

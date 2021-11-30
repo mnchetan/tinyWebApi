@@ -4,10 +4,10 @@
 // <summary>
 //     Declares the IProcessData interface.
 // </summary>
-using tiny.WebApi.DataObjects;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using tiny.WebApi.DataObjects;
 namespace tiny.WebApi.IDataContracts
 {
     /// <summary>

@@ -1,11 +1,6 @@
 ﻿// <copyright file="Base.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
-using tiny.WebApi.DataObjects;
-using tiny.WebApi.Enums;
-using tiny.WebApi.Exceptions;
-using tiny.WebApi.IDataContracts;
-using tiny.WebApi.IDBContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -18,7 +13,12 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using tiny.WebApi.DataObjects;
+using tiny.WebApi.Enums;
+using tiny.WebApi.Exceptions;
 using tiny.WebApi.Helpers;
+using tiny.WebApi.IDataContracts;
+using tiny.WebApi.IDBContext;
 namespace tiny.WebApi.Controllers
 {
     /// <summary>
@@ -130,7 +130,7 @@ namespace tiny.WebApi.Controllers
             _logger.LogInformation("Setting up globals.");
             Global.Logger = _logger;
             Global.ServicePort = HttpContext.Connection.LocalPort;
-            Global.ServiceIP = HttpContext.Connection.LocalIpAddress;
+            Global.ServiceIP = HttpContext?.Connection?.LocalIpAddress;
             Global.CurrentHttpContext = HttpContext;
             _logger.LogInformation("globals have been set.");
         }
@@ -163,13 +163,17 @@ namespace tiny.WebApi.Controllers
                     throw new CustomException((int)HttpStatusCode.InternalServerError, "Internal Server Error!!!", "Request execution type ScalarText, ScalarProcedure, NonQueryText, NonQueryProcedure can only support JSON serialized output.");
                 var result = new List<RequestSpecification>();
                 _logger.LogInformation("Looping thorugh request.");
+#pragma warning disable CS8604 // Possible null reference argument.
                 foreach (var (p, r) in from KeyValuePair<string, JToken> p in request as JObject
+#pragma warning restore CS8604 // Possible null reference argument.
                                        let r = new RequestSpecification
                                        {
                                            IsArrayOfSingleField = p.Value.HasValues,
                                            PropertyName = p.Key,
                                            CallType = "P",
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                                            PropertyType = null,
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                                            IsArrayOfMultipleFields = hasFileContent ? !$"{fileContentFieldName}".Contains($"{p.Key}", StringComparison.OrdinalIgnoreCase) && p.Value.HasValues && p.Value is not null && p.Value.First is not null && p.Value.First.HasValues : p.Value.HasValues && p.Value is not null && p.Value.First.HasValues,
                                            IsFileContent = hasFileContent && $"{fileContentFieldName}".Contains($"{p.Key}", StringComparison.OrdinalIgnoreCase),
                                            FileContentType = fileContentType
@@ -177,16 +181,26 @@ namespace tiny.WebApi.Controllers
                                        select (p, r))
                 {
                     _logger.LogInformation("Setting property type.");
+#pragma warning disable CS8601 // Possible null reference assignment.
                     r.PropertyType = hasFileContent && $"{fileContentFieldName}".Contains($"{p.Key}", StringComparison.OrdinalIgnoreCase) ? null : GetPropertyType(p, r);
+#pragma warning restore CS8601 // Possible null reference assignment.
                     try
                     {
                         _logger.LogInformation("Setting propery value.");
+#pragma warning disable CS8601 // Possible null reference assignment.
+#pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                         r.PropertyValue = hasFileContent && $"{fileContentFieldName}".Contains($"{p.Key}", StringComparison.OrdinalIgnoreCase) ? fileContentType == FileContentType.CSV ? ExcelCSVHelper.ImportCSVToDataTable(p.Value.ToObject<byte[]>()) : fileContentType == FileContentType.Excel ? ExcelCSVHelper.ImportExcelToDataTable(p.Value.ToObject<byte[]>(), sheetName) : p.Value.ToObject<byte[]>() : r.IsArrayOfSingleField && !r.IsArrayOfMultipleFields ? (dynamic)p.Value.ToObject<List<dynamic>>() : r.IsArrayOfSingleField && r.IsArrayOfMultipleFields ? (dynamic)p.Value : (dynamic)p.Value.ToObject(r.PropertyType);
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning restore CS8601 // Possible null reference assignment.
                     }
                     catch
                     {
-                        r.PropertyType = null; 
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+                        r.PropertyType = null;
                         r.PropertyValue = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                     }
                     result.Add(r);
                 }
@@ -210,7 +224,9 @@ namespace tiny.WebApi.Controllers
         /// <seealso cref="M:IBase.GetRequestSpecificationFromQueryParameters()"/>
         [DebuggerStepThrough]
         [DebuggerHidden]
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public List<RequestSpecification> GetRequestSpecificationFromQueryParameters() => (from c in HttpContext.Request.Query select new RequestSpecification() { PropertyName = c.Key, PropertyType = null, PropertyValue = c.Value, CallType = "G" }).ToList();
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Gets property type.
         /// </summary>
@@ -221,7 +237,11 @@ namespace tiny.WebApi.Controllers
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8601 // Possible null reference assignment.
         public static Type GetPropertyType(KeyValuePair<string, JToken> property, RequestSpecification r) => r.PropertyType = !r.IsArrayOfMultipleFields ? (r.IsArrayOfSingleField && !r.IsArrayOfMultipleFields ? property.Value.First?.Type : property.Value.Type) switch { JTokenType.Raw or JTokenType.String or JTokenType.TimeSpan or JTokenType.Guid or JTokenType.Uri => typeof(String), JTokenType.Boolean => typeof(Boolean), JTokenType.Date => typeof(DateTime), JTokenType.Integer => typeof(Int64), JTokenType.Float => typeof(Decimal), _ => r.CallType == "P" ? null : typeof(Object), } : typeof(DataTable);
+#pragma warning restore CS8601 // Possible null reference assignment.
+#pragma warning restore CS8603 // Possible null reference return.
         /// <summary>
         ///     Map out put type.
         /// </summary>

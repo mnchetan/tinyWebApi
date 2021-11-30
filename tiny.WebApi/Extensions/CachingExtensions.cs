@@ -42,7 +42,9 @@ namespace tiny.WebApi.Extensions
         /// <returns></returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         internal static bool AllowServeFromCache(this QuerySpecification querySpecification, ExecutionType executionType) => TinyCache.GetValueOrDefault($"{querySpecification.Query}_ {Enum.GetName(executionType)}".ToLower()) != null && (TinyCache.GetValueOrDefault($"{querySpecification.Query}_ {Enum.GetName(executionType)}".ToLower()).LastFetchedFromDatabaseOnDateTimeInUTC - DateTime.UtcNow) <= new TimeSpan(0, 0, querySpecification.CacheDurationInSeconds);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         /// <summary>
         /// Add to Cache.
         /// </summary>
@@ -104,13 +106,21 @@ namespace tiny.WebApi.Extensions
         internal static T ServeFromCache<T>(this QuerySpecification querySpecification, ExecutionType executionType)
         {
             Global.LogInformation($"Inside ServeFromCache, if data exists return data else return instance of {typeof(T)}.");
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var value = TinyCache.ContainsKey($"{querySpecification.Query}_ {Enum.GetName(executionType)}".ToLower()) && TinyCache.GetValueOrDefault($"{querySpecification.Query}_ {Enum.GetName(executionType)}".ToLower()) != null ? TinyCache.GetValueOrDefault($"{querySpecification.Query}_ {Enum.GetName(executionType)}".ToLower()).CachedData : Activator.CreateInstance<T>();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8603 // Possible null reference return.
             return value switch
             {
+#pragma warning disable CS8604 // Possible null reference argument.
                 DataSet => JsonConvert.DeserializeObject<DataSet>((value as DataSet).ToJSON()),
+#pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning disable CS8604 // Possible null reference argument.
                 DataTable => JsonConvert.DeserializeObject<DataTable>((value as DataTable).ToJSON()),
+#pragma warning restore CS8604 // Possible null reference argument.
                 _ => value,
             };
+#pragma warning restore CS8603 // Possible null reference return.
         }
     }
 }

@@ -2,7 +2,7 @@
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
 // <summary>
-//     tiny.WebApiConfigurations implements Itiny.WebApiConfigurations interface.
+//     TinyWebApiConfigurations implements Itiny.WebApiConfigurations interface.
 //     This is used to push the configurations necessary to inject in the DI for functionaning of the tiny.WebApi.
 // </summary>
 using System.Collections.Generic;
@@ -25,7 +25,9 @@ namespace tiny.WebApi.Configurations
         /// Make sure QueriesJSONFileNameWithoutExtension.environment.json is present at ConfigurationDirectoryPath.
         /// </summary>
         [DebuggerHidden]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string QueriesJSONFileNameWithoutExtension { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Gets the queries JSON file path.
         /// </summary>
@@ -35,7 +37,9 @@ namespace tiny.WebApi.Configurations
         /// Gets or sets the connection strings file name without extension.
         /// </summary>
         [DebuggerHidden]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string ConnectionStringJSONFileNameWithoutExtension { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Gets the connection string JSON file path.
         /// </summary>
@@ -45,7 +49,7 @@ namespace tiny.WebApi.Configurations
         /// Gets or sets the mailers file name without extension.
         /// </summary>
         [DebuggerHidden]
-        public string MailerJSONFileNameWithoutExtension { get; set; }
+        public string MailerJSONFileNameWithoutExtension { get; set; } = "";
         /// <summary>
         /// Gets the mailer JSON file path.
         /// </summary>
@@ -55,7 +59,9 @@ namespace tiny.WebApi.Configurations
         /// Gets or sets the run as user file name without extension.
         /// </summary>
         [DebuggerHidden]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string RunAsUserJSONFileNameWithoutExtension { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Gets the run as user JSON file path.
         /// </summary>
@@ -68,26 +74,26 @@ namespace tiny.WebApi.Configurations
         /// If both provided then both configurations will be merged where in configurations in the json file will be take precedence in case of duplicates.
         /// </summary>
         [DebuggerHidden]
-        public Dictionary<string, QuerySpecification> QuerySpecifications { get; set; }
+        public Dictionary<string, QuerySpecification> QuerySpecifications { get; set; } = new();
         /// <summary>
         /// Gets or sets the mailer specifications.
         /// </summary>
         [DebuggerHidden]
-        public Dictionary<string, MailerSpecification> MailerSpecifications { get; set; }
+        public Dictionary<string, MailerSpecification> MailerSpecifications { get; set; } = new();
         /// <summary>
         /// Gets or sets the database specifications.
         /// </summary>
         [DebuggerHidden]
-        public Dictionary<string, DatabaseSpecification> DatabaseSpecifications { get; set; }
+        public Dictionary<string, DatabaseSpecification> DatabaseSpecifications { get; set; } = new();
         /// <summary>
         /// Gets or sets the run as user specifications.
         /// </summary>
         [DebuggerHidden]
-        public Dictionary<string, RunAsUserSpecification> RunAsUserSpecifications { get; set; }
+        public Dictionary<string, RunAsUserSpecification> RunAsUserSpecifications { get; set; } = new();
         /// <summary>
         /// Gets the configuration directory path.
         /// </summary>
         [DebuggerHidden]
-        public string ConfigurationDirectoryPath { get; set; }
+        public string ConfigurationDirectoryPath { get; set; } = "";
     }
 }

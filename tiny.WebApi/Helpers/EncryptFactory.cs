@@ -10,7 +10,6 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using tiny.WebApi.DataObjects;
-
 namespace tiny.WebApi.Helpers
 {
     /// <summary>

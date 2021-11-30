@@ -4,13 +4,13 @@
 // <summary>
 //     Implements the external assembly execution helper class.
 // </summary>
-using tiny.WebApi.DataObjects;
-using tiny.WebApi.IDataContracts;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using tiny.WebApi.DataObjects;
+using tiny.WebApi.IDataContracts;
 namespace tiny.WebApi.Helpers
 {
     /// <summary>
@@ -36,7 +36,9 @@ namespace tiny.WebApi.Helpers
                 Global.LogInformation("Inside LoadPluginFromFile, Load external assembly from the filepath if not already loaded in app domain.");
                 var found = false;
                 Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                 Assembly asm = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 var fileInfo = new FileInfo(filePath);
                 foreach(var item in assemblies.Where(item => item.GetName().Name == fileInfo.Name.Replace(fileInfo.Extension, "")))
                 {
@@ -44,14 +46,24 @@ namespace tiny.WebApi.Helpers
                     found = true;
                     break;
                 }
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 Type type = found ? asm.GetType(className) : Assembly.LoadFrom(filePath).GetType(className);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 Global.LogInformation("Returning the instance of class from the loaded external assembly.");
-                return (IProcessData)Activator.CreateInstance(type);
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8604 // Possible null reference argument.
+                return Activator.CreateInstance(type) as IProcessData;
+#pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning restore CS8603 // Possible null reference return.
             }
             catch (Exception ex)
             {
                 Global.LogError($"Class : {className} mapped with dll file path : {filePath} could not be found or some other issue while trying to load the assembly. Please check error for more details... {Environment.NewLine} Error : {ex.Message}", ex);
+#pragma warning disable CS8603 // Possible null reference return.
                 return default;
+#pragma warning restore CS8603 // Possible null reference return.
             }
         }
     }

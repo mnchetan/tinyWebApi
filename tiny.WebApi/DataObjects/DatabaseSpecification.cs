@@ -4,10 +4,10 @@
 // <summary>
 //     Implements the database specification class.
 // </summary>
-using tiny.WebApi.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Diagnostics;
+using tiny.WebApi.Enums;
 namespace tiny.WebApi.DataObjects
 {
     /// <summary>
@@ -19,7 +19,9 @@ namespace tiny.WebApi.DataObjects
         /// <summary>
         ///     The run as user specification.
         /// </summary>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private RunAsUserSpecification runAsUSerSpecification;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the connection string.
         /// </summary>
@@ -28,7 +30,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "ConnectionString", Required = Required.Always, NullValueHandling = NullValueHandling.Include)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string ConnectionString { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         /// Gets a value indicating whether is encrypted.
         /// </summary>
@@ -54,7 +58,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "RunAsUser", Required = Required.Default)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string RunAsUser { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the run as user specification.
         /// </summary>
@@ -79,7 +85,9 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         [JsonProperty(PropertyName = "EncryptionKey", Required = Required.Default)]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public string EncryptionKey { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         /// <summary>
         ///     Gets the connection time out.
         /// </summary>

@@ -7,9 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using tiny.WebApi.DataObjects;
-using tiny.WebApi.Helpers;
 using tiny.WebApi.IDBContext;
-
 namespace tiny.WebApi.Helpers
 {
     /// <summary>
@@ -35,7 +33,9 @@ namespace tiny.WebApi.Helpers
         /// </summary>
         /// <param name="context"></param>
         /// <param name="querySpecification"></param>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public OracleDependencyEx(IDBContextOracle context, QuerySpecification querySpecification)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             Global.LogInformation("Inside DataBaseManagerOracle and setting up the parameters.");
             _context = context;
@@ -126,16 +126,16 @@ namespace tiny.WebApi.Helpers
                         Global.LogInformation("Close connection when open, dispose and set as null.");
                         if (_conn.State == ConnectionState.Open) _conn.Close();
                         _conn.Dispose();
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                         _conn = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                     }
             }
         }
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         /// <summary>
         /// Extended Oracle Notification event.
         /// </summary>
         public event OracleNotificationHandlerEx? OracleNotificationEventEx;
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         /// <summary>
         /// Dispose the File System Watcher Extended object.
         /// </summary>
@@ -143,7 +143,9 @@ namespace tiny.WebApi.Helpers
         [DebuggerStepThrough]
         public void Dispose()
         {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
             SharedObject = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -173,7 +175,9 @@ namespace tiny.WebApi.Helpers
                         Global.LogInformation("Close connection when open, dispose and set as null.");
                         if (_conn.State == ConnectionState.Open) _conn.Close();
                         _conn.Dispose();
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                         _conn = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                     }
                     Global.LogInformation("Releasing lock.");
                 }

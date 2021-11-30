@@ -11,7 +11,6 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using tiny.WebApi.Controllers;
 using tiny.WebApi.Enums;
 using tiny.WebApi.IDataContracts;
 using tiny.WebApi.IDBContext;
@@ -24,7 +23,7 @@ namespace tiny.WebApi.Controllers
     /// </summary>
     /// <seealso cref="T:Base"/>
     [DebuggerStepThrough]
-    public class TinyController : Base
+    public class TinyWebApiController : Base
     {
         /// <summary>
         ///     (Immutable) an Itiny.WebApiRepository to process.
@@ -43,14 +42,14 @@ namespace tiny.WebApi.Controllers
         /// <param name="oracleContext"> Context for the oracle. </param>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public TinyController(ITinyWebApiRepository repository, ILogger<TinyController> logger, IDBContextSql sqlContext, IDBContextOracle oracleContext) : base(logger, sqlContext, oracleContext)
+        public TinyWebApiController(ITinyWebApiRepository repository, ILogger<TinyWebApiController> logger, IDBContextSql sqlContext, IDBContextOracle oracleContext) : base(logger, sqlContext, oracleContext)
         {
             r = repository;
             _ = this;
         }
         /// <summary>
         ///     (An Action that handles HTTP POST requests) (Restricted to ) post this message.
-        ///     Route : tiny/Post/{key}/{executionType}/{outPutType?}/{hasFileContent?}/{fileContentType?}/{fileContentFieldName?}/{sheetName?}
+        ///     Route : TinyWebApi/Post/{key}/{executionType}/{outPutType?}/{hasFileContent?}/{fileContentType?}/{fileContentFieldName?}/{sheetName?}
         /// </summary>
         /// <param name="key">                  The key. </param>
         /// <param name="request">              The request. </param>
@@ -74,7 +73,7 @@ namespace tiny.WebApi.Controllers
         public virtual async Task<IActionResult> Post(string key, [FromBody] dynamic request, ExecutionType executionType, CancellationToken token, OutPutType outPutType = OutPutType.JSON, bool hasFileContent = false, FileContentType fileContentType = FileContentType.Excel, string fileContentFieldName = "", string sheetName = "") => await _.ExecuteAsync(() => _.MapOutPutType(outPutType, executionType).OutPutType == OutPutType.JSON ? Ok(r.Post(key, _.GetRequestSpecification(request, executionType, outPutType, hasFileContent, fileContentType, fileContentFieldName, sheetName), executionType, outPutType)) : File(r.Post(key, _.GetRequestSpecification(request, executionType, outPutType, hasFileContent, fileContentType, fileContentFieldName, sheetName), executionType, outPutType), _.OutPutType == OutPutType.Excel ? ApplicationExcel : _.OutPutType == OutPutType.PDF ? ApplicationPDF : TextCSV, Guid.NewGuid().ToString() + (_.OutPutType == OutPutType.Excel ? ExcelExtension : _.OutPutType == OutPutType.PDF ? PDFExtension : CSVExtension)), token);
         /// <summary>
         ///     (An Action that handles HTTP GET requests) (Restricted to ) gets.
-        ///     Route : tiny/Get/{key}/{executionType}/{outPutType?}/{hasFileContent?}/{fileContentType?}/{fileContentFieldName?}/{sheetName?}
+        ///     Route : TinyWebApi/Get/{key}/{executionType}/{outPutType?}/{hasFileContent?}/{fileContentType?}/{fileContentFieldName?}/{sheetName?}
         /// </summary>
         /// <param name="key">           The key. </param>
         /// <param name="executionType"> Type of the execution. </param>
