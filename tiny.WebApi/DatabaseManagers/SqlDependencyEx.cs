@@ -101,9 +101,11 @@ namespace tiny.WebApi.Helpers
                 ObjWatcher.OnChange += ObjWatcher_OnChange;
                 _context.ExecuteNonQuery(cmd);
             }
-            catch
+            catch(Exception ex)
             {
-                throw;
+                if (SqlNotificationExceptionEvent is not null)
+                    SqlNotificationExceptionEvent(this, new() { Exception = ex });
+                Dispose(true);
             }
         }
         /// <summary>
@@ -190,6 +192,16 @@ namespace tiny.WebApi.Helpers
         /// (Immutable) Lock Object.
         /// </summary>
         private readonly object _lockObject = new();
+        /// <summary>
+        /// Sql notification exception handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public delegate void SqlNotificationExceptionHandler(SqlDependencyEx sender, ExceptionEventArgs e);
+        /// <summary>
+        /// Sql notification exception event.
+        /// </summary>
+        public SqlNotificationExceptionHandler SqlNotificationExceptionEvent;
     }
     /// <summary>
     /// Extended Error Event Args to return shared object. 
@@ -226,5 +238,15 @@ namespace tiny.WebApi.Helpers
         /// </summary>
         [DebuggerHidden]
         public Guid Guid { get; set; }
+    }
+    /// <summary>
+    /// Exception event arguments
+    /// </summary>
+    public class ExceptionEventArgs : EventArgs
+    {
+        /// <summary>
+        /// Exception object
+        /// </summary>
+        public Exception? Exception { get; set; }
     }
 }

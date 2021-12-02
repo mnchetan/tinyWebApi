@@ -4,6 +4,8 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using tiny.WebApi.DataObjects;
+
 namespace tiny.WebApi.Helpers
 {
     /// <summary>
@@ -81,11 +83,12 @@ namespace tiny.WebApi.Helpers
                     ErrorEx(this, new ErrorEventArgsEx(e) { SharedObject = this.SharedObject, Guid = this.Guid });
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 if (IsNotifyFirstChangeOnly)
                     ObjWatcher.EnableRaisingEvents = false;
-                throw;
+                Global.LogDebug(ex.Message, ex);
+                Dispose();
             }
         }
         /// <summary>

@@ -103,9 +103,11 @@ namespace tiny.WebApi.Helpers
                 ObjWatcher.OnChange += ObjWatcher_OnChange;
                 _context.ExecuteNonQuery(cmd);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                if (OracleNotificationExceptionEvent is not null)
+                    OracleNotificationExceptionEvent(this, new() { Exception = ex });
+                Dispose(true);
             }
         }
         /// <summary>
@@ -192,6 +194,16 @@ namespace tiny.WebApi.Helpers
         /// (Immutable) Lock Object.
         /// </summary>
         private readonly object _lockObject = new();
+        /// <summary>
+        /// Oracle notification exception handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public delegate void OracleNotificationExceptionHandler(OracleDependencyEx sender, ExceptionEventArgs e);
+        /// <summary>
+        /// Oracle notification exception event.
+        /// </summary>
+        public OracleNotificationExceptionHandler OracleNotificationExceptionEvent;
     }
     /// <summary>
     /// Extended Error Event Args to return shared object. 
