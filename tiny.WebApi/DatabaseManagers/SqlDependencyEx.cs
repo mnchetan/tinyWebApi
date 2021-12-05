@@ -127,7 +127,7 @@ namespace tiny.WebApi.Helpers
         {
             if (SqlNotificationEventEx is not null)
             {
-                SqlNotificationEventEx(sender, new SqlNotificationEventArgsEx(eventArgs, SharedObject, Guid));
+                SqlNotificationEventEx(this, new SqlNotificationEventArgsEx(eventArgs, SharedObject, Guid));
                 if (IsNotifyFirstChangeOnly && _conn is not null)
                     lock (_lockObject)
                     {
@@ -162,7 +162,7 @@ namespace tiny.WebApi.Helpers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public delegate void SqlNotificationHandlerEx(object sender, SqlNotificationEventArgsEx e);
+        public delegate void SqlNotificationHandlerEx(SqlDependencyEx sender, SqlNotificationEventArgsEx e);
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>

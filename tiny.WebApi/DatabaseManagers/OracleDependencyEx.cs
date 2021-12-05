@@ -125,7 +125,7 @@ namespace tiny.WebApi.Helpers
         {
             if (OracleNotificationEventEx is not null)
             {
-                OracleNotificationEventEx(sender, new OracleNotificationEventArgsEx(eventArgs, SharedObject, Guid));
+                OracleNotificationEventEx(this, new OracleNotificationEventArgsEx(eventArgs, SharedObject, Guid));
                 if (IsNotifyFirstChangeOnly && _conn is not null)
                     lock (_lockObject)
                     {
@@ -160,7 +160,7 @@ namespace tiny.WebApi.Helpers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public delegate void OracleNotificationHandlerEx(object sender, OracleNotificationEventArgsEx e);
+        public delegate void OracleNotificationHandlerEx(OracleDependencyEx sender, OracleNotificationEventArgsEx e);
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
