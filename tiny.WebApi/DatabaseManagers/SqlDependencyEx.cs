@@ -73,16 +73,17 @@ namespace tiny.WebApi.Helpers
         /// Note : Make sure only text based queries are used and only number or string type parameters are used whose direction isof type input .
         /// </summary>
         /// <param name="parameters"></param>
+        /// <param name="commandTimeOutInSeconds"></param>
         /// <returns></returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        private SqlCommand CreateCommand(List<DatabaseParameters> parameters)
+        private SqlCommand CreateCommand(List<DatabaseParameters> parameters, int commandTimeOutInSeconds)
         {
             Global.LogInformation("Inside CreateCommand.");
             SqlCommand cmd = new(_querySpecification.Query, _conn);
             Global.LogInformation("Setting command type, command timeout.");
             cmd.Notification = null;
-            cmd.CommandTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
+            cmd.CommandTimeout = commandTimeOutInSeconds > 0 ? commandTimeOutInSeconds : _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
             cmd.CommandType = CommandType.Text;
             Global.LogInformation("Setting command parameters.");
             foreach (var item in parameters) cmd.Parameters.Add(new SqlParameter(item.Name, item.Value));
@@ -93,13 +94,14 @@ namespace tiny.WebApi.Helpers
         /// Starts watching the data
         /// </summary>
         /// <param name="parameters"></param>
+        /// <param name="commandTimeOutInSeconds"></param>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public void StartWatching(List<DatabaseParameters> parameters)
+        public void StartWatching(List<DatabaseParameters> parameters, int commandTimeOutInSeconds = 0)
         {
             try
             {
-                var cmd = CreateCommand(parameters);
+                var cmd = CreateCommand(parameters, commandTimeOutInSeconds);
                 if (ObjWatcher is null)
                     ObjWatcher = new();
                 ObjWatcher.OnChange -= ObjWatcher_OnChange;

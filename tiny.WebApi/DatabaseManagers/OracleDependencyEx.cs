@@ -69,17 +69,18 @@ namespace tiny.WebApi.Helpers
         /// Note : Make sure only text based queries are used and only number or string type parameters are used whose direction isof type input .
         /// </summary>
         /// <param name="parameters"></param>
+        /// <param name="commandTimeOutInSeconds"></param>
         /// <returns></returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        private OracleCommand CreateCommand(List<DatabaseParameters> parameters)
+        private OracleCommand CreateCommand(List<DatabaseParameters> parameters, int commandTimeOutInSeconds)
         {
             Global.LogInformation("Inside CreateCommand.");
             OracleCommand cmd = new(_querySpecification.Query, _conn);
             Global.LogInformation("Setting command type, command timeout.");
             cmd.BindByName = true;
             cmd.Notification.IsNotifiedOnce = IsNotifyFirstChangeOnly;
-            cmd.CommandTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
+            cmd.CommandTimeout = commandTimeOutInSeconds > 0 ? commandTimeOutInSeconds : _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
             cmd.CommandType = CommandType.Text;
             cmd.AddRowid = true;
             Global.LogInformation("Setting command parameters.");
@@ -91,13 +92,14 @@ namespace tiny.WebApi.Helpers
         /// Starts watching the data
         /// </summary>
         /// <param name="parameters"></param>
+        /// <param name="commandTimeOutInSeconds"></param>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public void StartWatching(List<DatabaseParameters> parameters)
+        public void StartWatching(List<DatabaseParameters> parameters, int commandTimeOutInSeconds = 0)
         {
             try
             {
-                var cmd = CreateCommand(parameters);
+                var cmd = CreateCommand(parameters, commandTimeOutInSeconds);
                 if (ObjWatcher is null)
                     ObjWatcher = new();
                 ObjWatcher.OnChange -= ObjWatcher_OnChange;
