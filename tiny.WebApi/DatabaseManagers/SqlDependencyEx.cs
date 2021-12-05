@@ -34,6 +34,8 @@ namespace tiny.WebApi.Helpers
         /// <param name="context"></param>
         /// <param name="querySpecification"></param>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        [DebuggerStepThrough]
+        [DebuggerHidden]
         public SqlDependencyEx(IDBContextSql context, QuerySpecification querySpecification)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
@@ -93,7 +95,7 @@ namespace tiny.WebApi.Helpers
         {
             try
             {
-                var cmd = CreateCommand(_querySpecification.Query, parameters);
+                var cmd = CreateCommand(parameters);
                 if (ObjWatcher is null)
                     ObjWatcher = new();
                 ObjWatcher.OnChange -= ObjWatcher_OnChange;
@@ -241,11 +243,13 @@ namespace tiny.WebApi.Helpers
     /// <summary>
     /// Exception event arguments
     /// </summary>
+    [DebuggerStepThrough]
     public class ExceptionEventArgs : EventArgs
     {
         /// <summary>
         /// Exception object
         /// </summary>
+        [DebuggerHidden]
         public Exception? Exception { get; set; }
     }
 }

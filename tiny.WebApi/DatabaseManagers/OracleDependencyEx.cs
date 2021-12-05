@@ -34,6 +34,8 @@ namespace tiny.WebApi.Helpers
         /// <param name="context"></param>
         /// <param name="querySpecification"></param>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        [DebuggerStepThrough]
+        [DebuggerHidden]
         public OracleDependencyEx(IDBContextOracle context, QuerySpecification querySpecification)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
