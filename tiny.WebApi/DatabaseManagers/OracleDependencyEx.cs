@@ -205,7 +205,7 @@ namespace tiny.WebApi.Helpers
         /// <summary>
         /// Oracle notification exception event.
         /// </summary>
-        public OracleNotificationExceptionHandler OracleNotificationExceptionEvent;
+        public event OracleNotificationExceptionHandler OracleNotificationExceptionEvent;
     }
     /// <summary>
     /// Extended Error Event Args to return shared object. 

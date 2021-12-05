@@ -207,7 +207,7 @@ namespace tiny.WebApi.Helpers
         /// <summary>
         /// Sql notification exception event.
         /// </summary>
-        public SqlNotificationExceptionHandler SqlNotificationExceptionEvent;
+        public event SqlNotificationExceptionHandler SqlNotificationExceptionEvent;
     }
     /// <summary>
     /// Extended Error Event Args to return shared object. 
