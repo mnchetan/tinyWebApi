@@ -66,15 +66,14 @@ namespace tiny.WebApi.Helpers
         /// Creates a command of type text.
         /// Note : Make sure only text based queries are used and only number or string type parameters are used whose direction isof type input .
         /// </summary>
-        /// <param name="query"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public SqlCommand CreateCommand(string query, List<DatabaseParameters> parameters)
+        private SqlCommand CreateCommand(List<DatabaseParameters> parameters)
         {
             Global.LogInformation("Inside CreateCommand.");
-            SqlCommand cmd = new(query, _conn);
+            SqlCommand cmd = new(_querySpecification.Query, _conn);
             Global.LogInformation("Setting command type, command timeout.");
             cmd.Notification = null;
             cmd.CommandTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;

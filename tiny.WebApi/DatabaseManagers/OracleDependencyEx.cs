@@ -66,15 +66,14 @@ namespace tiny.WebApi.Helpers
         /// Creates a command of type text.
         /// Note : Make sure only text based queries are used and only number or string type parameters are used whose direction isof type input .
         /// </summary>
-        /// <param name="query"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public OracleCommand CreateCommand(string query, List<DatabaseParameters> parameters)
+        private OracleCommand CreateCommand(List<DatabaseParameters> parameters)
         {
             Global.LogInformation("Inside CreateCommand.");
-            OracleCommand cmd = new(query, _conn);
+            OracleCommand cmd = new(_querySpecification.Query, _conn);
             Global.LogInformation("Setting command type, command timeout.");
             cmd.BindByName = true;
             cmd.Notification.IsNotifiedOnce = IsNotifyFirstChangeOnly;
@@ -96,7 +95,7 @@ namespace tiny.WebApi.Helpers
         {
             try
             {
-                var cmd = CreateCommand(_querySpecification.Query, parameters);
+                var cmd = CreateCommand(parameters);
                 if (ObjWatcher is null)
                     ObjWatcher = new();
                 ObjWatcher.OnChange -= ObjWatcher_OnChange;
