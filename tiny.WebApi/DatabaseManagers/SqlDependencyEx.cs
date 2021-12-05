@@ -12,6 +12,10 @@ namespace tiny.WebApi.Helpers
 {
     /// <summary>
     /// Extended Sql Dependency
+    /// Note # 1: Service broker account needs to be enabled for the sql database in order to recieve change notifications.
+    /// Note # 2: Use of[dbo] – table schema name in the query.This is important to get proper notification.
+    ///           Query will not be valid if you are using * for your select query.You need to compulsory specify the column names in your query to get notified.
+    /// Sample Query to enable Service Broker : ALTER DATABASE UrDb SET ENABLE_BROKER          
     /// </summary>
     [DebuggerStepThrough]
     public class SqlDependencyEx : IDisposable
@@ -100,9 +104,10 @@ namespace tiny.WebApi.Helpers
                     ObjWatcher = new();
                 ObjWatcher.OnChange -= ObjWatcher_OnChange;
                 ObjWatcher.OnChange += ObjWatcher_OnChange;
+                if (_conn.State != ConnectionState.Open) _conn.Open();
                 _context.ExecuteNonQuery(cmd);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (SqlNotificationExceptionEvent is not null)
                     SqlNotificationExceptionEvent(this, new() { Exception = ex });

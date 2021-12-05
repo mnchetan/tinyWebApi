@@ -102,6 +102,7 @@ namespace tiny.WebApi.Helpers
                     ObjWatcher = new();
                 ObjWatcher.OnChange -= ObjWatcher_OnChange;
                 ObjWatcher.OnChange += ObjWatcher_OnChange;
+                if (_conn.State != ConnectionState.Open) _conn.Open();
                 _context.ExecuteNonQuery(cmd);
             }
             catch (Exception ex)
