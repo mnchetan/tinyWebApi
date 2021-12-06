@@ -23,7 +23,7 @@ namespace tiny.WebApi.Controllers
     /// </summary>
     /// <seealso cref="T:Base"/>
     [DebuggerStepThrough]
-    public class TinyWebApiController : Base
+    public class TinyWebApiController : BaseController
     {
         /// <summary>
         ///     (Immutable) an Itiny.WebApiRepository to process.
@@ -32,7 +32,7 @@ namespace tiny.WebApi.Controllers
         /// <summary>
         ///     (Immutable) the.
         /// </summary>
-        private readonly IBase _;
+        private readonly IBaseController _;
         /// <summary>
         ///     Initializes a new instance of the tiny.WebApi.Controllers.tiny.WebApiController class.
         /// </summary>

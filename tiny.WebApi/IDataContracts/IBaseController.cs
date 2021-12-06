@@ -11,9 +11,9 @@ using tiny.WebApi.Enums;
 namespace tiny.WebApi.IDataContracts
 {
     /// <summary>
-    ///     Interface for base.
+    ///     Interface for base controller.
     /// </summary>
-    public interface IBase
+    public interface IBaseController
     {
         /// <summary>
         ///     Executes the 'asynchronous' operation.
@@ -67,7 +67,7 @@ namespace tiny.WebApi.IDataContracts
         /// <returns>
         ///     An IBase.
         /// </returns>
-        IBase MapOutPutType(OutPutType outPutType, ExecutionType executionType);
+        IBaseController MapOutPutType(OutPutType outPutType, ExecutionType executionType);
         /// <summary>
         ///     Gets or sets the type of the out put.
         /// </summary>

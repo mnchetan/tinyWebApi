@@ -22,25 +22,33 @@ using tiny.WebApi.IDBContext;
 namespace tiny.WebApi.Controllers
 {
     /// <summary>
-    /// The base.
+    /// The base controller.
     /// </summary>
     [DebuggerStepThrough]
-    public class Base : ControllerBase, IBase
+    public class BaseController : ControllerBase, IBaseController
     {
         /// <summary>
         ///     (Immutable) the.
         /// </summary>
-        private readonly IBase _;
+        private readonly IBaseController _;
         /// <summary>
         ///     (Immutable) the logger.
         /// </summary>
-        private readonly ILogger<Base> _logger;
+        public readonly ILogger<BaseController> Logger;
+        /// <summary>
+        /// (Immutable) the SqlContext
+        /// </summary>
+        public readonly IDBContextSql SqlContext;
+        /// <summary>
+        /// (Immutable) the OracleContext
+        /// </summary>
+        public readonly IDBContextOracle OracleContext;
         /// <summary>
         ///     Gets or sets the type of the out put.
         /// </summary>
         /// <seealso cref="P:tiny.WebApi.IDataContracts.IBase.OutPutType"/>
         [DebuggerHidden]
-        OutPutType IBase.OutPutType { get; set; } = OutPutType.JSON;
+        OutPutType IBaseController.OutPutType { get; set; } = OutPutType.JSON;
         /// <summary>
         ///     Initializes a new instance of the tiny.WebApi.Helpers.Base class.
         /// </summary>
@@ -50,10 +58,13 @@ namespace tiny.WebApi.Controllers
         [DebuggerStepThrough]
         [DebuggerHidden]
 #pragma warning disable IDE0060 // Remove unused parameter
-        public Base(ILogger<Base> logger, IDBContextSql sqlContext, IDBContextOracle oracleContext)
+        public BaseController(ILogger<BaseController> logger, IDBContextSql sqlContext, IDBContextOracle oracleContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            _ = this; _logger = logger;
+            _ = this; 
+            Global.Logger = Logger = logger;
+            SqlContext = sqlContext;
+            OracleContext = oracleContext;
         }
         /// <summary>
         ///     Executes the 'asynchronous' operation.
@@ -76,17 +87,17 @@ namespace tiny.WebApi.Controllers
             try
             {
                 SetGlobal();
-                _logger.LogInformation(message: $"Starting invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+                Logger.LogInformation(message: $"Starting invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
                 return await Task.Run(f, cancellation);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, message: $"Error occured while invoking  method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+                Logger.LogError(ex, message: $"Error occured while invoking  method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
                 throw new CustomException((int)HttpStatusCode.InternalServerError, $"Internal Server Error!!!", ex.Message + "");
             }
             finally
             {
-                _logger.LogInformation(message: $"Finishing invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+                Logger.LogInformation(message: $"Finishing invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
             }
         }
         /// <summary>
@@ -107,17 +118,17 @@ namespace tiny.WebApi.Controllers
             try
             {
                 SetGlobal();
-                _logger.LogInformation(message: $"Starting invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+                Logger.LogInformation(message: $"Starting invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
                 await Task.Run(a, cancellation);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, message: $"Error occured while invoking  method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+                Logger.LogError(ex, message: $"Error occured while invoking  method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
                 throw new CustomException((int)HttpStatusCode.InternalServerError, $"Internal Server Error!!!", ex.Message + "");
             }
             finally
             {
-                _logger.LogInformation(message: $"Finishing invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
+                Logger.LogInformation(message: $"Finishing invocation of method name : {callerName}, file path : {callerFilePath}, line number : {callerLineNumer}, DateTime : {DateTime.UtcNow.ToLongDateString()} {DateTime.UtcNow.ToLongTimeString()}");
             }
         }
         /// <summary>
@@ -127,12 +138,11 @@ namespace tiny.WebApi.Controllers
         [DebuggerHidden]
         private void SetGlobal()
         {
-            _logger.LogInformation("Setting up globals.");
-            Global.Logger = _logger;
+            Logger.LogInformation("Setting up globals.");
             Global.ServicePort = HttpContext.Connection.LocalPort;
             Global.ServiceIP = HttpContext?.Connection?.LocalIpAddress;
             Global.CurrentHttpContext = HttpContext;
-            _logger.LogInformation("globals have been set.");
+            Logger.LogInformation("globals have been set.");
         }
         /// <summary>
         ///     Gets request specification.
@@ -155,14 +165,14 @@ namespace tiny.WebApi.Controllers
         {
             try
             {
-                _logger.LogInformation("Inside GetRequestSpecification");
-                _logger.LogInformation("validating input data.");
+                Logger.LogInformation("Inside GetRequestSpecification");
+                Logger.LogInformation("validating input data.");
                 if (hasFileContent && executionType != ExecutionType.DataSetProcedure && executionType != ExecutionType.DataTableProcedure)
                     throw new CustomException((int)HttpStatusCode.InternalServerError, "Internal Server Error!!!", "Request having file content should have execution type either DataTableProcedure or DataSetProcedure.");
                 if ((executionType == ExecutionType.NonQueryProcedure || executionType == ExecutionType.NonQueryText || executionType == ExecutionType.ScalarProcedure || executionType == ExecutionType.ScalarText) && outPutType != OutPutType.JSON)
                     throw new CustomException((int)HttpStatusCode.InternalServerError, "Internal Server Error!!!", "Request execution type ScalarText, ScalarProcedure, NonQueryText, NonQueryProcedure can only support JSON serialized output.");
                 var result = new List<RequestSpecification>();
-                _logger.LogInformation("Looping thorugh request.");
+                Logger.LogInformation("Looping thorugh request.");
 #pragma warning disable CS8604 // Possible null reference argument.
                 foreach (var (p, r) in from KeyValuePair<string, JToken> p in request as JObject
 #pragma warning restore CS8604 // Possible null reference argument.
@@ -180,13 +190,13 @@ namespace tiny.WebApi.Controllers
                                        }
                                        select (p, r))
                 {
-                    _logger.LogInformation("Setting property type.");
+                    Logger.LogInformation("Setting property type.");
 #pragma warning disable CS8601 // Possible null reference assignment.
                     r.PropertyType = hasFileContent && $"{fileContentFieldName}".Contains($"{p.Key}", StringComparison.OrdinalIgnoreCase) ? null : GetPropertyType(p, r);
 #pragma warning restore CS8601 // Possible null reference assignment.
                     try
                     {
-                        _logger.LogInformation("Setting propery value.");
+                        Logger.LogInformation("Setting propery value.");
 #pragma warning disable CS8601 // Possible null reference assignment.
 #pragma warning disable CS8604 // Possible null reference argument.
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
@@ -204,14 +214,14 @@ namespace tiny.WebApi.Controllers
                     }
                     result.Add(r);
                 }
-                _logger.LogInformation("Getting request specification from query parameters if any.");
+                Logger.LogInformation("Getting request specification from query parameters if any.");
                 var q = _.GetRequestSpecificationFromQueryParameters();
                 if (q.Count > 0) result.AddRange(q);
                 return result;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Invalid request!!!");
+                Logger.LogError(ex, "Invalid request!!!");
                 throw new CustomException((int)HttpStatusCode.InternalServerError, $"Internal Server Error!!!", $"Invalid request...{Environment.NewLine}Error:{ex.Message + ""}");
             }
         }
@@ -253,9 +263,9 @@ namespace tiny.WebApi.Controllers
         /// <seealso cref="M:IBase.MapOutPutType(OutPutType,ExecutionType)"/>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public IBase MapOutPutType(OutPutType outPutType, ExecutionType executionType)
+        public IBaseController MapOutPutType(OutPutType outPutType, ExecutionType executionType)
         {
-            _logger.LogInformation("Mapping output type based on execution type.");
+            Logger.LogInformation("Mapping output type based on execution type.");
             _.OutPutType = (executionType == ExecutionType.DataSetProcedure || executionType == ExecutionType.DataSetText || executionType == ExecutionType.DataTableProcedure || executionType == ExecutionType.DataTableText) && outPutType == OutPutType.Excel ? OutPutType.Excel : outPutType == OutPutType.PDF ? OutPutType.PDF : (executionType == ExecutionType.DataTableProcedure || executionType == ExecutionType.DataTableText) && outPutType == OutPutType.CSV ? OutPutType.CSV : OutPutType.JSON;
             return _;
         }
