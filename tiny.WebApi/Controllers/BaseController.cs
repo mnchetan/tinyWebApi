@@ -139,6 +139,7 @@ namespace tiny.WebApi.Controllers
         private void SetGlobal()
         {
             Logger.LogInformation("Setting up globals.");
+            Global.Logger = Logger;
             Global.ServicePort = HttpContext.Connection.LocalPort;
             Global.ServiceIP = HttpContext?.Connection?.LocalIpAddress;
             Global.CurrentHttpContext = HttpContext;

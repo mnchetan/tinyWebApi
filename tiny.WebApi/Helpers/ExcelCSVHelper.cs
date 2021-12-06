@@ -155,7 +155,33 @@ namespace tiny.WebApi.Helpers
         /// </summary>
         /// <exception cref="Exception"> Thrown when an exception error condition occurs. </exception>
         ///
-        /// <param name="fileData">  Information describing the file. </param>
+        /// <param name="filePath">  Path of the file. </param>
+        /// <param name="sheetName"> (Optional) Name of the sheet. </param>
+        /// <returns>
+        ///     A DataTable.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public static DataTable ImportExcelToDataTable(string filePath, string sheetName = "")
+        {
+            if (File.Exists(filePath))
+            {
+                using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
+                byte[] buffer = new byte[fs.Length];
+                fs.Read(buffer, 0, (int)fs.Length);
+                return ImportExcelToDataTable(buffer, sheetName);
+            }
+            else
+            {
+                throw new FileNotFoundException($"Excel file not found at specified file path : {filePath}");
+            }
+        }
+        /// <summary>
+        ///     Import excel to data table.
+        /// </summary>
+        /// <exception cref="Exception"> Thrown when an exception error condition occurs. </exception>
+        ///
+        /// <param name="fileData">  File Data in byte array format. </param>
         /// <param name="sheetName"> (Optional) Name of the sheet. </param>
         /// <returns>
         ///     A DataTable.
@@ -214,7 +240,30 @@ namespace tiny.WebApi.Helpers
         /// <summary>
         ///     Import CSV to data table.
         /// </summary>
-        /// <param name="fileData"> Information describing the file. </param>
+        /// <param name="filePath"> File path. </param>
+        /// <returns>
+        ///     A DataTable.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public static DataTable ImportCSVToDataTable(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
+                byte[] buffer = new byte[fs.Length];
+                fs.Read(buffer, 0, (int)fs.Length);
+                return ImportCSVToDataTable(buffer);
+            }
+            else
+            {
+                throw new FileNotFoundException($"CSV file not found at specified file path : {filePath}");
+            }
+        }
+        /// <summary>
+        ///     Import CSV to data table.
+        /// </summary>
+        /// <param name="fileData"> File data. </param>
         /// <returns>
         ///     A DataTable.
         /// </returns>
