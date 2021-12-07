@@ -96,14 +96,14 @@ namespace tiny.WebApi.Helpers
                 if (ErrorEx is not null)
                 {
                     if (IsNotifyFirstChangeOnly)
-                        ObjWatcher.EnableRaisingEvents = false;
+                        StopWatching();
                     ErrorEx(this, new ErrorEventArgsEx(e) { SharedObject = this.SharedObject, Guid = this.Guid });
                 }
             }
             catch(Exception ex)
             {
                 if (IsNotifyFirstChangeOnly)
-                    ObjWatcher.EnableRaisingEvents = false;
+                    StopWatching();
                 Global.LogDebug(ex.Message, ex);
                 Dispose();
             }
@@ -122,14 +122,14 @@ namespace tiny.WebApi.Helpers
                 if (CreatedEx is not null)
                 {
                     if (IsNotifyFirstChangeOnly)
-                        ObjWatcher.EnableRaisingEvents = false;
+                        StopWatching();
                     CreatedEx(this, new FileSystemEventArgsEx(e) { SharedObject = this.SharedObject, Guid = this.Guid });
                 }
             }
             catch
             {
                 if (IsNotifyFirstChangeOnly)
-                    ObjWatcher.EnableRaisingEvents = false;
+                    StopWatching();
                 throw;
             }
         }
@@ -147,14 +147,14 @@ namespace tiny.WebApi.Helpers
                 if (DeletedEx is not null)
                 {
                     if (IsNotifyFirstChangeOnly)
-                        ObjWatcher.EnableRaisingEvents = false;
+                        StopWatching();
                     DeletedEx(this, new FileSystemEventArgsEx(e) { SharedObject = this.SharedObject, Guid = this.Guid });
                 }
             }
             catch
             {
                 if (IsNotifyFirstChangeOnly)
-                    ObjWatcher.EnableRaisingEvents = false;
+                    StopWatching();
                 throw;
             }
         }
@@ -172,14 +172,14 @@ namespace tiny.WebApi.Helpers
                 if (ChangedEx is not null)
                 {
                     if (IsNotifyFirstChangeOnly)
-                        ObjWatcher.EnableRaisingEvents = false;
+                        StopWatching();
                     ChangedEx(this, new FileSystemEventArgsEx(e) { SharedObject = this.SharedObject, Guid = this.Guid });
                 }
             }
             catch
             {
                 if (IsNotifyFirstChangeOnly)
-                    ObjWatcher.EnableRaisingEvents = false;
+                    StopWatching();
                 throw;
             }
         }
@@ -197,14 +197,14 @@ namespace tiny.WebApi.Helpers
                 if (RenamedEx is not null)
                 {
                     if (IsNotifyFirstChangeOnly)
-                        ObjWatcher.EnableRaisingEvents = false;
+                        StopWatching();
                     RenamedEx(this, new RenamedEventArgsEx(e) { SharedObject = this.SharedObject, Guid = this.Guid });
                 }
             }
             catch
             {
                 if (IsNotifyFirstChangeOnly)
-                    ObjWatcher.EnableRaisingEvents = false;
+                    StopWatching();
                 throw;
             }
         }
