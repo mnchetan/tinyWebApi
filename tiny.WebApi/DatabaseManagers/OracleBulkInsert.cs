@@ -33,11 +33,9 @@ namespace tiny.WebApi.Helpers
         /// </summary>
         /// <param name="context"></param>
         /// <param name="querySpecification"></param>
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         [DebuggerStepThrough]
         [DebuggerHidden]
         public OracleBulkInsert(IDBContextOracle context, QuerySpecification querySpecification)
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             Global.LogInformation("Inside DataBaseManagerOracle and setting up the parameters.");
             _context = context;

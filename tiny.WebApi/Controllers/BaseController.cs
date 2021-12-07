@@ -57,9 +57,7 @@ namespace tiny.WebApi.Controllers
         /// <param name="oracleContext"> (Immutable) context for the oracle. </param>
         [DebuggerStepThrough]
         [DebuggerHidden]
-#pragma warning disable IDE0060 // Remove unused parameter
         public BaseController(ILogger<BaseController> logger, IDBContextSql sqlContext, IDBContextOracle oracleContext)
-#pragma warning restore IDE0060 // Remove unused parameter
         {
             _ = this;
             Global.Logger = Logger = logger;
