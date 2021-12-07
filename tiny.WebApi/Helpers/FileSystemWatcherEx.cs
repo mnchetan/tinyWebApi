@@ -66,6 +66,23 @@ namespace tiny.WebApi.Helpers
             ObjWatcher.EnableRaisingEvents = true;
         }
         /// <summary>
+        /// Stops watching the file within a specified directory.
+        /// </summary>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
+        public void StopWatching()
+        {
+            if (ObjWatcher is not null)
+            {
+                ObjWatcher.Created -= ObjWatcher_Created;
+                ObjWatcher.Deleted -= ObjWatcher_Deleted;
+                ObjWatcher.Changed -= ObjWatcher_Changed;
+                ObjWatcher.Renamed -= ObjWatcher_Renamed;
+                ObjWatcher.Error -= ObjWatcher_Error;
+                ObjWatcher.EnableRaisingEvents = false;
+            }
+        }
+        /// <summary>
         /// Recieve error notification.
         /// </summary>
         /// <param name="sender"></param>
