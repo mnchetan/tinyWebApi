@@ -47,7 +47,7 @@ namespace tiny.WebApi.DataObjects
         ///     True if this object is encrypted, false if not.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "IsEncrypted", Required = Required.Default)]
+        [JsonProperty(PropertyName = "IsEncrypted", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool IsEncrypted { get; set; }
         /// <summary>
         ///     Gets a value indicating whether this object is impersonation needed.
@@ -58,7 +58,7 @@ namespace tiny.WebApi.DataObjects
         ///     Impersonation for Linux without KetTab and with root access will not work with Anonymous Authenitcation.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "IsImpersonationNeeded", Required = Required.Default)]
+        [JsonProperty(PropertyName = "IsImpersonationNeeded", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool IsImpersonationNeeded { get; set; }
         /// <summary>
         ///     Gets the run as user.
@@ -170,7 +170,7 @@ namespace tiny.WebApi.DataObjects
         ///     True if this object is body html, false if not.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "IsBodyHtml", Required = Required.Default, NullValueHandling = NullValueHandling.Include)]
+        [JsonProperty(PropertyName = "IsBodyHtml", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool IsBodyHtml { get; set; }
     }
 }

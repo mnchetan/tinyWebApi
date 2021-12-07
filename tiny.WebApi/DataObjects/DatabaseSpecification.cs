@@ -6,6 +6,7 @@
 // </summary>
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.ComponentModel;
 using System.Diagnostics;
 using tiny.WebApi.Enums;
 namespace tiny.WebApi.DataObjects
@@ -37,7 +38,7 @@ namespace tiny.WebApi.DataObjects
         /// Gets a value indicating whether is encrypted.
         /// </summary>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "IsEncrypted", Required = Required.Default)]
+        [JsonProperty(PropertyName = "IsEncrypted", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool IsEncrypted { get; set; }
         /// <summary>
         ///     Gets a value indicating whether this object is impersonation needed.
@@ -48,7 +49,7 @@ namespace tiny.WebApi.DataObjects
         ///     Impersonation for Linux without KetTab and with root access will not work with Anonymous Authenitcation.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "IsImpersonationNeeded", Required = Required.Default)]
+        [JsonProperty(PropertyName = "IsImpersonationNeeded", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool IsImpersonationNeeded { get; set; }
         /// <summary>
         ///     Gets the run as user.
@@ -95,7 +96,8 @@ namespace tiny.WebApi.DataObjects
         ///     The connection time out.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "ConnectionTimeOut", Required = Required.Default)]
+        [DefaultValue(1200)]
+        [JsonProperty(PropertyName = "ConnectionTimeOut", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public int ConnectionTimeOut { get; set; } = 1200;
         /// <summary>
         ///     Gets the type of the database.

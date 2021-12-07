@@ -90,7 +90,7 @@ namespace tiny.WebApi.DataObjects
         ///     True if this object is map udt as json, false if not.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "IsMapUDTAsJSON_ApplicableForOracle", Required = Required.Default)]
+        [JsonProperty(PropertyName = "IsMapUDTAsJSON_ApplicableForOracle", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool IsMapUDTAsJSON_ApplicableForOracle { get; set; }
         /// <summary>
         ///     Gets a value indicating whether this object is map udt as XML.
@@ -99,7 +99,7 @@ namespace tiny.WebApi.DataObjects
         ///     True if this object is map udt as xml, false if not.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "IsMapUDTAsXML_ApplicableForOracle", Required = Required.Default)]
+        [JsonProperty(PropertyName = "IsMapUDTAsXML_ApplicableForOracle", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool IsMapUDTAsXML_ApplicableForOracle { get; set; }
         /// <summary>
         ///     Gets the full pathname of the pre process file default is the configuration path.
@@ -174,7 +174,7 @@ namespace tiny.WebApi.DataObjects
         ///     True if this object is send output via email also, false if not.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "IsSendOutputViaEmailAlso", Required = Required.Default)]
+        [JsonProperty(PropertyName = "IsSendOutputViaEmailAlso", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool IsSendOutputViaEmailAlso { get; set; }
         /// <summary>
         ///     Gets the mailer.
@@ -194,7 +194,7 @@ namespace tiny.WebApi.DataObjects
         ///     True if this object is allow sending JSON in mail, false if not.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "IsAllowSendingJSONInMail", Required = Required.Default)]
+        [JsonProperty(PropertyName = "IsAllowSendingJSONInMail", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool IsAllowSendingJSONInMail { get; set; }
         /// <summary>
         ///     Gets the database specification.
@@ -233,8 +233,8 @@ namespace tiny.WebApi.DataObjects
         ///     The IsCachingRequired.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "IsCachingRequired", Required = Required.Default)]
-        public bool IsCachingRequired { get; set; } = false;
+        [JsonProperty(PropertyName = "IsCachingRequired", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool IsCachingRequired { get; set; }
         /// <summary>
         ///     Gets or Sets the duration for which the data cache to be cached and after which will be renewed.
         ///     Note: Renewal will be done on subsequent calls.
@@ -243,7 +243,7 @@ namespace tiny.WebApi.DataObjects
         ///     The CacheDurationInSeconds.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "CacheDurationInSeconds", Required = Required.Default)]
+        [JsonProperty(PropertyName = "CacheDurationInSeconds", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public int CacheDurationInSeconds { get; set; } = 0;
     }
 }

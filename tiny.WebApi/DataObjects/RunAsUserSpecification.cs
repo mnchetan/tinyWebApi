@@ -54,7 +54,7 @@ namespace tiny.WebApi.DataObjects
         ///     True if this object is run as password encrypted, false if not.
         /// </value>
         [DebuggerHidden]
-        [JsonProperty(PropertyName = "IsRunAsPasswordEncrypted", Required = Required.Default)]
+        [JsonProperty(PropertyName = "IsRunAsPasswordEncrypted", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool IsRunAsPasswordEncrypted { get; set; }
         /// <summary>
         ///     Gets the encryption key.
