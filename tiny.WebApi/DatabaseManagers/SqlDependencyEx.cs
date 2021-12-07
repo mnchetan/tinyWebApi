@@ -101,13 +101,10 @@ namespace tiny.WebApi.Helpers
         {
             try
             {
-                var cmd = CreateCommand(parameters, commandTimeOutInSeconds);
-                if (ObjWatcher is null)
-                    ObjWatcher = new();
-                ObjWatcher.OnChange -= ObjWatcher_OnChange;
-                ObjWatcher.OnChange += ObjWatcher_OnChange;
-                if (_conn.State != ConnectionState.Open) _conn.Open();
-                _context.ExecuteNonQuery(cmd);
+                if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
+                    ImpersonationHelper.Execute(() => { ProcessAction(parameters, commandTimeOutInSeconds); }, _querySpecification.DatabaseSpecification);
+                else
+                    ProcessAction(parameters, commandTimeOutInSeconds);
             }
             catch (Exception ex)
             {
@@ -115,6 +112,23 @@ namespace tiny.WebApi.Helpers
                     SqlNotificationExceptionEvent(this, new() { Exception = ex });
                 Dispose(true);
             }
+        }
+        /// <summary>
+        /// Process Action.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="commandTimeOutInSeconds"></param>
+        /// <returns></returns>
+        private int ProcessAction(List<DatabaseParameters> parameters, int commandTimeOutInSeconds = 0)
+        {
+            var cmd = CreateCommand(parameters, commandTimeOutInSeconds);
+            if (ObjWatcher is null)
+                ObjWatcher = new();
+            ObjWatcher.OnChange -= ObjWatcher_OnChange;
+            ObjWatcher.OnChange += ObjWatcher_OnChange;
+            if (_conn.State != ConnectionState.Open) _conn.Open();
+            _context.ExecuteNonQuery(cmd);
+            return 0;
         }
         /// <summary>
         /// Recieve change notifications.

@@ -61,7 +61,7 @@ namespace tiny.WebApi.Controllers
         public BaseController(ILogger<BaseController> logger, IDBContextSql sqlContext, IDBContextOracle oracleContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            _ = this; 
+            _ = this;
             Global.Logger = Logger = logger;
             SqlContext = sqlContext;
             OracleContext = oracleContext;
@@ -168,9 +168,9 @@ namespace tiny.WebApi.Controllers
             {
                 Logger.LogInformation("Inside GetRequestSpecification");
                 Logger.LogInformation("validating input data.");
-                if (hasFileContent && executionType != ExecutionType.DataSetProcedure && executionType != ExecutionType.DataTableProcedure)
+                if (hasFileContent && executionType != ExecutionType.DataSetProcedure && executionType != ExecutionType.DataTableProcedure && executionType != ExecutionType.BulkInsert)
                     throw new CustomException((int)HttpStatusCode.InternalServerError, "Internal Server Error!!!", "Request having file content should have execution type either DataTableProcedure or DataSetProcedure.");
-                if ((executionType == ExecutionType.NonQueryProcedure || executionType == ExecutionType.NonQueryText || executionType == ExecutionType.ScalarProcedure || executionType == ExecutionType.ScalarText) && outPutType != OutPutType.JSON)
+                if ((executionType == ExecutionType.NonQueryProcedure || executionType == ExecutionType.NonQueryText || executionType == ExecutionType.ScalarProcedure || executionType == ExecutionType.ScalarText || executionType == ExecutionType.BulkInsert) && outPutType != OutPutType.JSON)
                     throw new CustomException((int)HttpStatusCode.InternalServerError, "Internal Server Error!!!", "Request execution type ScalarText, ScalarProcedure, NonQueryText, NonQueryProcedure can only support JSON serialized output.");
                 var result = new List<RequestSpecification>();
                 Logger.LogInformation("Looping thorugh request.");
@@ -267,7 +267,7 @@ namespace tiny.WebApi.Controllers
         public IBaseController MapOutPutType(OutPutType outPutType, ExecutionType executionType)
         {
             Logger.LogInformation("Mapping output type based on execution type.");
-            _.OutPutType = (executionType == ExecutionType.DataSetProcedure || executionType == ExecutionType.DataSetText || executionType == ExecutionType.DataTableProcedure || executionType == ExecutionType.DataTableText) && outPutType == OutPutType.Excel ? OutPutType.Excel : outPutType == OutPutType.PDF ? OutPutType.PDF : (executionType == ExecutionType.DataTableProcedure || executionType == ExecutionType.DataTableText) && outPutType == OutPutType.CSV ? OutPutType.CSV : OutPutType.JSON;
+            _.OutPutType = (executionType == ExecutionType.DataSetProcedure || executionType == ExecutionType.DataSetText || executionType == ExecutionType.DataTableProcedure || executionType == ExecutionType.DataTableText) && outPutType == OutPutType.Excel ? OutPutType.Excel : outPutType == OutPutType.PDF ? OutPutType.PDF : (executionType == ExecutionType.DataTableProcedure || executionType == ExecutionType.DataTableText) && outPutType == OutPutType.CSV ? OutPutType.CSV : executionType == ExecutionType.BulkInsert ? OutPutType.JSON : OutPutType.JSON;
             return _;
         }
     }

@@ -266,6 +266,8 @@ namespace tiny.WebApi
             (ExecutionType.NonQueryProcedure, DatabaseType.ORACLE, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new ora(_oracleContext, querySpecification).ExecNonQueryProc(querySpecification, list), key, querySpecification, requestSpecifications),
             (ExecutionType.ScalarProcedure, DatabaseType.MSSQL, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new sql(_sqlContext, querySpecification).ExecScalarProc(querySpecification, list), key, querySpecification, requestSpecifications),
             (ExecutionType.ScalarProcedure, DatabaseType.ORACLE, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new ora(_oracleContext, querySpecification).ExecScalarProc(querySpecification, list), key, querySpecification, requestSpecifications),
+            (ExecutionType.BulkInsert, DatabaseType.ORACLE, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new OracleBulkInsert(_oracleContext, querySpecification).BulkInsert(requestSpecifications), key, querySpecification, requestSpecifications),
+            (ExecutionType.BulkInsert, DatabaseType.MSSQL, OutPutType.JSON) => ProcessDataExtensions.ProcessOutPutScalarNonScalar(new SqlBulkInsert(_sqlContext, querySpecification).BulkInsert(requestSpecifications), key, querySpecification, requestSpecifications),
             _ => throw new NotImplementedException()
         };
     }

@@ -39,6 +39,10 @@ namespace tiny.WebApi.Enums
         /// <summary>
         ///     An enum constant representing the data set procedure option.
         /// </summary>
-        DataSetProcedure
+        DataSetProcedure,
+        /// <summary>
+        /// An enum constant representing the bulk insert.
+        /// </summary>
+        BulkInsert
     }
 }
