@@ -1,4 +1,4 @@
-﻿// <copyright file="queries.local.json" company="tiny">
+﻿// <copyright file="queries.dev.json" company="tiny">
 //   Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
 {
@@ -16,6 +16,7 @@
     "ExternalDllPathImplementingIProcessDataInterface_PostProcessing": "",
     "ExternalDllNameImplementingIProcessDataInterface_PostProcessing": "",
     "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing": "",
+    "SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma": "",
     "IsSendOutputViaEmailAlso": false,
     "Mailer": "somemailername1",
     "IsAllowSendingJSONInMail": false,
@@ -36,6 +37,7 @@
     "ExternalDllPathImplementingIProcessDataInterface_PostProcessing": "",
     "ExternalDllNameImplementingIProcessDataInterface_PostProcessing": "",
     "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing": "",
+    "SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma": "",
     "IsSendOutputViaEmailAlso": false,
     "Mailer": "somemailername2",
     "IsAllowSendingJSONInMail": false,
@@ -56,6 +58,7 @@
     "ExternalDllPathImplementingIProcessDataInterface_PostProcessing": "",
     "ExternalDllNameImplementingIProcessDataInterface_PostProcessing": "",
     "FullyQualifiedNameOfClassImplementingInterfaceIProcessDataInterface_PostProcessing": "",
+    "SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma": "",
     "IsSendOutputViaEmailAlso": false,
     "Mailer": "somemailername2",
     "IsAllowSendingJSONInMail": false,

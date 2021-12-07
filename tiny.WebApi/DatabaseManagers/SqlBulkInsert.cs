@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
 using tiny.WebApi.DataObjects;
 using tiny.WebApi.IDBContext;
 namespace tiny.WebApi.Helpers
@@ -52,10 +53,24 @@ namespace tiny.WebApi.Helpers
         {
             using SqlBulkCopy SqlBulkCopy = new(_conn, SqlBulkCopyOptions.UseInternalTransaction, _context.Transaction);
             SqlBulkCopy.DestinationTableName = _querySpecification.Query;
+            GetColumnMapping(_querySpecification, SqlBulkCopy);
             SqlBulkCopy.BulkCopyTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
             _conn.Open();
             SqlBulkCopy.WriteToServer(dt);
             _context.Transaction?.Commit();
+        }
+        /// <summary>
+        /// Get column mappings.
+        /// </summary>
+        /// <param name="querySpecification"></param>
+        /// <param name="sqlBulkCopy"></param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        private void GetColumnMapping(QuerySpecification querySpecification, SqlBulkCopy sqlBulkCopy)
+        {
+            if (!string.IsNullOrEmpty(querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma))
+                foreach (var j in from i in querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Split(',') from j in i.Split(':') select j) sqlBulkCopy.ColumnMappings.Add(j[0], j[1]);
         }
         /// <summary>
         /// Bulk insert data to the destination table.
@@ -96,6 +111,9 @@ namespace tiny.WebApi.Helpers
                 {
                     using SqlBulkCopy SqlBulkCopy = new(_conn, SqlBulkCopyOptions.UseInternalTransaction, _context.Transaction);
                     SqlBulkCopy.DestinationTableName = item.PropertyName;
+#pragma warning disable CS8604 // Possible null reference argument.
+                    GetColumnMapping(_querySpecification, SqlBulkCopy);
+#pragma warning restore CS8604 // Possible null reference argument.
                     SqlBulkCopy.BulkCopyTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
                     _conn.Open();
                     SqlBulkCopy.WriteToServer(item.PropertyValue as DataTable);

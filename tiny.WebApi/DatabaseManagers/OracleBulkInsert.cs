@@ -8,6 +8,8 @@ using System.Data;
 using System.Diagnostics;
 using tiny.WebApi.DataObjects;
 using tiny.WebApi.IDBContext;
+using System.Linq;
+
 namespace tiny.WebApi.Helpers
 {
     /// <summary>
@@ -43,6 +45,19 @@ namespace tiny.WebApi.Helpers
             _conn = _context.GetConnection(querySpecification.DatabaseSpecification.IsEncrypted ? EncryptFactory.Decrypt(querySpecification.DatabaseSpecification.ConnectionString + "", querySpecification?.DatabaseSpecification?.EncryptionKey + "") : querySpecification.DatabaseSpecification.ConnectionString + "", false);
         }
         /// <summary>
+        /// Get column mappings.
+        /// </summary>
+        /// <param name="querySpecification"></param>
+        /// <param name="oracleBulkCopy"></param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        private void GetColumnMapping(QuerySpecification querySpecification, OracleBulkCopy oracleBulkCopy)
+        {
+            if (!string.IsNullOrEmpty(querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma))
+                foreach (var j in from i in querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Split(',') from j in i.Split(':') select j) oracleBulkCopy.ColumnMappings.Add(j[0], j[1]);
+        }
+        /// <summary>
         /// Bulk insert data to the destination table.
         /// </summary>
         /// <param name="dt"></param>
@@ -54,6 +69,7 @@ namespace tiny.WebApi.Helpers
             try
             {
                 using OracleBulkCopy oracleBulkCopy = new(_conn, OracleBulkCopyOptions.UseInternalTransaction);
+                GetColumnMapping(_querySpecification, oracleBulkCopy);
                 oracleBulkCopy.DestinationTableName = _querySpecification.Query;
                 oracleBulkCopy.BulkCopyTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
                 _conn.Open();
@@ -85,6 +101,9 @@ namespace tiny.WebApi.Helpers
                     if (item.PropertyType == typeof(DataTable))
                     {
                         using OracleBulkCopy oracleBulkCopy = new(_conn, OracleBulkCopyOptions.UseInternalTransaction);
+#pragma warning disable CS8604 // Possible null reference argument.
+                        GetColumnMapping(_querySpecification, oracleBulkCopy);
+#pragma warning restore CS8604 // Possible null reference argument.
                         oracleBulkCopy.DestinationTableName = item.PropertyName;
                         oracleBulkCopy.BulkCopyTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
                         _conn.Open();

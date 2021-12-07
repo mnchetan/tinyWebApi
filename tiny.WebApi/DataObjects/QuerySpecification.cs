@@ -246,5 +246,16 @@ namespace tiny.WebApi.DataObjects
         [DebuggerHidden]
         [JsonProperty(PropertyName = "CacheDurationInSeconds", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
         public int CacheDurationInSeconds { get; set; } = 0;
+        /// <summary>
+        ///     Column Mapping for BulkInsert - optional
+        ///     Fomrat : source1:destination1,source2:destination2.
+        ///     Bulk insert one file at a time per query if column mappings are used.
+        /// </summary>
+        /// <value>
+        ///     The SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.
+        /// </value>
+        [DebuggerHidden]
+        [JsonProperty(PropertyName = "SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma", Required = Required.Default)]
+        public string SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma { get; set; } = "";
     }
 }
