@@ -52,7 +52,7 @@ namespace tiny.WebApi.Helpers
         /// <returns></returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        private void GetColumnMapping(QuerySpecification querySpecification, OracleBulkCopy oracleBulkCopy)
+        private static void GetColumnMapping(QuerySpecification querySpecification, OracleBulkCopy oracleBulkCopy)
         {
             if (!string.IsNullOrEmpty(querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma))
                 foreach (var j in from i in querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Split(',') from j in i.Split(':') select j) oracleBulkCopy.ColumnMappings.Add(j[0], j[1]);

@@ -67,7 +67,7 @@ namespace tiny.WebApi.Helpers
         /// <returns></returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        private void GetColumnMapping(QuerySpecification querySpecification, SqlBulkCopy sqlBulkCopy)
+        private static void GetColumnMapping(QuerySpecification querySpecification, SqlBulkCopy sqlBulkCopy)
         {
             if (!string.IsNullOrEmpty(querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma))
                 foreach (var j in from i in querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Split(',') from j in i.Split(':') select j) sqlBulkCopy.ColumnMappings.Add(j[0], j[1]);
