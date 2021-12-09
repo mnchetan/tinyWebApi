@@ -70,8 +70,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         private static void GetColumnMapping(QuerySpecification querySpecification, SqlBulkCopy sqlBulkCopy)
         {
-            if (!string.IsNullOrEmpty(querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma))
-                foreach (var j in from i in querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Split(',') from j in i.Split(':') select j) sqlBulkCopy.ColumnMappings.Add(j[0], j[1]);
+            if (!string.IsNullOrEmpty(querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma)) foreach (var j in from i in querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Split(",") let j = i.Replace(",", "").Split(":") select j) sqlBulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping() { SourceColumn = j[0].Replace(":", ""), DestinationColumn = j[1].Replace(":", "") });
         }
         /// <summary>
         /// Bulk insert data to the destination table.
