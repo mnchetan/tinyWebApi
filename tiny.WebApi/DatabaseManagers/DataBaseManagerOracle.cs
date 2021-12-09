@@ -1079,7 +1079,7 @@ namespace tiny.WebApi.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataSet ExecDataSet(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => SetInt64ColumnType(ExecDataSet(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle), querySpecification);
+        public DataSet ExecDataSet(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => SetInt64ColumnType(ExecDataSetWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out OracleCommand oracleCommand), querySpecification, oracleCommand);
         /// <summary>
         ///     Executes the 'data set with command out' operation.
         /// </summary>
@@ -1091,7 +1091,7 @@ namespace tiny.WebApi.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataSet ExecDataSetWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => SetInt64ColumnType(ExecDataSetWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command), querySpecification);
+        public DataSet ExecDataSetWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => SetInt64ColumnType(ExecDataSetWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command), querySpecification, command);
         /// <summary>
         ///     Executes the 'data set procedure' operation.
         /// </summary>
@@ -1102,7 +1102,7 @@ namespace tiny.WebApi.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataSet ExecDataSetProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => SetInt64ColumnType(ExecDataSetProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle), querySpecification);
+        public DataSet ExecDataSetProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => SetInt64ColumnType(ExecDataSetProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out OracleCommand oracleCommand), querySpecification, oracleCommand);
         /// <summary>
         ///     Executes the 'data set procedure with command out' operation.
         /// </summary>
@@ -1114,7 +1114,7 @@ namespace tiny.WebApi.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataSet ExecDataSetProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => SetInt64ColumnType(ExecDataSetProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command), querySpecification);
+        public DataSet ExecDataSetProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => SetInt64ColumnType(ExecDataSetProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command), querySpecification, command);
         /// <summary>
         ///     Executes the 'data table' operation.
         /// </summary>
@@ -1125,7 +1125,7 @@ namespace tiny.WebApi.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataTable ExecDataTable(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => SetInt64ColumnType(ExecDataTable(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle), querySpecification);
+        public DataTable ExecDataTable(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => SetInt64ColumnType(ExecDataTableWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out OracleCommand oracleCommand), querySpecification, oracleCommand);
         /// <summary>
         ///     Executes the 'data table with command out' operation.
         /// </summary>
@@ -1137,7 +1137,7 @@ namespace tiny.WebApi.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataTable ExecDataTableWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => SetInt64ColumnType(ExecDataTableWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command), querySpecification);
+        public DataTable ExecDataTableWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => SetInt64ColumnType(ExecDataTableWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command), querySpecification, command);
         /// <summary>
         ///     Executes the 'data table procedure' operation.
         /// </summary>
@@ -1148,7 +1148,7 @@ namespace tiny.WebApi.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataTable ExecDataTableProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => SetInt64ColumnType(ExecDataTableProc(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle), querySpecification);
+        public DataTable ExecDataTableProc(QuerySpecification querySpecification, List<DatabaseParameters> parameters) => SetInt64ColumnType(ExecDataTableProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out OracleCommand oracleCommand), querySpecification, oracleCommand);
         /// <summary>
         ///     Executes the 'data table procedure with command out' operation.
         /// </summary>
@@ -1160,14 +1160,14 @@ namespace tiny.WebApi.DatabaseManagers
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public DataTable ExecDataTableProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => SetInt64ColumnType(ExecDataTableProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command), querySpecification);
+        public DataTable ExecDataTableProcWithCommandOut(QuerySpecification querySpecification, List<DatabaseParameters> parameters, out OracleCommand command) => SetInt64ColumnType(ExecDataTableProcWithCommandOut(querySpecification.Query, parameters, querySpecification.IsMapUDTAsJSON_ApplicableForOracle, querySpecification.IsMapUDTAsXML_ApplicableForOracle, out command), querySpecification, command);
         /// <summary>
         /// Set Int64 as column type for specified columns in Data Table as Oracle does not differentiate between intergers and decimals and makes every number column as decimal.
         /// </summary>
         /// <param name="dt"></param>
         /// <param name="querySpecification"></param>
         /// <returns></returns>
-        private static DataTable SetInt64ColumnType(DataTable dt, QuerySpecification querySpecification)
+        private static DataTable SetInt64ColumnType(DataTable dt, QuerySpecification querySpecification, OracleCommand oracleCommand)
         {
             try
             {
@@ -1181,13 +1181,28 @@ namespace tiny.WebApi.DatabaseManagers
                         var fields = rcs[0].Split(':');
                         if (fields is not null && fields.Length > 0)
                         {
-                            foreach (var item in fields.Skip(1))
+                            if (oracleCommand.CommandType == CommandType.Text)
                             {
-                                foreach (var dataColumn in from DataColumn dataColumn in dt1.Columns
-                                                           where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
-                                                           select dataColumn)
+                                foreach (var item in fields)
                                 {
-                                    dataColumn.DataType = typeof(long);
+                                    foreach (var dataColumn in from DataColumn dataColumn in dt1.Columns
+                                                               where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
+                                                               select dataColumn)
+                                    {
+                                        dataColumn.DataType = typeof(long);
+                                    }
+                                }
+                            }
+                            else if(oracleCommand.CommandType == CommandType.StoredProcedure)
+                            {
+                                foreach (var item in fields.Skip(1))
+                                {
+                                    foreach (var dataColumn in from DataColumn dataColumn in dt1.Columns
+                                                               where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
+                                                               select dataColumn)
+                                    {
+                                        dataColumn.DataType = typeof(long);
+                                    }
                                 }
                             }
                         }
@@ -1208,8 +1223,9 @@ namespace tiny.WebApi.DatabaseManagers
         /// </summary>
         /// <param name="ds"></param>
         /// <param name="querySpecification"></param>
+        /// <param name="oracleCommand"></param>
         /// <returns></returns>
-        private static DataSet SetInt64ColumnType(DataSet ds, QuerySpecification querySpecification)
+        private static DataSet SetInt64ColumnType(DataSet ds, QuerySpecification querySpecification, OracleCommand oracleCommand)
         {
             try
             {
@@ -1230,13 +1246,28 @@ namespace tiny.WebApi.DatabaseManagers
                                     var fields = rcs[level].Split(':');
                                     if (fields is not null && fields.Length > 0)
                                     {
-                                        foreach (var item in fields.Skip(1))
+                                        if (oracleCommand.CommandType == CommandType.Text)
                                         {
-                                            foreach (var dataColumn in from DataColumn dataColumn in dt.Columns
-                                                                       where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
-                                                                       select dataColumn)
+                                            foreach (var item in fields)
                                             {
-                                                dataColumn.DataType = typeof(long);
+                                                foreach (var dataColumn in from DataColumn dataColumn in dt.Columns
+                                                                           where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
+                                                                           select dataColumn)
+                                                {
+                                                    dataColumn.DataType = typeof(long);
+                                                }
+                                            }
+                                        }
+                                        else if(oracleCommand.CommandType == CommandType.StoredProcedure)
+                                        {
+                                            foreach (var item in fields.Skip(1))
+                                            {
+                                                foreach (var dataColumn in from DataColumn dataColumn in dt.Columns
+                                                                           where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
+                                                                           select dataColumn)
+                                                {
+                                                    dataColumn.DataType = typeof(long);
+                                                }
                                             }
                                         }
                                     }
