@@ -1181,32 +1181,12 @@ namespace tiny.WebApi.DatabaseManagers
                     {
                         var fields = rcs[0].Split(':');
                         if (fields is not null && fields.Length > 0)
-                        {
                             if (oracleCommand.CommandType == CommandType.Text)
-                            {
-                                foreach (var item in fields)
-                                {
-                                    foreach (var dataColumn in from DataColumn dataColumn in dt1.Columns
-                                                               where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
-                                                               select dataColumn)
-                                    {
-                                        dataColumn.DataType = typeof(long);
-                                    }
-                                }
-                            }
-                            else if(oracleCommand.CommandType == CommandType.StoredProcedure)
-                            {
-                                foreach (var item in fields.Skip(1))
-                                {
-                                    foreach (var dataColumn in from DataColumn dataColumn in dt1.Columns
-                                                               where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
-                                                               select dataColumn)
-                                    {
-                                        dataColumn.DataType = typeof(long);
-                                    }
-                                }
-                            }
-                        }
+                                foreach (var dataColumn in from item in fields from dataColumn in from DataColumn dataColumn in dt1.Columns where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower() select dataColumn select dataColumn)
+                                    dataColumn.DataType = typeof(long);
+                            else if (oracleCommand.CommandType == CommandType.StoredProcedure)
+                                foreach (var dataColumn in from item in fields.Skip(1) from dataColumn in from DataColumn dataColumn in dt1.Columns where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower() select dataColumn select dataColumn)
+                                    dataColumn.DataType = typeof(long);
                     }
                     foreach (DataRow row in dt.Rows)
                         dt1.ImportRow(row);
@@ -1246,32 +1226,12 @@ namespace tiny.WebApi.DatabaseManagers
                                 {
                                     var fields = rcs[level].Split(':');
                                     if (fields is not null && fields.Length > 0)
-                                    {
                                         if (oracleCommand.CommandType == CommandType.Text)
-                                        {
-                                            foreach (var item in fields)
-                                            {
-                                                foreach (var dataColumn in from DataColumn dataColumn in dt.Columns
-                                                                           where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
-                                                                           select dataColumn)
-                                                {
-                                                    dataColumn.DataType = typeof(long);
-                                                }
-                                            }
-                                        }
-                                        else if(oracleCommand.CommandType == CommandType.StoredProcedure)
-                                        {
-                                            foreach (var item in fields.Skip(1))
-                                            {
-                                                foreach (var dataColumn in from DataColumn dataColumn in dt.Columns
-                                                                           where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower()
-                                                                           select dataColumn)
-                                                {
-                                                    dataColumn.DataType = typeof(long);
-                                                }
-                                            }
-                                        }
-                                    }
+                                            foreach (var dataColumn in from item in fields from dataColumn in from DataColumn dataColumn in dt.Columns where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower() select dataColumn select dataColumn)
+                                                dataColumn.DataType = typeof(long);
+                                        else if (oracleCommand.CommandType == CommandType.StoredProcedure)
+                                            foreach (var dataColumn in from item in fields.Skip(1) from dataColumn in from DataColumn dataColumn in dt.Columns where $"{dataColumn.ColumnName}".ToLower() == $"{item}".ToLower() select dataColumn select dataColumn)
+                                                dataColumn.DataType = typeof(long);
                                 }
                                 level++;
                             }
