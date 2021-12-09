@@ -13,9 +13,40 @@ namespace tiny.WebApi.Helpers
     /// <summary>
     /// Extended Sql Dependency
     /// Note # 1: Service broker account needs to be enabled for the sql database in order to recieve change notifications.
-    /// Note # 2: Use of[dbo] – table schema name in the query.This is important to get proper notification.
-    ///           Query will not be valid if you are using * for your select query.You need to compulsory specify the column names in your query to get notified.
-    /// Sample Query to enable Service Broker : ALTER DATABASE UrDb SET ENABLE_BROKER          
+    /// Note # 2: The projected columns in the SELECT statement must be explicitly stated, and table names must be qualified with two-part names.Notice that this means that all tables referenced in the statement must be in the same database.
+    /// Note # 3: The statement may not use the asterisk (*) or table_name.* syntax to specify columns.
+    /// Note # 4: The statement may not use unnamed columns or duplicate column names.
+    /// Note # 5: The statement must reference a base table.
+    /// Note # 6: The projected columns in the SELECT statement may not contain aggregate expressions unless the statement uses a GROUP BY expression. When a GROUP BY expression is provided, the select list may contain the aggregate functions COUNT_BIG() or SUM(). However, SUM() may not be specified for a nullable column.The statement may not specify HAVING, CUBE, or ROLLUP.
+    /// 
+    /// Change Notification permissions Sample : to provide to leats priviledged user:
+    /// 
+    /// USE YourDatabase;
+    /// GO
+    /// --create user for schema ownership
+    /// CREATE USER SqlDependencySchemaOwner WITHOUT LOGIN;
+    /// GO
+    /// --create schema for SqlDependency ojbects
+    /// CREATE SCHEMA SqlDependency AUTHORIZATION SqlDependencySchemaOwner;
+    /// GO
+    /// --set the default schema of minimally privileged user to SqlDependency
+    /// ALTER USER SqlNotificationUser WITH DEFAULT_SCHEMA = SqlDependency;
+    /// --grant user control permissions on SqlDependency schema
+    /// GRANT CONTROL ON SCHEMA::SqlDependency TO SqlNotificationUser;
+    /// --grant user impersonate permissions on SqlDependency schema owner
+    /// GRANT IMPERSONATE ON USER::SqlDependencySchemaOwner TO SqlNotificationUser;
+    /// GO
+    /// --grant database permissions needed to create and use SqlDependency objects
+    /// GRANT CREATE PROCEDURE TO SqlNotificationUser;
+    /// GRANT CREATE QUEUE TO SqlNotificationUser;
+    /// GRANT CREATE SERVICE TO SqlNotificationUser;
+    /// GRANT REFERENCES ON
+    /// CONTRACT::[http://schemas.microsoft.com/SQL/Notifications/PostQueryNotification] TO SqlNotificationUser;
+    /// GRANT VIEW DEFINITION TO SqlNotificationUser;
+    /// GRANT SELECT to SqlNotificationUser;
+    /// GRANT SUBSCRIBE QUERY NOTIFICATIONS TO SqlNotificationUser;
+    /// GRANT RECEIVE ON QueryNotificationErrorsQueue TO SqlNotificationUser;
+    /// GO
     /// </summary>
     [DebuggerStepThrough]
     public class SqlDependencyEx : IDisposable
@@ -64,11 +95,6 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public Guid Guid { get; set; } = Guid.NewGuid();
         /// <summary>
-        /// Automatically disables the raising of events after first change occurs.
-        /// </summary>
-        [DebuggerHidden]
-        public bool IsNotifyFirstChangeOnly { get; set; }
-        /// <summary>
         /// Creates a command of type text.
         /// Note : Make sure only text based queries are used and only number or string type parameters are used whose direction isof type input .
         /// </summary>
@@ -87,7 +113,6 @@ namespace tiny.WebApi.Helpers
             cmd.CommandType = CommandType.Text;
             Global.LogInformation("Setting command parameters.");
             foreach (var item in parameters) cmd.Parameters.Add(new SqlParameter(item.Name, item.Value));
-            cmd.Notification = null;
             return cmd;
         }
         /// <summary>
@@ -122,11 +147,12 @@ namespace tiny.WebApi.Helpers
         private int ProcessAction(List<DatabaseParameters> parameters, int commandTimeOutInSeconds = 0)
         {
             var cmd = CreateCommand(parameters, commandTimeOutInSeconds);
+            if (_conn.State != ConnectionState.Open) _conn.Open();
             if (ObjWatcher is null)
-                ObjWatcher = new();
+                ObjWatcher = new(cmd, null, commandTimeOutInSeconds);
             ObjWatcher.OnChange -= ObjWatcher_OnChange;
             ObjWatcher.OnChange += ObjWatcher_OnChange;
-            if (_conn.State != ConnectionState.Open) _conn.Open();
+            _context.AutoDisposeConnection = false;
             _context.ExecuteNonQuery(cmd);
             return 0;
         }
@@ -142,16 +168,15 @@ namespace tiny.WebApi.Helpers
             if (SqlNotificationEventEx is not null)
             {
                 SqlNotificationEventEx(this, new SqlNotificationEventArgsEx(eventArgs, SharedObject, Guid));
-                if (IsNotifyFirstChangeOnly && _conn is not null)
-                    lock (_lockObject)
-                    {
-                        Global.LogInformation("Close connection when open, dispose and set as null.");
-                        if (_conn.State == ConnectionState.Open) _conn.Close();
-                        _conn.Dispose();
+                lock (_lockObject)
+                {
+                    Global.LogInformation("Close connection when open, dispose and set as null.");
+                    if (_conn.State == ConnectionState.Open) _conn.Close();
+                    _conn.Dispose();
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-                        _conn = null;
+                    _conn = null;
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
-                    }
+                }
             }
         }
         /// <summary>

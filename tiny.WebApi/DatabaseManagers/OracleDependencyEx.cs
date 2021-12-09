@@ -12,6 +12,9 @@ namespace tiny.WebApi.Helpers
 {
     /// <summary>
     /// Extended Oracle Dependency
+    /// Ensure proper change notification permissions are granted to user.
+    /// 
+    /// Command : grant change notification to scott;
     /// </summary>
     [DebuggerStepThrough]
     public class OracleDependencyEx : IDisposable
@@ -78,14 +81,13 @@ namespace tiny.WebApi.Helpers
             Global.LogInformation("Inside CreateCommand.");
             OracleCommand cmd = new(_querySpecification.Query, _conn);
             Global.LogInformation("Setting command type, command timeout.");
+            cmd.Notification = null;
             cmd.BindByName = true;
-            cmd.Notification.IsNotifiedOnce = IsNotifyFirstChangeOnly;
             cmd.CommandTimeout = commandTimeOutInSeconds > 0 ? commandTimeOutInSeconds : _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
             cmd.CommandType = CommandType.Text;
             cmd.AddRowid = true;
             Global.LogInformation("Setting command parameters.");
             foreach (var item in parameters) cmd.Parameters.Add(new OracleParameter(item.Name, item.Value));
-            cmd.Notification = null;
             return cmd;
         }
         /// <summary>
@@ -100,11 +102,12 @@ namespace tiny.WebApi.Helpers
             try
             {
                 var cmd = CreateCommand(parameters, commandTimeOutInSeconds);
-                if (ObjWatcher is null)
-                    ObjWatcher = new();
+                if (_conn.State != ConnectionState.Open) _conn.Open();
+                if (ObjWatcher is null) ObjWatcher = new(cmd, !IsNotifyFirstChangeOnly, commandTimeOutInSeconds, false);
+                if (cmd.Notification is not null) cmd.Notification.IsNotifiedOnce = IsNotifyFirstChangeOnly;
                 ObjWatcher.OnChange -= ObjWatcher_OnChange;
                 ObjWatcher.OnChange += ObjWatcher_OnChange;
-                if (_conn.State != ConnectionState.Open) _conn.Open();
+                _context.AutoDisposeConnection = false;
                 _context.ExecuteNonQuery(cmd);
             }
             catch (Exception ex)
