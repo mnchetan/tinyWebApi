@@ -1166,6 +1166,7 @@ namespace tiny.WebApi.DatabaseManagers
         /// </summary>
         /// <param name="dt"></param>
         /// <param name="querySpecification"></param>
+        /// <param name="oracleCommand"></param>
         /// <returns></returns>
         private static DataTable SetInt64ColumnType(DataTable dt, QuerySpecification querySpecification, OracleCommand oracleCommand)
         {
