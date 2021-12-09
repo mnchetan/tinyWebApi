@@ -346,5 +346,13 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         public static ITinyWebApiConfigurations? TinyWebApiConfigurations { get; set; }
+        /// <summary>
+        /// Gets the key from the Query specifications based on query specification value.
+        /// </summary>
+        /// <param name="querySpecification"></param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public static string GetKeyFromQuerySpecificationValue(QuerySpecification querySpecification) => QuerySpecifications.FirstOrDefault(o => o.Value.Query == querySpecification.Query).Key;
     }
 }

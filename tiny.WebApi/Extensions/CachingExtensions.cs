@@ -46,7 +46,7 @@ namespace tiny.WebApi.Extensions
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
         internal static bool AllowServeFromCache(this QuerySpecification querySpecification, ExecutionType executionType)
         {
-            var queryName = querySpecification.GetKeyFromQuerySpecificationValue();
+            var queryName = Global.GetKeyFromQuerySpecificationValue(querySpecification);
             return TinyCache.GetValueOrDefault($"{queryName}_ {Enum.GetName(executionType)}".ToLower()) != null && (TinyCache.GetValueOrDefault($"{queryName}_ {Enum.GetName(executionType)}".ToLower()).LastFetchedFromDatabaseOnDateTimeInUTC - DateTime.UtcNow) <= new TimeSpan(0, 0, querySpecification.CacheDurationInSeconds);
         }
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
@@ -66,7 +66,7 @@ namespace tiny.WebApi.Extensions
             {
                 lock (_lockObject)
                 {
-                    var queryName = querySpecification.GetKeyFromQuerySpecificationValue();
+                    var queryName = Global.GetKeyFromQuerySpecificationValue(querySpecification);
                     if (TinyCache.ContainsKey($"{queryName}_ {Enum.GetName(executionType)}".ToLower()))
                         TinyCache.Remove($"{queryName}_ {Enum.GetName(executionType)}".ToLower());
                     TinyCache.Add($"{queryName}_ {Enum.GetName(executionType)}".ToLower(), new CachingHelper() { CachedData = data, LastFetchedFromDatabaseOnDateTimeInUTC = DateTime.UtcNow, QuerySpecification = querySpecification });
@@ -76,14 +76,6 @@ namespace tiny.WebApi.Extensions
             else
                 return data;
         }
-        /// <summary>
-        /// Gets the key from the Query specifications based on query specification value.
-        /// </summary>
-        /// <param name="querySpecification"></param>
-        /// <returns></returns>
-        [DebuggerStepThrough]
-        [DebuggerHidden]
-        private static string GetKeyFromQuerySpecificationValue(this QuerySpecification querySpecification) => Global.QuerySpecifications.FirstOrDefault(o => o.Value.Equals(querySpecification)).Key;
         /// <summary>
         /// Add to Cache.
         /// </summary>
@@ -100,7 +92,7 @@ namespace tiny.WebApi.Extensions
             {
                 lock (_lockObject)
                 {
-                    var queryName = querySpecification.GetKeyFromQuerySpecificationValue();
+                    var queryName = Global.GetKeyFromQuerySpecificationValue(querySpecification);
                     if (TinyCache.ContainsKey($"{queryName}_ {Enum.GetName(executionType)}".ToLower()))
                         TinyCache.Remove($"{queryName}_ {Enum.GetName(executionType)}".ToLower());
                     TinyCache.Add($"{queryName}_ {Enum.GetName(executionType)}".ToLower(), new CachingHelper() { CachedData = data, LastFetchedFromDatabaseOnDateTimeInUTC = DateTime.UtcNow, QuerySpecification = querySpecification });
@@ -121,7 +113,7 @@ namespace tiny.WebApi.Extensions
         internal static T ServeFromCache<T>(this QuerySpecification querySpecification, ExecutionType executionType)
         {
             Global.LogInformation($"Inside ServeFromCache, if data exists return data else return instance of {typeof(T)}.");
-            var queryName = querySpecification.GetKeyFromQuerySpecificationValue();
+            var queryName = Global.GetKeyFromQuerySpecificationValue(querySpecification);
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var value = TinyCache.ContainsKey($"{queryName}_ {Enum.GetName(executionType)}".ToLower()) && TinyCache.GetValueOrDefault($"{queryName}_ {Enum.GetName(executionType)}".ToLower()) != null ? TinyCache.GetValueOrDefault($"{queryName}_ {Enum.GetName(executionType)}".ToLower()).CachedData : Activator.CreateInstance<T>();
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
