@@ -68,11 +68,12 @@ namespace tiny.WebApi.Helpers
         {
             try
             {
+                if (_conn.State != ConnectionState.Open)
+                    _conn.Open();
                 using OracleBulkCopy oracleBulkCopy = new(_conn, OracleBulkCopyOptions.UseInternalTransaction);
                 GetColumnMapping(_querySpecification, oracleBulkCopy);
                 oracleBulkCopy.DestinationTableName = _querySpecification.Query;
                 oracleBulkCopy.BulkCopyTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
-                _conn.Open();
                 oracleBulkCopy.WriteToServer(dt);
             }
             catch
@@ -100,13 +101,14 @@ namespace tiny.WebApi.Helpers
                 {
                     if (item.PropertyType == typeof(DataTable))
                     {
+                        if (_conn.State != ConnectionState.Open)
+                            _conn.Open();
                         using OracleBulkCopy oracleBulkCopy = new(_conn, OracleBulkCopyOptions.UseInternalTransaction);
 #pragma warning disable CS8604 // Possible null reference argument.
                         GetColumnMapping(_querySpecification, oracleBulkCopy);
 #pragma warning restore CS8604 // Possible null reference argument.
                         oracleBulkCopy.DestinationTableName = item.PropertyName;
                         oracleBulkCopy.BulkCopyTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
-                        _conn.Open();
                         oracleBulkCopy.WriteToServer(item.PropertyValue as DataTable);
                     }
                 }

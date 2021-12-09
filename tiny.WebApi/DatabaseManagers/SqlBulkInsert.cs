@@ -51,11 +51,12 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         private void ProcessAction(DataTable dt)
         {
+            if (_conn.State != ConnectionState.Open)
+                _conn.Open();
             using SqlBulkCopy SqlBulkCopy = new(_conn, SqlBulkCopyOptions.UseInternalTransaction, _context.Transaction);
             SqlBulkCopy.DestinationTableName = _querySpecification.Query;
             GetColumnMapping(_querySpecification, SqlBulkCopy);
             SqlBulkCopy.BulkCopyTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
-            _conn.Open();
             SqlBulkCopy.WriteToServer(dt);
             _context.Transaction?.Commit();
         }
@@ -109,13 +110,14 @@ namespace tiny.WebApi.Helpers
             {
                 if (item.PropertyType == typeof(DataTable))
                 {
+                    if(_conn.State != ConnectionState.Open)
+                        _conn.Open();
                     using SqlBulkCopy SqlBulkCopy = new(_conn, SqlBulkCopyOptions.UseInternalTransaction, _context.Transaction);
                     SqlBulkCopy.DestinationTableName = item.PropertyName;
 #pragma warning disable CS8604 // Possible null reference argument.
                     GetColumnMapping(_querySpecification, SqlBulkCopy);
 #pragma warning restore CS8604 // Possible null reference argument.
                     SqlBulkCopy.BulkCopyTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
-                    _conn.Open();
                     SqlBulkCopy.WriteToServer(item.PropertyValue as DataTable);
                 }
             }
