@@ -114,6 +114,7 @@ namespace tiny.WebApi.Helpers
             {
                 if (OracleNotificationExceptionEvent is not null)
                     OracleNotificationExceptionEvent(this, new() { Exception = ex });
+                ObjWatcher.OnChange -= ObjWatcher_OnChange;
                 Dispose(true);
             }
         }
@@ -152,6 +153,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerStepThrough]
         public void Dispose()
         {
+            ObjWatcher.OnChange -= ObjWatcher_OnChange;
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
             SharedObject = null;
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
