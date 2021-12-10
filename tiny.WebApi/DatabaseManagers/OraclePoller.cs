@@ -120,7 +120,11 @@ namespace tiny.WebApi.Helpers
                     }
                     if (DateTime.UtcNow.Subtract(startTime).TotalSeconds >= commandTimeOutInSeconds)
                         isExit = true;
-                    else Task.Delay(pollIntervalInSeconds * 1000).ConfigureAwait(true);
+                    else
+                    {
+                        if (!isExit)
+                            Task.Delay(pollIntervalInSeconds * 1000).ConfigureAwait(true);
+                    }
                 });
             }
             Dispose(true);

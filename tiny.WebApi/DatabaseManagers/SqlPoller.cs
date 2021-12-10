@@ -113,14 +113,18 @@ namespace tiny.WebApi.Helpers
                 Task.Run(() =>
                 {
                     DataTable dt = _context.FillDataTable(new SqlDataAdapter(cmd));
-                    if(dt.Rows.Count > 0)
+                    if (dt.Rows.Count > 0)
                     {
                         isExit = true;
                         result = dt;
                     }
                     if (DateTime.UtcNow.Subtract(startTime).TotalSeconds >= commandTimeOutInSeconds)
                         isExit = true;
-                    else Task.Delay(pollIntervalInSeconds * 1000).ConfigureAwait(true);
+                    else
+                    {
+                        if (!isExit)
+                            Task.Delay(pollIntervalInSeconds * 1000).ConfigureAwait(true);
+                    }
                 });
             }
             Dispose(true);
