@@ -111,5 +111,44 @@ namespace tiny.WebApi.Extensions
 
             return expandoList;
         }
+        /// <summary>
+        /// Get value or default from the dictionary with culture neutral and case neutral key if key is of type string.
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dictionary"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+#pragma warning disable CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        public static TValue GetValueOrDefaultIgnoreCase<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key) => key is not null ? key is string ? dictionary.FirstOrDefault(o => (o.Key as string).ToLowerInvariant() == (key as string).ToLowerInvariant()).Value : dictionary.GetValueOrDefault(key) : default;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8603 // Possible null reference return.
+        /// <summary>
+        /// Checks if dictioanry contains the provided key where key is looked up in a case neutral way if key is of type string.
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dictionary"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+#pragma warning disable CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
+        public static bool ContainsKeyIgnoreCase<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key) => key is not null && (key is string ? dictionary.Keys.OfType<string>().Any(k => string.Equals(k, key as string, StringComparison.OrdinalIgnoreCase)) : dictionary.ContainsKey(key));
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning disable IDE0075 // Simplify conditional expression
+#pragma warning disable CS0458 // The result of the expression is always 'null'
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public static bool RemoveIgnoreCase<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key) => key is not null ? key is string ? dictionary.Remove(dictionary.FirstOrDefault(o=>(o as string).ToLowerInvariant() == (key as string).ToLowerInvariant()).Key) : dictionary.Remove(key) : false;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS0458 // The result of the expression is always 'null'
+#pragma warning restore IDE0075 // Simplify conditional expression
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 }
