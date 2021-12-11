@@ -140,15 +140,32 @@ namespace tiny.WebApi.Extensions
 #pragma warning disable CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
         public static bool ContainsKeyIgnoreCase<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key) => key is not null && (key is string ? dictionary.Keys.OfType<string>().Any(k => string.Equals(k, key as string, StringComparison.OrdinalIgnoreCase)) : dictionary.ContainsKey(key));
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-#pragma warning disable IDE0075 // Simplify conditional expression
-#pragma warning disable CS0458 // The result of the expression is always 'null'
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static bool RemoveIgnoreCase<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key) => key is not null ? key is string ? dictionary.Remove(dictionary.FirstOrDefault(o=>(o as string).ToLowerInvariant() == (key as string).ToLowerInvariant()).Key) : dictionary.Remove(key) : false;
+        public static bool RemoveIgnoreCase<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
+        {
+            switch (key)
+            {
+                case not null:
+                    if (key is string)
+                    {
+                        bool isFound = false;
+                        KeyValuePair<TKey, TValue> actualKey = new();
+                        foreach (var item in from item in dictionary where (item.Key as string).ToLowerInvariant() == (key as string).ToLowerInvariant() select item)
+                        {
+                            isFound = true;
+                            actualKey = item;
+                            break;
+                        }
+
+                        return isFound && dictionary.Remove(actualKey.Key);
+                    }
+                    else return dictionary.Remove(key);
+                default: return false;
+            }
+        }
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-#pragma warning restore CS0458 // The result of the expression is always 'null'
-#pragma warning restore IDE0075 // Simplify conditional expression
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 }
