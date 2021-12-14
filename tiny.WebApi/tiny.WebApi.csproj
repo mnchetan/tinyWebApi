@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <Nullable>enable</Nullable>
     <Authors>tinyChetan</Authors>
     <Description>A Powerful WebApi written to ease up webapi development purely based on the configuration - supports MSSQL Server and Oracle databases.</Description>
@@ -14,6 +14,7 @@
     <FileVersion>5.0.0</FileVersion>
     <PackageReleaseNotes>A Powerful WebApi written to ease up webapi development purely based on the configuration - supports MSSQL Server and Oracle databases.</PackageReleaseNotes>
     <Company>tiny</Company>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

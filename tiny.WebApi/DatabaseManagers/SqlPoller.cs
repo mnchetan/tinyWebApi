@@ -82,9 +82,9 @@ namespace tiny.WebApi.Helpers
             try
             {
                 if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
-                    return ImpersonationHelper.Execute(() => { return ProcessAction(parameters, commandTimeOutInSeconds, pollIntervalInSeconds); }, _querySpecification.DatabaseSpecification);
+                    return ImpersonationHelper.Execute(() => { return ProcessAction(parameters, commandTimeOutInSeconds, pollIntervalInSeconds).Result; }, _querySpecification.DatabaseSpecification);
                 else
-                    return ProcessAction(parameters, commandTimeOutInSeconds, pollIntervalInSeconds);
+                    return ProcessAction(parameters, commandTimeOutInSeconds, pollIntervalInSeconds).Result;
             }
             catch (Exception ex)
             {
@@ -94,13 +94,13 @@ namespace tiny.WebApi.Helpers
             }
         }
         /// <summary>
-        /// Process Action.
+        /// Process Action
         /// </summary>
         /// <param name="parameters"></param>
         /// <param name="commandTimeOutInSeconds"></param>
         /// <param name="pollIntervalInSeconds"></param>
         /// <returns></returns>
-        private DataTable ProcessAction(List<DatabaseParameters> parameters, int commandTimeOutInSeconds = 0, int pollIntervalInSeconds = 60)
+        private async Task<DataTable> ProcessAction(List<DatabaseParameters> parameters, int commandTimeOutInSeconds = 0, int pollIntervalInSeconds = 60)
         {
             var cmd = CreateCommand(parameters, commandTimeOutInSeconds);
             if (_conn.State != ConnectionState.Open) _conn.Open();
@@ -110,7 +110,7 @@ namespace tiny.WebApi.Helpers
             DataTable result = new();
             while (!isExit)
             {
-                Task.Run(() =>
+                try
                 {
                     DataTable dt = _context.FillDataTable(new SqlDataAdapter(cmd));
                     if (dt.Rows.Count > 0)
@@ -118,17 +118,15 @@ namespace tiny.WebApi.Helpers
                         isExit = true;
                         result = dt;
                     }
-                    if (DateTime.UtcNow.Subtract(startTime).TotalSeconds >= commandTimeOutInSeconds)
+                    if (!isExit && DateTime.UtcNow.Subtract(startTime).TotalSeconds >= (commandTimeOutInSeconds > 0 ? commandTimeOutInSeconds : cmd.CommandTimeout))
                         isExit = true;
-                    else
-                    {
-                        if (!isExit)
-                            Task.Delay(pollIntervalInSeconds * 1000).ConfigureAwait(true);
-                    }
-                });
+                }
+                catch { isExit = true; }
+                if (!isExit)
+                    await Task.Delay(pollIntervalInSeconds * 1000);
             }
             Dispose(true);
-            return result;
+            return await Task.FromResult(result);
         }
         /// <summary>
         /// Dispose the File System Watcher Extended object.
