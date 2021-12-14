@@ -1,4 +1,4 @@
-﻿// <copyright file="Base.cs" company="tiny">
+﻿// <copyright file="BaseController.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
 using Microsoft.AspNetCore.Mvc;

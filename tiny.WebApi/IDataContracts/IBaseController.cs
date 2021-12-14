@@ -1,4 +1,4 @@
-﻿// <copyright file="IBase.cs" company="tiny">
+﻿// <copyright file="IBaseController.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
 using System;

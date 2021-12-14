@@ -1,4 +1,4 @@
-﻿// <copyright file="Startup.cs" company="tiny">
+﻿// <copyright file="TinyWebApiConfigurations.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
 // <summary>

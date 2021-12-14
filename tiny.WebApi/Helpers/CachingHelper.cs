@@ -1,4 +1,4 @@
-﻿// <copyright file="Exceptions.cs" company="tiny">
+﻿// <copyright file="CachingHelper.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
 using System;

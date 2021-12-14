@@ -1,4 +1,4 @@
-﻿// <copyright file="tiny.WebApiController.cs" company="tiny">
+﻿// <copyright file="TinyWebApiController.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
 // <summary>

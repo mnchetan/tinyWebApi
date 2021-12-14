@@ -1,4 +1,4 @@
-﻿// <copyright file="Itiny.WebApiRepository.cs" company="tiny">
+﻿// <copyright file="ITinyWebApiRepository.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
 // <summary>
