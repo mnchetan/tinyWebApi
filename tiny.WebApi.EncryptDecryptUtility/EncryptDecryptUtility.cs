@@ -1,7 +1,10 @@
 ﻿// <copyright file="Program.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
+using System;
 using System.Diagnostics;
+using System.Windows.Forms;
+
 namespace tiny.WebApi.EncryptDecryptUtility
 {
     /// <summary>

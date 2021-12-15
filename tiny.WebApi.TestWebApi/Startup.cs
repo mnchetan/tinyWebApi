@@ -4,7 +4,11 @@
 // <summary>
 //     Implements the startup class.
 // </summary>
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
+using System.IO;
 using tiny.WebApi.Configurations;
 namespace tiny.WebApi.TestWebApi
 {
