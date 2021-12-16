@@ -45,20 +45,6 @@ namespace tiny.WebApi.Helpers
         /// </summary>
         private const int LOGON32_PROVIDE_DEFAULT = 9;
         /// <summary>
-        ///     Executes the funtion as impersonated.
-        ///     For Linux impersonation if not ran with root access then KeyTab is needed.
-        ///     Impersonation for Linux without KetTab and with root access will not work with Anonymous Authenitcation.
-        /// </summary>
-        /// <typeparam name="T"> Generic type parameter. </typeparam>
-        /// <param name="func">                  The function. </param>
-        /// <param name="databaseSpecification"> The database specification. </param>
-        /// <returns>
-        ///     A T.
-        /// </returns>
-        [DebuggerStepThrough]
-        [DebuggerHidden]
-        public static T Execute<T>(Func<T> func, DatabaseSpecification databaseSpecification) => Execute(func, databaseSpecification.RunAsUserSpecification.RunAsUserName, databaseSpecification.RunAsUserSpecification.RunAsDomain, databaseSpecification.RunAsUserSpecification.IsRunAsPasswordEncrypted ? EncryptFactory.Decrypt(databaseSpecification.RunAsUserSpecification.RunAsPassword, databaseSpecification.RunAsUserSpecification.EncryptionKey) : databaseSpecification.RunAsUserSpecification.RunAsPassword);
-        /// <summary>
         ///     Executes the function as impersonated.
         ///     For Linux impersonation if not ran with root access then KeyTab is needed.
         ///     Impersonation for Linux without KetTab and with root access will not work with Anonymous Authenitcation.
@@ -157,6 +143,68 @@ namespace tiny.WebApi.Helpers
         /// <param name="databaseSpecification"> The database specification. </param>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static void Execute(Action action, DatabaseSpecification databaseSpecification) => Execute(action, databaseSpecification.RunAsUserSpecification.RunAsUserName, databaseSpecification.RunAsUserSpecification.RunAsDomain, databaseSpecification.RunAsUserSpecification.IsRunAsPasswordEncrypted ? EncryptFactory.Decrypt(databaseSpecification.RunAsUserSpecification.RunAsPassword, databaseSpecification.RunAsUserSpecification.EncryptionKey) : databaseSpecification.RunAsUserSpecification.RunAsPassword);
+        public static void Execute(Action action, DatabaseSpecification databaseSpecification) => Execute(action, databaseSpecification.RunAsUserSpecification);
+        /// <summary>
+        ///     Executes the funtion as impersonated.
+        ///     For Linux impersonation if not ran with root access then KeyTab is needed.
+        ///     Impersonation for Linux without KetTab and with root access will not work with Anonymous Authenitcation.
+        /// </summary>
+        /// <typeparam name="T"> Generic type parameter. </typeparam>
+        /// <param name="func">                  The function. </param>
+        /// <param name="databaseSpecification"> The database specification. </param>
+        /// <returns>
+        ///     A T.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public static T Execute<T>(Func<T> func, DatabaseSpecification databaseSpecification) => Execute(func, databaseSpecification.RunAsUserSpecification);
+        /// <summary>
+        ///     Executes the action as impersonated.
+        ///     For Linux impersonation if not ran with root access then KeyTab is needed.
+        ///     Impersonation for Linux without KetTab and with root access will not work with Anonymous Authenitcation.
+        /// </summary>
+        /// <param name="action">                The action. </param>
+        /// <param name="runAsUserSpecification"> The run as user specification. </param>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public static void Execute(Action action, RunAsUserSpecification runAsUserSpecification) => Execute(action, runAsUserSpecification.RunAsUserName, runAsUserSpecification.RunAsDomain, runAsUserSpecification.IsRunAsPasswordEncrypted ? EncryptFactory.Decrypt(runAsUserSpecification.RunAsPassword, runAsUserSpecification.EncryptionKey) : runAsUserSpecification.RunAsPassword);
+        /// <summary>
+        ///     Executes the funtion as impersonated.
+        ///     For Linux impersonation if not ran with root access then KeyTab is needed.
+        ///     Impersonation for Linux without KetTab and with root access will not work with Anonymous Authenitcation.
+        /// </summary>
+        /// <typeparam name="T"> Generic type parameter. </typeparam>
+        /// <param name="func">                  The function. </param>
+        /// <param name="runAsUserSpecification"> The database specification. </param>
+        /// <returns>
+        ///     A T.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public static T Execute<T>(Func<T> func, RunAsUserSpecification runAsUserSpecification) => Execute(func, runAsUserSpecification.RunAsUserName, runAsUserSpecification.RunAsDomain, runAsUserSpecification.IsRunAsPasswordEncrypted ? EncryptFactory.Decrypt(runAsUserSpecification.RunAsPassword, runAsUserSpecification.EncryptionKey) : runAsUserSpecification.RunAsPassword);
+        /// <summary>
+        ///     Executes the action as impersonated.
+        ///     For Linux impersonation if not ran with root access then KeyTab is needed.
+        ///     Impersonation for Linux without KetTab and with root access will not work with Anonymous Authenitcation.
+        /// </summary>
+        /// <param name="action">                The action. </param>
+        /// <param name="mailerSpecification"> The mailer specification. </param>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public static void Execute(Action action, MailerSpecification mailerSpecification) => Execute(action, mailerSpecification.RunAsUserSpecification);
+        /// <summary>
+        ///     Executes the funtion as impersonated.
+        ///     For Linux impersonation if not ran with root access then KeyTab is needed.
+        ///     Impersonation for Linux without KetTab and with root access will not work with Anonymous Authenitcation.
+        /// </summary>
+        /// <typeparam name="T"> Generic type parameter. </typeparam>
+        /// <param name="func">                  The function. </param>
+        /// <param name="mailerSpecification"> The mailer specification. </param>
+        /// <returns>
+        ///     A T.
+        /// </returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public static T Execute<T>(Func<T> func, MailerSpecification mailerSpecification) => Execute(func, mailerSpecification.RunAsUserSpecification);
     }
 }
