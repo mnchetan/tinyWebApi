@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using tiny.WebApi.Configurations;
+using static tiny.Logger.Extensions;
 namespace tiny.WebApi.DataObjects
 {
     /// <summary>
@@ -42,7 +43,7 @@ namespace tiny.WebApi.DataObjects
         [DebuggerHidden]
         [DebuggerStepThrough]
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-        public static void LogInformation(string message, object objToLog = null) => Logger?.LogInformation(message, objToLog);
+        public static void LogInformation(string message, object objToLog = null) => Log(LogLevel.Information, message, objToLog);
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         /// Logs the critical.
@@ -54,7 +55,7 @@ namespace tiny.WebApi.DataObjects
         [DebuggerHidden]
         [DebuggerStepThrough]
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-        public static void LogCritical(string message, object objToLog = default, EventId eventId = default, Exception ex = default) => Logger?.LogCritical(eventId, ex, message, objToLog);
+        public static void LogCritical(string message, object objToLog = default, EventId eventId = default, Exception ex = default) { Log(LogLevel.Critical, message, ex); Log(LogLevel.Critical, message, objToLog); Log(LogLevel.Critical, message, eventId); }
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Logs a trace.
@@ -64,7 +65,7 @@ namespace tiny.WebApi.DataObjects
         [DebuggerHidden]
         [DebuggerStepThrough]
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-        public static void LogTrace(string message, object objToLog = null) => Logger?.LogTrace(message, objToLog);
+        public static void LogTrace(string message, object objToLog = null) => Log(LogLevel.Trace, message, objToLog);
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Logs a warning.
@@ -74,7 +75,7 @@ namespace tiny.WebApi.DataObjects
         [DebuggerHidden]
         [DebuggerStepThrough]
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-        public static void LogWarning(string message, object objToLog = null) => Logger?.LogWarning(message, objToLog);
+        public static void LogWarning(string message, object objToLog = null) => Log(LogLevel.Warning, message, objToLog);
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Logs a critical.
@@ -84,7 +85,7 @@ namespace tiny.WebApi.DataObjects
         [DebuggerHidden]
         [DebuggerStepThrough]
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-        public static void LogCritical(string message, object objToLog = null) => Logger?.LogCritical(message, objToLog);
+        public static void LogCritical(string message, object objToLog = null) => Log(LogLevel.Critical, message, objToLog);
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Logs a debug.
@@ -94,7 +95,7 @@ namespace tiny.WebApi.DataObjects
         [DebuggerHidden]
         [DebuggerStepThrough]
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-        public static void LogDebug(string message, object objToLog = null) => Logger?.LogDebug(message, objToLog);
+        public static void LogDebug(string message, object objToLog = null) => Log(LogLevel.Debug, message, objToLog);
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Logs an error.
@@ -105,7 +106,7 @@ namespace tiny.WebApi.DataObjects
         [DebuggerHidden]
         [DebuggerStepThrough]
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-        public static void LogError(string message, Exception ex, object objToLog = null) => Logger?.LogError(message, ex, objToLog);
+        public static void LogError(string message, Exception ex, object objToLog = null) { Log(LogLevel.Error, message, ex); Log(LogLevel.Error, message, objToLog); }
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Gets the environment.
@@ -330,14 +331,6 @@ namespace tiny.WebApi.DataObjects
         /// </value>
         [DebuggerHidden]
         public static int ServicePort { get; internal set; }
-        /// <summary>
-        ///     Gets the logger.
-        /// </summary>
-        /// <value>
-        ///     The logger.
-        /// </value>
-        [DebuggerHidden]
-        public static ILogger? Logger { get; internal set; }
         /// <summary>
         /// Gets or sets the tiny web api configurations.
         /// </summary>

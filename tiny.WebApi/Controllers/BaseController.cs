@@ -60,7 +60,7 @@ namespace tiny.WebApi.Controllers
         public BaseController(ILogger<BaseController> logger, IDBContextSql sqlContext, IDBContextOracle oracleContext)
         {
             _ = this;
-            Global.Logger = Logger = logger;
+            Logger = logger;
             SqlContext = sqlContext;
             OracleContext = oracleContext;
         }
@@ -137,7 +137,6 @@ namespace tiny.WebApi.Controllers
         private void SetGlobal()
         {
             Logger.LogInformation("Setting up globals.");
-            Global.Logger = Logger;
             Global.ServicePort = HttpContext.Connection.LocalPort;
             Global.ServiceIP = HttpContext?.Connection?.LocalIpAddress;
             Global.CurrentHttpContext = HttpContext;

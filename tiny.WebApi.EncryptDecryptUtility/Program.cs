@@ -4,6 +4,7 @@
 // <summary>
 //     Implements the program class.
 // </summary>
+using System.Windows.Forms;
 using tiny.WebApi.EncryptDecryptUtility;
 Application.SetHighDpiMode(HighDpiMode.SystemAware);
 Application.EnableVisualStyles();

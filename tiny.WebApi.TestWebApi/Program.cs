@@ -4,7 +4,12 @@
 // <summary>
 //     Implements the program class.
 // </summary>
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using tiny.WebApi.TestWebApi;

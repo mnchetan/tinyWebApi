@@ -1,7 +1,9 @@
 ﻿// <copyright file="EncryptFactory.cs" company="tiny">
 //     Copyright (c) 2021 tiny. All rights reserved.
 // </copyright>
+using System;
 using System.Diagnostics;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 namespace tiny.WebApi.EncryptDecryptUtility

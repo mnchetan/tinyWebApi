@@ -16,7 +16,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-//using tiny.Logger;
+using tiny.Logger;
 using tiny.WebApi.DataObjects;
 using tiny.WebApi.DBContext;
 using tiny.WebApi.Exceptions;
@@ -98,7 +98,7 @@ namespace tiny.WebApi.Configurations
                 options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
-            //services.AddTinyLogger(new LoggerOption("logs",Level:LogLevel.Trace)).AddTinyLoggerConsole();
+            services.AddTinyLogger().AddTinyLoggerConsole();
             return services;
         }
         /// <summary>
