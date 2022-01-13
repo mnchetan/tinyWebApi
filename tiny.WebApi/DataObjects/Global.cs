@@ -110,14 +110,14 @@ namespace tiny.WebApi.DataObjects
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         /// <summary>
         ///     Gets the environment.
-        ///     Default environment is "Development".
+        ///     Default environment is "Production".
         /// </summary>
         /// <value>
         ///     The environment.
         /// </value>
         [DebuggerHidden]
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-        public static string Environment => string.IsNullOrEmpty(WebHostingEnvironment.EnvironmentName) ? "Development" : WebHostingEnvironment.EnvironmentName;
+        public static string Environment => string.IsNullOrEmpty(WebHostingEnvironment.EnvironmentName) ? "Production" : WebHostingEnvironment.EnvironmentName;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
         /// <summary>
         ///     Gets the run as user specifications.
