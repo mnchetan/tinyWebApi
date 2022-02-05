@@ -31,7 +31,7 @@ namespace tiny.WebApi.DBContext
         {
             try
             {
-                Global.LogInformation("Inside ExecuteDataReader, get connection and execute.");
+                Global.LogDebug("Inside ExecuteDataReader, get connection and execute.");
                 GetConnection(_connectionString, true);
                 return OracleCommand.ExecuteReader();
             }
@@ -58,7 +58,7 @@ namespace tiny.WebApi.DBContext
         {
             try
             {
-                Global.LogInformation("Inside ExecuteNonQuery, get connection and execute.");
+                Global.LogDebug("Inside ExecuteNonQuery, get connection and execute.");
                 GetConnection(_connectionString, true);
                 return OracleCommand.ExecuteNonQuery();
             }
@@ -85,7 +85,7 @@ namespace tiny.WebApi.DBContext
         {
             try
             {
-                Global.LogInformation("Inside ExecuteScalar, get connection and execute.");
+                Global.LogDebug("Inside ExecuteScalar, get connection and execute.");
                 GetConnection(_connectionString, true);
                 return OracleCommand.ExecuteScalar();
             }
@@ -112,7 +112,7 @@ namespace tiny.WebApi.DBContext
         {
             try
             {
-                Global.LogInformation("Inside ExecuteXmlReader, get connection and execute.");
+                Global.LogDebug("Inside ExecuteXmlReader, get connection and execute.");
                 GetConnection(_connectionString, true);
                 return OracleCommand.ExecuteXmlReader();
             }
@@ -141,7 +141,7 @@ namespace tiny.WebApi.DBContext
         {
             try
             {
-                Global.LogInformation("Inside FillDataSet, get connection and fill.");
+                Global.LogDebug("Inside FillDataSet, get connection and fill.");
                 GetConnection(_connectionString, true);
                 DataSet ds = new();
                 OracleDataAdapter.Fill(ds);
@@ -170,7 +170,7 @@ namespace tiny.WebApi.DBContext
         {
             try
             {
-                Global.LogInformation("Inside FillDataTable, get connection and fill.");
+                Global.LogDebug("Inside FillDataTable, get connection and fill.");
                 GetConnection(_connectionString, true);
                 DataTable dt = new();
                 OracleDataAdapter.Fill(dt);
@@ -198,12 +198,12 @@ namespace tiny.WebApi.DBContext
         [DebuggerHidden]
         public OracleConnection GetConnection(string connectionString, bool isOpenConnection = false)
         {
-            Global.LogInformation("Inside GetConnection, create new connection object.");
+            Global.LogDebug("Inside GetConnection, create new connection object.");
             if (_connection == null)
                 _connection = new OracleConnection(_connectionString = connectionString);
-            Global.LogInformation("If connection state is not open and isOpenConnection as true then open the connection.");
+            Global.LogDebug("If connection state is not open and isOpenConnection as true then open the connection.");
             if (_connection.State != ConnectionState.Open && isOpenConnection) _connection.Open();
-            Global.LogInformation("Return connection.");
+            Global.LogDebug("Return connection.");
             return _connection;
         }
         /// <summary>
@@ -238,24 +238,24 @@ namespace tiny.WebApi.DBContext
         [DebuggerHidden]
         protected virtual void Dispose(bool disposing)
         {
-            Global.LogInformation("Inside Dispose, If not already disposed.");
+            Global.LogDebug("Inside Dispose, If not already disposed.");
             if (!_disposed)
             {
                 Rollback();
-                Global.LogInformation("When disposing is true and connection is not null.");
+                Global.LogDebug("When disposing is true and connection is not null.");
                 if (disposing && _connection is not null)
                 {
-                    Global.LogInformation("Lock when disposing connection.");
+                    Global.LogDebug("Lock when disposing connection.");
                     lock (_lockObject)
                     {
-                        Global.LogInformation("Close connection when open, dispose and set as null.");
+                        Global.LogDebug("Close connection when open, dispose and set as null.");
                         if (_connection.State == ConnectionState.Open) _connection.Close();
                         _connection.Dispose();
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                         _connection = null;
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                     }
-                    Global.LogInformation("Releasing lock.");
+                    Global.LogDebug("Releasing lock.");
                 }
                 _disposed = true;
             }
@@ -267,12 +267,12 @@ namespace tiny.WebApi.DBContext
         [DebuggerHidden]
         public void Rollback()
         {
-            Global.LogInformation("Inside rollback, rollback if transaction is not null.");
+            Global.LogDebug("Inside rollback, rollback if transaction is not null.");
             if (Transaction is not null)
             {
-                Global.LogInformation("Rolling back transaction.");
+                Global.LogDebug("Rolling back transaction.");
                 Transaction.Rollback();
-                Global.LogInformation("Transaction rolled back.");
+                Global.LogDebug("Transaction rolled back.");
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                 Transaction = null;
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -290,7 +290,7 @@ namespace tiny.WebApi.DBContext
         [DebuggerHidden]
         public void Dispose()
         {
-            Global.LogInformation("Inside Dispose.");
+            Global.LogDebug("Inside Dispose.");
             Dispose(true);
             GC.SuppressFinalize(this);
         }

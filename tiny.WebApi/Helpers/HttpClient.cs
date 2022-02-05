@@ -45,7 +45,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public T Get<T>(Uri requestUri, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Get, get data using httpclient synchronously.");
+            Global.LogDebug("Inside Get, get data using httpclient synchronously.");
             var response = _httpClient.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead, cancellationToken).GetAwaiter().GetResult();
             string data;
             try
@@ -74,7 +74,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public byte[] GetAsBytes<T>(Uri requestUri, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside GetAsBytes, get byte array using httpclient synchronously.");
+            Global.LogDebug("Inside GetAsBytes, get byte array using httpclient synchronously.");
             return _httpClient.GetByteArrayAsync(requestUri, cancellationToken).GetAwaiter().GetResult();
         }
         /// <summary>
@@ -89,7 +89,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public Stream GetAsStream<T>(Uri requestUri, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside GetAsStream, get data stream using httpclient synchronously.");
+            Global.LogDebug("Inside GetAsStream, get data stream using httpclient synchronously.");
             return _httpClient.GetStreamAsync(requestUri, cancellationToken).GetAwaiter().GetResult();
         }
         /// <summary>
@@ -105,7 +105,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public async Task<T> GetAsync<T>(Uri requestUri, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Get, get data using httpclient asynchronously.");
+            Global.LogDebug("Inside Get, get data using httpclient asynchronously.");
             var response = _httpClient.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead, cancellationToken).GetAwaiter().GetResult();
             string data;
             try
@@ -136,7 +136,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public T Post<T>(Uri requestUri, T content, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Post, post data using httpclient synchronously.");
+            Global.LogDebug("Inside Post, post data using httpclient synchronously.");
             var response = _httpClient.PostAsync(requestUri, CreateHttpContent(content), cancellationToken).GetAwaiter().GetResult();
             string data;
             try
@@ -168,7 +168,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public T1 Post<T1, T2>(Uri requestUri, T2 content, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Post, post data using httpclient synchronously.");
+            Global.LogDebug("Inside Post, post data using httpclient synchronously.");
             var response = _httpClient.PostAsync(requestUri, CreateHttpContent(content), cancellationToken).GetAwaiter().GetResult();
             string data;
             try
@@ -199,7 +199,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public async Task<T> PostAsync<T>(Uri requestUri, T content, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Post, post data using httpclient asynchronously.");
+            Global.LogDebug("Inside Post, post data using httpclient asynchronously.");
             var response = await _httpClient.PostAsync(requestUri, CreateHttpContent(content), cancellationToken);
             string data;
             try
@@ -231,7 +231,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public async Task<T1> PostAsync<T1, T2>(Uri requestUri, T2 content, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Post, post data using httpclient asynchronously.");
+            Global.LogDebug("Inside Post, post data using httpclient asynchronously.");
             var response = await _httpClient.PostAsync(requestUri, CreateHttpContent(content), cancellationToken);
             string data;
             try
@@ -262,7 +262,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public T Put<T>(Uri requestUri, T content, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Put, Put data using httpclient synchronously.");
+            Global.LogDebug("Inside Put, Put data using httpclient synchronously.");
             var response = _httpClient.PutAsync(requestUri, CreateHttpContent(content), cancellationToken).GetAwaiter().GetResult();
             string data;
             try
@@ -294,7 +294,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public T1 Put<T1, T2>(Uri requestUri, T2 content, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Put, Put data using httpclient synchronously.");
+            Global.LogDebug("Inside Put, Put data using httpclient synchronously.");
             var response = _httpClient.PutAsync(requestUri, CreateHttpContent(content), cancellationToken).GetAwaiter().GetResult();
             string data;
             try
@@ -325,7 +325,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public async Task<T> PutAsync<T>(Uri requestUri, T content, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Put, Put data using httpclient asynchronously.");
+            Global.LogDebug("Inside Put, Put data using httpclient asynchronously.");
             var response = await _httpClient.PutAsync(requestUri, CreateHttpContent(content), cancellationToken);
             string data;
             try
@@ -357,7 +357,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public async Task<T1> PutAsync<T1, T2>(Uri requestUri, T2 content, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Put, Put data using httpclient asynchronously.");
+            Global.LogDebug("Inside Put, Put data using httpclient asynchronously.");
             var response = await _httpClient.PutAsync(requestUri, CreateHttpContent(content), cancellationToken);
             string data;
             try
@@ -387,7 +387,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public T Delete<T>(Uri requestUri, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Delete, Delete data using httpclient synchronously.");
+            Global.LogDebug("Inside Delete, Delete data using httpclient synchronously.");
             var response = _httpClient.DeleteAsync(requestUri, cancellationToken).GetAwaiter().GetResult();
             string data;
             try
@@ -417,7 +417,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public async Task<T> DeleteAsync<T>(Uri requestUri, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Delete, Delete data using httpclient asynchronously.");
+            Global.LogDebug("Inside Delete, Delete data using httpclient asynchronously.");
             var response = _httpClient.DeleteAsync(requestUri, cancellationToken).GetAwaiter().GetResult();
             string data;
             try
@@ -448,7 +448,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public T Patch<T>(Uri requestUri, T content, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Patch, Patch data using httpclient synchronously.");
+            Global.LogDebug("Inside Patch, Patch data using httpclient synchronously.");
             var response = _httpClient.PatchAsync(requestUri, CreateHttpContent(content), cancellationToken).GetAwaiter().GetResult();
             string data;
             try
@@ -480,7 +480,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public T1 Patch<T1, T2>(Uri requestUri, T2 content, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Patch, Patch data using httpclient synchronously.");
+            Global.LogDebug("Inside Patch, Patch data using httpclient synchronously.");
             var response = _httpClient.PatchAsync(requestUri, CreateHttpContent(content), cancellationToken).GetAwaiter().GetResult();
             string data;
             try
@@ -511,7 +511,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public async Task<T> PatchAsync<T>(Uri requestUri, T content, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Patch, Patch data using httpclient asynchronously.");
+            Global.LogDebug("Inside Patch, Patch data using httpclient asynchronously.");
             var response = await _httpClient.PatchAsync(requestUri, CreateHttpContent(content), cancellationToken);
             string data;
             try
@@ -543,7 +543,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public async Task<T1> PatchAsync<T1, T2>(Uri requestUri, T2 content, CancellationToken cancellationToken)
         {
-            Global.LogInformation("Inside Patch, Patch data using httpclient asynchronously.");
+            Global.LogDebug("Inside Patch, Patch data using httpclient asynchronously.");
             var response = await _httpClient.PatchAsync(requestUri, CreateHttpContent(content), cancellationToken);
             string data;
             try

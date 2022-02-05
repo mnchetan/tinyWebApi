@@ -61,7 +61,7 @@ namespace tiny.WebApi.Extensions
         [DebuggerHidden]
         internal static DataSet AddToCache(this DataSet data, QuerySpecification querySpecification, ExecutionType executionType)
         {
-            Global.LogInformation("Inside AddToCache, if data exists then delete data and then add new data to cache in thread safe manner and then return the same data back.");
+            Global.LogDebug("Inside AddToCache, if data exists then delete data and then add new data to cache in thread safe manner and then return the same data back.");
             if (querySpecification.CachingEnabled())
             {
                 lock (_lockObject)
@@ -87,7 +87,7 @@ namespace tiny.WebApi.Extensions
         [DebuggerHidden]
         internal static DataTable AddToCache(this DataTable data, QuerySpecification querySpecification, ExecutionType executionType)
         {
-            Global.LogInformation("Inside AddToCache, if data exists then delete data and then add new data to cache in thread safe manner and then return the same data back.");
+            Global.LogDebug("Inside AddToCache, if data exists then delete data and then add new data to cache in thread safe manner and then return the same data back.");
             if (querySpecification.CachingEnabled())
             {
                 lock (_lockObject)
@@ -112,7 +112,7 @@ namespace tiny.WebApi.Extensions
         [DebuggerHidden]
         internal static T ServeFromCache<T>(this QuerySpecification querySpecification, ExecutionType executionType)
         {
-            Global.LogInformation($"Inside ServeFromCache, if data exists return data else return instance of {typeof(T)}.");
+            Global.LogDebug($"Inside ServeFromCache, if data exists return data else return instance of {typeof(T)}.");
             var queryName = Global.GetKeyFromQuerySpecificationValue(querySpecification);
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var value = TinyCache.ContainsKey($"{queryName}_ {Enum.GetName(executionType)}".ToLower()) && TinyCache.GetValueOrDefault($"{queryName}_ {Enum.GetName(executionType)}".ToLower()) != null ? TinyCache.GetValueOrDefault($"{queryName}_ {Enum.GetName(executionType)}".ToLower()).CachedData : Activator.CreateInstance<T>();

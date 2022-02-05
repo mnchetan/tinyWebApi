@@ -73,7 +73,7 @@ namespace tiny.WebApi.DatabaseManagers
         [DebuggerHidden]
         public DataBaseManagerOracle(IDBContextOracle context, QuerySpecification querySpecification, bool autoDisposeConnection = true)
         {
-            Global.LogInformation("Inside DataBaseManagerOracle and setting up the parameters.");
+            Global.LogDebug("Inside DataBaseManagerOracle and setting up the parameters.");
             _context = context;
             _querySpecification = querySpecification;
             _context.AutoDisposeConnection = _autoDisposeConnection = autoDisposeConnection;
@@ -94,7 +94,7 @@ namespace tiny.WebApi.DatabaseManagers
         public DataBaseManagerOracle(IDBContextOracle context, string connectionString, bool autoDisposeConnection = false)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            Global.LogInformation("Inside DataBaseManagerOracle and setting up the parameters.");
+            Global.LogDebug("Inside DataBaseManagerOracle and setting up the parameters.");
             _context = context;
             _context.AutoDisposeConnection = _autoDisposeConnection = autoDisposeConnection;
             _context.Transaction = Transaction;
@@ -120,30 +120,30 @@ namespace tiny.WebApi.DatabaseManagers
         [DebuggerHidden]
         public OracleCommand CreateCommand(string query, CommandType type, List<DatabaseParameters> parameters, bool isMapUDTAsJSON, bool isMapUDTAsXML)
         {
-            Global.LogInformation("Inside CreateCommand.");
+            Global.LogDebug("Inside CreateCommand.");
             OracleCommand cmd = new(query, _conn);
-            Global.LogInformation("If transaction is not null then set transaction.");
+            Global.LogDebug("If transaction is not null then set transaction.");
             if (Trans is not null) cmd.Transaction = Trans;
-            Global.LogInformation("Setting command type, command timeout.");
+            Global.LogDebug("Setting command type, command timeout.");
             cmd.BindByName = true;
             cmd.CommandType = type;
             cmd.CommandTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
-            Global.LogInformation("Set parameters if any.");
+            Global.LogDebug("Set parameters if any.");
             if (parameters is not null && parameters.Count > 0)
             {
-                Global.LogInformation("Loop through parameters.");
+                Global.LogDebug("Loop through parameters.");
                 foreach (var item in parameters)
                 {
                     switch (item.Type)
                     {
                         case DatabaseParameterType.Structured when !item.IsOutParameter:
                             {
-                                Global.LogInformation("When parameter type is stuctured and is not an out parameter.");
+                                Global.LogDebug("When parameter type is stuctured and is not an out parameter.");
                                 if (isMapUDTAsJSON || isMapUDTAsXML)
                                 {
-                                    Global.LogInformation("When isMapUDTAsJSON or isMapUDTAsXML is true.");
+                                    Global.LogDebug("When isMapUDTAsJSON or isMapUDTAsXML is true.");
                                     if (_conn.State != ConnectionState.Open) { _conn.Open(); }
-                                    Global.LogInformation("Setting up clob object.");
+                                    Global.LogDebug("Setting up clob object.");
                                     OracleClob clob = new(_conn);
 #pragma warning disable CS8604 // Possible null reference argument.
                                     var arr = Encoding.Unicode.GetBytes(item.Value as string);
@@ -153,7 +153,7 @@ namespace tiny.WebApi.DatabaseManagers
                                 }
                                 else
                                 {
-                                    Global.LogInformation("Setting up UDT in case of 21C and isMapUDTAsJSON or isMapUDTAsXML is false.");
+                                    Global.LogDebug("Setting up UDT in case of 21C and isMapUDTAsJSON or isMapUDTAsXML is false.");
                                     var p = cmd.Parameters.Add(!string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains(':') ? CommandType.Text == type ? item.Name : ":" + item.Name : CommandType.StoredProcedure == type ? item.Name.Replace(":", "") : item.Name, OracleDbType.Object, item.Value, ParameterDirection.Input);
                                     p.UdtTypeName = item.Tag;
                                 }
@@ -161,9 +161,9 @@ namespace tiny.WebApi.DatabaseManagers
                             }
                         case DatabaseParameterType.Binary when !item.IsOutParameter:
                             {
-                                Global.LogInformation("When parameter tpe is binary and is not an out parameter.");
+                                Global.LogDebug("When parameter tpe is binary and is not an out parameter.");
                                 if (_conn.State != ConnectionState.Open) { _conn.Open(); }
-                                Global.LogInformation("Setting up bindary object.");
+                                Global.LogDebug("Setting up bindary object.");
                                 OracleBlob blob = new(_conn);
 #pragma warning disable CS8604 // Possible null reference argument.
                                 var arr = Encoding.Unicode.GetBytes(item.Value as string);
@@ -174,11 +174,11 @@ namespace tiny.WebApi.DatabaseManagers
                             }
                         default:
                             {
-                                Global.LogInformation("When parameter tpe is not binary and clob.");
+                                Global.LogDebug("When parameter tpe is not binary and clob.");
                                 var p = cmd.Parameters.Add(new OracleParameter());
                                 if (item.IsOutParameter)
                                 {
-                                    Global.LogInformation("When parameter is an out parameter then set the direction accordingly and DBType as RefCursor.");
+                                    Global.LogDebug("When parameter is an out parameter then set the direction accordingly and DBType as RefCursor.");
                                     p.Direction = ParameterDirection.Output;
                                     p.Size = item.Size is > 0 ? item.Size : p.Size;
                                     if (item.Type == DatabaseParameterType.RefCursor)
@@ -186,10 +186,10 @@ namespace tiny.WebApi.DatabaseManagers
                                 }
                                 else
                                 {
-                                    Global.LogInformation("When parameter is an input parameter then set the direction and value.");
+                                    Global.LogDebug("When parameter is an input parameter then set the direction and value.");
                                     p.Value = item.Value; p.Direction = ParameterDirection.Input;
                                 }
-                                Global.LogInformation("Setting parameter type and name and ignore the UnKnown, RefCursour DBTypes as they are already handled.");
+                                Global.LogDebug("Setting parameter type and name and ignore the UnKnown, RefCursour DBTypes as they are already handled.");
                                 p.ParameterName = !string.IsNullOrEmpty(item.Name) && item.Name.ToLower().Contains(':') ? CommandType.Text == type ? item.Name : ":" + item.Name : CommandType.StoredProcedure == type ? item.Name.Replace(":", "") : item.Name;
                                 if (item.Type is not null && item.Type.HasValue && item.Type.Value != DatabaseParameterType.UnKnown && item.Type.Value != DatabaseParameterType.RefCursor)
                                     p.DbType = (DbType)(int)item.Type.Value;
@@ -216,7 +216,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Non Query as text.");
+                Global.LogDebug("Executing Non Query as text.");
                 return _context.ExecuteNonQuery(CreateCommand(query, CommandType.Text, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -245,7 +245,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Non Query as text with command out.");
+                Global.LogDebug("Executing Non Query as text with command out.");
                 return _context.ExecuteNonQuery(command = CreateCommand(query, CommandType.Text, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -273,7 +273,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Non Query as procedure.");
+                Global.LogDebug("Executing Non Query as procedure.");
                 return _context.ExecuteNonQuery(CreateCommand(query, CommandType.StoredProcedure, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -302,7 +302,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Non Query with command out as procedure.");
+                Global.LogDebug("Executing Non Query with command out as procedure.");
                 return _context.ExecuteNonQuery(command = CreateCommand(query, CommandType.StoredProcedure, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -330,7 +330,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Scalar as text.");
+                Global.LogDebug("Executing Scalar as text.");
                 return _context.ExecuteScalar(CreateCommand(query, CommandType.Text, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -359,7 +359,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Scalar as text with command out.");
+                Global.LogDebug("Executing Scalar as text with command out.");
                 return _context.ExecuteScalar(command = CreateCommand(query, CommandType.Text, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -387,7 +387,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Scalar as procedure.");
+                Global.LogDebug("Executing Scalar as procedure.");
                 return _context.ExecuteScalar(CreateCommand(query, CommandType.StoredProcedure, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -416,7 +416,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Scalar as procedure with command out.");
+                Global.LogDebug("Executing Scalar as procedure with command out.");
                 return _context.ExecuteScalar(command = CreateCommand(query, CommandType.StoredProcedure, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -444,7 +444,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Data Reader as text.");
+                Global.LogDebug("Executing Data Reader as text.");
                 return _context.ExecuteDataReader(CreateCommand(query, CommandType.Text, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -473,7 +473,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Data Reader as text with command out.");
+                Global.LogDebug("Executing Data Reader as text with command out.");
                 return _context.ExecuteDataReader(command = CreateCommand(query, CommandType.Text, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -501,7 +501,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Data Reader as procedure.");
+                Global.LogDebug("Executing Data Reader as procedure.");
                 return _context.ExecuteDataReader(CreateCommand(query, CommandType.StoredProcedure, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -530,7 +530,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Data Reader as procedure with command out.");
+                Global.LogDebug("Executing Data Reader as procedure with command out.");
                 return _context.ExecuteDataReader(command = CreateCommand(query, CommandType.StoredProcedure, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -558,7 +558,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing XML Reader as text.");
+                Global.LogDebug("Executing XML Reader as text.");
                 return _context.ExecuteXmlReader(CreateCommand(query, CommandType.Text, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -587,7 +587,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing XML Reader as text with command out.");
+                Global.LogDebug("Executing XML Reader as text with command out.");
                 return _context.ExecuteXmlReader(command = CreateCommand(query, CommandType.Text, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -615,7 +615,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing XML Reader as procedure.");
+                Global.LogDebug("Executing XML Reader as procedure.");
                 return _context.ExecuteXmlReader(CreateCommand(query, CommandType.StoredProcedure, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -644,7 +644,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing XML Reader as procedure with command out.");
+                Global.LogDebug("Executing XML Reader as procedure with command out.");
                 return _context.ExecuteXmlReader(command = CreateCommand(query, CommandType.StoredProcedure, parameters, isMapUDTAsJSON, isMapUDTAsXML));
             }
             catch
@@ -672,7 +672,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Fill Data Set as text.");
+                Global.LogDebug("Executing Fill Data Set as text.");
                 return _context.FillDataSet(new OracleDataAdapter(CreateCommand(query, CommandType.Text, parameters, isMapUDTAsJSON, isMapUDTAsXML)));
             }
             catch
@@ -701,7 +701,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Fill Data Set as text with command out.");
+                Global.LogDebug("Executing Fill Data Set as text with command out.");
                 return _context.FillDataSet(new OracleDataAdapter(command = CreateCommand(query, CommandType.Text, parameters, isMapUDTAsJSON, isMapUDTAsXML)));
             }
             catch
@@ -729,7 +729,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Fill Data Set as procedure.");
+                Global.LogDebug("Executing Fill Data Set as procedure.");
                 return _context.FillDataSet(new OracleDataAdapter(CreateCommand(query, CommandType.StoredProcedure, parameters, isMapUDTAsJSON, isMapUDTAsXML)));
             }
             catch
@@ -758,7 +758,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Fill Data Set as procedure with command out.");
+                Global.LogDebug("Executing Fill Data Set as procedure with command out.");
                 return _context.FillDataSet(new OracleDataAdapter(command = CreateCommand(query, CommandType.StoredProcedure, parameters, isMapUDTAsJSON, isMapUDTAsXML)));
             }
             catch
@@ -786,7 +786,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Fill Data Table as text.");
+                Global.LogDebug("Executing Fill Data Table as text.");
                 return _context.FillDataTable(new OracleDataAdapter(CreateCommand(query, CommandType.Text, parameters, isMapUDTAsJSON, isMapUDTAsXML)));
             }
             catch
@@ -815,7 +815,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Fill Data Table as text with command out.");
+                Global.LogDebug("Executing Fill Data Table as text with command out.");
                 return _context.FillDataTable(new OracleDataAdapter(command = CreateCommand(query, CommandType.Text, parameters, isMapUDTAsJSON, isMapUDTAsXML)));
             }
             catch
@@ -843,7 +843,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Fill Data Table as procedure.");
+                Global.LogDebug("Executing Fill Data Table as procedure.");
                 return _context.FillDataTable(new OracleDataAdapter(CreateCommand(query, CommandType.StoredProcedure, parameters, isMapUDTAsJSON, isMapUDTAsXML)));
             }
             catch
@@ -872,7 +872,7 @@ namespace tiny.WebApi.DatabaseManagers
         {
             try
             {
-                Global.LogInformation("Executing Fill Data Table as procedure with command out.");
+                Global.LogDebug("Executing Fill Data Table as procedure with command out.");
                 return _context.FillDataTable(new OracleDataAdapter(command = CreateCommand(query, CommandType.StoredProcedure, parameters, isMapUDTAsJSON, isMapUDTAsXML)));
             }
             catch
@@ -1261,7 +1261,7 @@ namespace tiny.WebApi.DatabaseManagers
         [DebuggerStepThrough]
         public void Dispose()
         {
-            Global.LogInformation("Inside Dispose.");
+            Global.LogDebug("Inside Dispose.");
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -1273,24 +1273,24 @@ namespace tiny.WebApi.DatabaseManagers
         [DebuggerStepThrough]
         protected virtual void Dispose(bool disposing)
         {
-            Global.LogInformation("Inside Dispose, If not already disposed.");
+            Global.LogDebug("Inside Dispose, If not already disposed.");
             if (!_disposed)
             {
                 Rollback();
-                Global.LogInformation("When disposing is true and connection is not null.");
+                Global.LogDebug("When disposing is true and connection is not null.");
                 if (disposing && _conn is not null)
                 {
-                    Global.LogInformation("Lock when disposing connection.");
+                    Global.LogDebug("Lock when disposing connection.");
                     lock (_lockObject)
                     {
-                        Global.LogInformation("Close connection when open, dispose and set as null.");
+                        Global.LogDebug("Close connection when open, dispose and set as null.");
                         if (_conn.State == ConnectionState.Open) _conn.Close();
                         _conn.Dispose();
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                         _conn = null;
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                     }
-                    Global.LogInformation("Releasing lock.");
+                    Global.LogDebug("Releasing lock.");
                 }
                 _disposed = true;
             }
@@ -1302,12 +1302,12 @@ namespace tiny.WebApi.DatabaseManagers
         [DebuggerStepThrough]
         public void Rollback()
         {
-            Global.LogInformation("Inside rollback, rollback if transaction is not null.");
+            Global.LogDebug("Inside rollback, rollback if transaction is not null.");
             if (Trans is not null)
             {
-                Global.LogInformation("Rolling back transaction.");
+                Global.LogDebug("Rolling back transaction.");
                 Trans.Rollback();
-                Global.LogInformation("Transaction rolled back.");
+                Global.LogDebug("Transaction rolled back.");
 #pragma warning disable CS8601 // Possible null reference assignment.
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                 _context.Transaction = Trans = null;
@@ -1322,12 +1322,12 @@ namespace tiny.WebApi.DatabaseManagers
         [DebuggerStepThrough]
         public void Commit()
         {
-            Global.LogInformation("Inside Commit transaction, commiting if transaction is not null.");
+            Global.LogDebug("Inside Commit transaction, commiting if transaction is not null.");
             if (Trans is not null)
             {
-                Global.LogInformation("Commiting transaction.");
+                Global.LogDebug("Commiting transaction.");
                 Trans.Commit();
-                Global.LogInformation("Transaction committed.");
+                Global.LogDebug("Transaction committed.");
 #pragma warning disable CS8601 // Possible null reference assignment.
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                 _context.Transaction = Trans = null;
@@ -1345,13 +1345,13 @@ namespace tiny.WebApi.DatabaseManagers
         [DebuggerStepThrough]
         public OracleTransaction BeginTransaction()
         {
-            Global.LogInformation("Inside Begin transaction.");
+            Global.LogDebug("Inside Begin transaction.");
             Rollback();
-            Global.LogInformation("Beginning transaction.");
+            Global.LogDebug("Beginning transaction.");
 #pragma warning disable CS8601 // Possible null reference assignment.
             _context.Transaction = Trans = _conn?.BeginTransaction(IsolationLevel.ReadUncommitted);
 #pragma warning restore CS8601 // Possible null reference assignment.
-            Global.LogInformation("Transaction begun.");
+            Global.LogDebug("Transaction begun.");
             return Transaction;
         }
         /// <summary>

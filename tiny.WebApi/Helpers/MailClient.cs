@@ -18,7 +18,7 @@ namespace tiny.WebApi.Helpers
     /// <summary>
     ///     A mail client.
     /// </summary>
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     public static class MailClient
     {
         /// <summary>
@@ -71,13 +71,13 @@ namespace tiny.WebApi.Helpers
         /// <param name="smtp_port">   The SMTP port. </param>
         /// <param name="content">     (Optional) The content. </param>
         /// <param name="type">        (Optional) The type. </param>
-        [DebuggerStepThrough]
-        [DebuggerHidden]
+        //[DebuggerStepThrough]
+        //[DebuggerHidden]
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void SendMail(string from, string to, string cc, string bcc, string subject, string body, bool isBodyHtml, string smtp_server, int smtp_port, Stream content = null, ContentType type = null)
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         {
-            Global.LogInformation("Inside SendMail, send mail asynchronously.");
+            Global.LogDebug("Inside SendMail, send mail asynchronously.");
             try
             {
                 if (string.IsNullOrWhiteSpace(to) || string.IsNullOrWhiteSpace(subject) || string.IsNullOrWhiteSpace(body)) return;
@@ -110,8 +110,8 @@ namespace tiny.WebApi.Helpers
         /// <param name="querySpecification"> The query specification. </param>
         /// <param name="content">            The content. </param>
         /// <param name="type">               The type. </param>
-        [DebuggerStepThrough]
-        [DebuggerHidden]
+        //[DebuggerStepThrough]
+        //[DebuggerHidden]
         public static void SendMailImpersonated(QuerySpecification querySpecification, Stream content, ContentType type) => ImpersonationHelper.Execute(() => SendMail(querySpecification.MailerSpecification.From, querySpecification.MailerSpecification.To, querySpecification.MailerSpecification.CC, querySpecification.MailerSpecification.BCC, querySpecification.MailerSpecification.Subject, querySpecification.MailerSpecification.Body, querySpecification.MailerSpecification.IsBodyHtml, querySpecification.MailerSpecification.SMTP_SERVER, querySpecification.MailerSpecification.SMTP_PORT, content, type), querySpecification.MailerSpecification.RunAsUserSpecification.RunAsUserName, querySpecification.MailerSpecification.RunAsUserSpecification.RunAsDomain, querySpecification.MailerSpecification.RunAsUserSpecification.IsRunAsPasswordEncrypted ? EncryptFactory.Decrypt(querySpecification.MailerSpecification.RunAsUserSpecification.RunAsPassword, querySpecification.MailerSpecification.RunAsUserSpecification.EncryptionKey) : querySpecification.MailerSpecification.RunAsUserSpecification.RunAsPassword);
         /// <summary>
         ///     Sends a mail.
@@ -119,8 +119,8 @@ namespace tiny.WebApi.Helpers
         /// <param name="querySpecification"> The query specification. </param>
         /// <param name="content">            The content. </param>
         /// <param name="type">               The type. </param>
-        [DebuggerStepThrough]
-        [DebuggerHidden]
+        //[DebuggerStepThrough]
+        //[DebuggerHidden]
         public static void SendMail(QuerySpecification querySpecification, Stream content, ContentType type) => SendMail(querySpecification.MailerSpecification.From, querySpecification.MailerSpecification.To, querySpecification.MailerSpecification.CC, querySpecification.MailerSpecification.BCC, querySpecification.MailerSpecification.Subject, querySpecification.MailerSpecification.Body, querySpecification.MailerSpecification.IsBodyHtml, querySpecification.MailerSpecification.SMTP_SERVER, querySpecification.MailerSpecification.SMTP_PORT, content, type);
         /// <summary>
         ///     Sends a mail impersonated.
@@ -139,8 +139,8 @@ namespace tiny.WebApi.Helpers
         /// <param name="runAsPassword"> The run as password. </param>
         /// <param name="content">       (Optional) The content. </param>
         /// <param name="type">          (Optional) The type. </param>
-        [DebuggerHidden]
-        [DebuggerStepThrough]
+        //[DebuggerHidden]
+        //[DebuggerStepThrough]
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void SendMailImpersonated(string from, string to, string cc, string bcc, string subject, string body, bool isBodyHtml, string smtp_server, int smtp_port, string runAsUserName, string runAsDomain, string runAsPassword, Stream content = null, ContentType type = null) => ImpersonationHelper.Execute(() => SendMail(from, to, cc, bcc, subject, body, isBodyHtml, smtp_server, smtp_port, content, type), runAsUserName, runAsDomain, runAsPassword);
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -157,8 +157,8 @@ namespace tiny.WebApi.Helpers
         /// <param name="mailerSpecification"> The mailer specification. </param>
         /// <param name="content">             (Optional) The content. </param>
         /// <param name="type">                (Optional) The type. </param>
-        [DebuggerStepThrough]
-        [DebuggerHidden]
+        //[DebuggerStepThrough]
+        //[DebuggerHidden]
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         public static void SendMailImpersonated(string from, string to, string cc, string bcc, string subject, string body, bool isBodyHtml, MailerSpecification mailerSpecification, Stream content = null, ContentType type = null) => ImpersonationHelper.Execute(() => SendMail(from, to, cc, bcc, subject, body, isBodyHtml, mailerSpecification.SMTP_SERVER, mailerSpecification.SMTP_PORT, content, type), mailerSpecification.RunAsUserSpecification.RunAsUserName, mailerSpecification.RunAsUserSpecification.RunAsDomain, mailerSpecification.RunAsUserSpecification.IsRunAsPasswordEncrypted ? EncryptFactory.Decrypt(mailerSpecification.RunAsUserSpecification.RunAsPassword, mailerSpecification.RunAsUserSpecification.EncryptionKey) : mailerSpecification.RunAsUserSpecification.RunAsPassword);
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -168,8 +168,8 @@ namespace tiny.WebApi.Helpers
         /// <param name="querySpecification"> The query specification. </param>
         /// <param name="content">            The content. </param>
         /// <param name="outPutType">         (Optional) Type of the out put. </param>
-        [DebuggerStepThrough]
-        [DebuggerHidden]
+        //[DebuggerStepThrough]
+        //[DebuggerHidden]
         public static void SendMail(QuerySpecification querySpecification, Stream content, OutPutType outPutType = OutPutType.JSON)
         {
             if (querySpecification.MailerSpecification.IsImpersonationNeeded) SendMailImpersonated(querySpecification, content, outPutType == OutPutType.CSV ? new ContentType(TextCSV) { Name = querySpecification.MailerSpecification.AttachmentName.ResolveValues() + CSVExtension } : outPutType == OutPutType.Excel ? new ContentType(ApplicationExcel) { Name = querySpecification.MailerSpecification.AttachmentName.ResolveValues() + ExcelExtension } : outPutType == OutPutType.PDF ? new ContentType(ApplicationPDF) { Name = querySpecification.MailerSpecification.AttachmentName.ResolveValues() + PDFExtension } : new ContentType(TextJSON) { Name = querySpecification.MailerSpecification.AttachmentName.ResolveValues() + JSONExtension });
@@ -182,11 +182,11 @@ namespace tiny.WebApi.Helpers
         /// <returns>
         ///     A string.
         /// </returns>
-        [DebuggerStepThrough]
-        [DebuggerHidden]
+        //[DebuggerStepThrough]
+        //[DebuggerHidden]
         public static string ResolveValues(this string value)
         {
-            Global.LogInformation("Inside ResolveValues, resolving mail template for $ seperated date time formats.");
+            Global.LogDebug("Inside ResolveValues, resolving mail template for $ seperated date time formats.");
 #pragma warning disable CS8603 // Possible null reference return.
             if (value is null) return value;
 #pragma warning restore CS8603 // Possible null reference return.

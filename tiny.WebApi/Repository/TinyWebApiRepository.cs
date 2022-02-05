@@ -80,36 +80,36 @@ namespace tiny.WebApi
         [DebuggerHidden]
         public dynamic Execute(string key, List<RequestSpecification> requestSpecifications, ExecutionType executionType, OutPutType outPutType)
         {
-            Global.LogInformation("Inside Execute query, validate key.");
+            Global.LogDebug("Inside Execute query, validate key.");
             if (string.IsNullOrEmpty(key)) throw new ArgumentException($"Key cannot be null or empty.");
             try
             {
-                Global.LogInformation("Gey query specification by query name/key.");
+                Global.LogDebug("Gey query specification by query name/key.");
                 var querySpecification = Global.GetQuerySpecificationByQueryName(key);
                 if (querySpecification is null) throw new ArgumentException($"Query not mapped for the key : {key}.");
                 var isDoNotFireFurtherQuery = false;
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                 object output = null;
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-                Global.LogInformation("Processing input data before firing database queries.");
+                Global.LogDebug("Processing input data before firing database queries.");
 #pragma warning disable CS8601 // Possible null reference assignment.
                 requestSpecifications = requestSpecifications.ProcessInputData(key, querySpecification, ref isDoNotFireFurtherQuery, ref output);
 #pragma warning restore CS8601 // Possible null reference assignment.
                 if (isDoNotFireFurtherQuery)
                 {
-                    Global.LogInformation("Not firing the queries and escaping it.");
+                    Global.LogDebug("Not firing the queries and escaping it.");
                     return output is null ? 0 : output;
                 }
                 else
                 {
-                    Global.LogInformation("Get parameters.");
+                    Global.LogDebug("Get parameters.");
                     if (querySpecification.DatabaseSpecification is null) throw new ArgumentException($"Database not mapped for the query name : {key}.");
                     var list = GetParameters(requestSpecifications);
-                    Global.LogInformation("Process parameters.");
+                    Global.LogDebug("Process parameters.");
                     list = ProcessParameters(querySpecification, list);
-                    Global.LogInformation("Processing query.");
+                    Global.LogDebug("Processing query.");
                     querySpecification.Query = ProcessQuery(querySpecification, list, executionType);
-                    Global.LogInformation("Executing query and returning result.");
+                    Global.LogDebug("Executing query and returning result.");
                     return ExecuteQuery(key, querySpecification, executionType, list, requestSpecifications, outPutType);
                 }
             }

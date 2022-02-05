@@ -61,7 +61,7 @@ namespace tiny.WebApi.Exceptions
         [DebuggerHidden]
         private static async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
-            Global.LogInformation("Inside HandleExceptionAsync, prepare custom exception and return.");
+            Global.LogDebug("Inside HandleExceptionAsync, prepare custom exception and return.");
             int statusCode;
             string description, message;
             if (ex is CustomException exception)

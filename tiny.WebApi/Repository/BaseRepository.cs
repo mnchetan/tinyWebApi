@@ -58,7 +58,7 @@ namespace tiny.WebApi
         [DebuggerHidden]
         public static string ProcessQuery(QuerySpecification querySpecification, List<DatabaseParameters> list, ExecutionType executionType)
         {
-            Global.LogInformation("Inside ProcessQuery, processing the query to process text based queries for SQL and Oracle.");
+            Global.LogDebug("Inside ProcessQuery, processing the query to process text based queries for SQL and Oracle.");
             switch (executionType)
             {
                 case ExecutionType.ScalarText:
@@ -108,7 +108,7 @@ namespace tiny.WebApi
         [DebuggerHidden]
         public static List<DatabaseParameters> ProcessParameters(QuerySpecification querySpecification, List<DatabaseParameters> list)
         {
-            Global.LogInformation("Inside ProcessParameters, processing the process parameters for SQL and Oracle.");
+            Global.LogDebug("Inside ProcessParameters, processing the process parameters for SQL and Oracle.");
             List<DatabaseParameters> l1 = new();
             switch (querySpecification.DatabaseSpecification.DatabaseType)
             {
@@ -174,7 +174,7 @@ namespace tiny.WebApi
         [DebuggerHidden]
         private static List<DatabaseParameters> CopyUnMappedDatabaseParameters(List<DatabaseParameters> list, List<DatabaseParameters> l1)
         {
-            Global.LogInformation("Inside CopyUnMappedDatabaseParameters, Adding the unmapped database parameters.");
+            Global.LogDebug("Inside CopyUnMappedDatabaseParameters, Adding the unmapped database parameters.");
             foreach (var item in list)
             {
                 var notFound = true;
@@ -198,7 +198,7 @@ namespace tiny.WebApi
         [DebuggerHidden]
         public static List<DatabaseParameters> GetParameters(List<RequestSpecification> requestSpecifications)
         {
-            Global.LogInformation("Inside GetParameters, Getting the database parameters from requestspecification.");
+            Global.LogDebug("Inside GetParameters, Getting the database parameters from requestspecification.");
             List<DatabaseParameters> list = new();
             foreach (var (item, l) in from item in requestSpecifications let l = new DatabaseParameters() select (item, l))
             {

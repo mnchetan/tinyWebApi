@@ -18,7 +18,7 @@ namespace tiny.WebApi.Helpers
     /// <summary>
     ///     A PDF helper.
     /// </summary>
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     public static class PDFHelper
     {
         /// <summary>
@@ -28,11 +28,11 @@ namespace tiny.WebApi.Helpers
         /// <returns>
         ///     A byte[].
         /// </returns>
-        [DebuggerStepThrough]
-        [DebuggerHidden]
+        //[DebuggerStepThrough]
+        //[DebuggerHidden]
         public static byte[] ExportToPDF(this DataSet ds)
         {
-            Global.LogInformation("Inside ExportToPDF, export the DataSet to ByteArray.");
+            Global.LogDebug("Inside ExportToPDF, export the DataSet to ByteArray.");
             if (ds is null) ds = new();
             using MemoryStream ms = new();
             Document document = new();

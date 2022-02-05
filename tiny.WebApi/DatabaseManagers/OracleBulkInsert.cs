@@ -39,7 +39,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public OracleBulkInsert(IDBContextOracle context, QuerySpecification querySpecification)
         {
-            Global.LogInformation("Inside DataBaseManagerOracle and setting up the parameters.");
+            Global.LogDebug("Inside DataBaseManagerOracle and setting up the parameters.");
             _context = context;
             _querySpecification = querySpecification;
             _conn = _context.GetConnection(querySpecification.DatabaseSpecification.IsEncrypted ? EncryptFactory.Decrypt(querySpecification.DatabaseSpecification.ConnectionString + "", querySpecification?.DatabaseSpecification?.EncryptionKey + "") : querySpecification.DatabaseSpecification.ConnectionString + "", false);
@@ -140,23 +140,23 @@ namespace tiny.WebApi.Helpers
         [DebuggerStepThrough]
         protected virtual void Dispose(bool disposing)
         {
-            Global.LogInformation("Inside Dispose, If not already disposed.");
+            Global.LogDebug("Inside Dispose, If not already disposed.");
             if (!_disposed)
             {
-                Global.LogInformation("When disposing is true and connection is not null.");
+                Global.LogDebug("When disposing is true and connection is not null.");
                 if (disposing && _conn is not null)
                 {
-                    Global.LogInformation("Lock when disposing connection.");
+                    Global.LogDebug("Lock when disposing connection.");
                     lock (_lockObject)
                     {
-                        Global.LogInformation("Close connection when open, dispose and set as null.");
+                        Global.LogDebug("Close connection when open, dispose and set as null.");
                         if (_conn.State == ConnectionState.Open) _conn.Close();
                         _conn.Dispose();
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                         _conn = null;
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                     }
-                    Global.LogInformation("Releasing lock.");
+                    Global.LogDebug("Releasing lock.");
                 }
                 _disposed = true;
             }

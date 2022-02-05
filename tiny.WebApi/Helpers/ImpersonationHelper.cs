@@ -62,7 +62,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public static T Execute<T>(Func<T> func, string runAsUserName, string runAsDomain, string runAsPassword)
         {
-            Global.LogInformation("Inside Execute, execute the function and return data as impersonated.");
+            Global.LogDebug("Inside Execute, execute the function and return data as impersonated.");
             if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 bool returnValue = LogonUser(runAsUserName, runAsDomain, runAsPassword, LOGON_TYPE_NEW_CREDENTIALS, LOGON32_PROVIDE_DEFAULT, out SafeAccessTokenHandle token);
@@ -106,7 +106,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public static void Execute(Action action, string runAsUserName, string runAsDomain, string runAsPassword)
         {
-            Global.LogInformation("Inside Execute, execute the action as impersonated.");
+            Global.LogDebug("Inside Execute, execute the action as impersonated.");
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 bool returnValue = LogonUser(runAsUserName, runAsDomain, runAsPassword, LOGON_TYPE_NEW_CREDENTIALS, LOGON32_PROVIDE_DEFAULT, out SafeAccessTokenHandle token);

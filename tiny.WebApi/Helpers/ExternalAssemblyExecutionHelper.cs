@@ -33,7 +33,7 @@ namespace tiny.WebApi.Helpers
         {
             try
             {
-                Global.LogInformation("Inside LoadPluginFromFile, Load external assembly from the filepath if not already loaded in app domain.");
+                Global.LogDebug("Inside LoadPluginFromFile, Load external assembly from the filepath if not already loaded in app domain.");
                 var found = false;
                 Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
@@ -51,7 +51,7 @@ namespace tiny.WebApi.Helpers
                 Type type = found ? asm.GetType(className) : Assembly.LoadFrom(filePath).GetType(className);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-                Global.LogInformation("Returning the instance of class from the loaded external assembly.");
+                Global.LogDebug("Returning the instance of class from the loaded external assembly.");
 #pragma warning disable CS8603 // Possible null reference return.
 #pragma warning disable CS8604 // Possible null reference argument.
                 return Activator.CreateInstance(type) as IProcessData;
@@ -79,7 +79,7 @@ namespace tiny.WebApi.Helpers
         {
             try
             {
-                Global.LogInformation("Inside LoadPluginFromFile, Load external assembly from the filepath if not already loaded in app domain.");
+                Global.LogDebug("Inside LoadPluginFromFile, Load external assembly from the filepath if not already loaded in app domain.");
                 var found = false;
                 Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
@@ -97,7 +97,7 @@ namespace tiny.WebApi.Helpers
                 Type type = found ? asm.GetType(className) : Assembly.LoadFrom(filePath).GetType(className);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-                Global.LogInformation("Returning the instance of class from the loaded external assembly.");
+                Global.LogDebug("Returning the instance of class from the loaded external assembly.");
 #pragma warning disable CS8603 // Possible null reference return.
 #pragma warning disable CS8604 // Possible null reference argument.
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.

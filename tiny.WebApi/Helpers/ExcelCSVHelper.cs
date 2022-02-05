@@ -31,7 +31,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public static byte[] ExportToExcel(DataTable dt)
         {
-            Global.LogInformation("Inside ExceportToExcel, exporting DataTable to ByteArray.");
+            Global.LogDebug("Inside ExceportToExcel, exporting DataTable to ByteArray.");
             var ds = new DataSet();
             ds.Tables.Add(dt);
             return ExportToExcel(ds);
@@ -47,14 +47,14 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public static byte[] ExportToExcel(DataSet ds)
         {
-            Global.LogInformation("Inside ExceportToExcel, exporting DataSet to ByteArray.");
+            Global.LogDebug("Inside ExceportToExcel, exporting DataSet to ByteArray.");
             using MemoryStream ms = new();
             using (XLWorkbook wb = new())
             {
                 foreach (DataTable dt in ds.Tables) _ = string.IsNullOrWhiteSpace(dt.TableName) ? wb.Worksheets.Add(dt) : wb.Worksheets.Add(dt, dt.TableName);
                 wb.SaveAs(ms);
             }
-            Global.LogInformation("Returning ByteArray.");
+            Global.LogDebug("Returning ByteArray.");
             return ms.ToArray();
         }
         /// <summary>
@@ -68,13 +68,13 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public static string DataTableAsXML(this DataTable dt)
         {
-            Global.LogInformation("Inside DataTableAsXML, converting DataTable as XML.");
+            Global.LogDebug("Inside DataTableAsXML, converting DataTable as XML.");
             if (dt is not null && string.IsNullOrWhiteSpace(dt.TableName)) dt.TableName = "Table";
             using StringWriter sw = new();
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             dt.WriteXml(sw);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-            Global.LogInformation("Returning XML string.");
+            Global.LogDebug("Returning XML string.");
             return sw.ToString();
         }
         /// <summary>
@@ -88,7 +88,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public static byte[] GenerateExcel(DataTable dt)
         {
-            Global.LogInformation("Inside GenerateExcel, converting DataTable as ByteArray.");
+            Global.LogDebug("Inside GenerateExcel, converting DataTable as ByteArray.");
             var ds = new DataSet();
             ds.Tables.Add(dt);
             return GenerateExcel(ds);
@@ -104,7 +104,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public static byte[] GenerateExcel(DataSet ds)
         {
-            Global.LogInformation("Inside GenerateExcel, converting DataSet as ByteArray.");
+            Global.LogDebug("Inside GenerateExcel, converting DataSet as ByteArray.");
             using MemoryStream ms = new();
             using (var workbook = SpreadsheetDocument.Create(ms, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook))
             {
@@ -147,7 +147,7 @@ namespace tiny.WebApi.Helpers
                     }
                 }
             }
-            Global.LogInformation("Returning ByteArray.");
+            Global.LogDebug("Returning ByteArray.");
             return ms.ToArray();
         }
         /// <summary>
@@ -192,7 +192,7 @@ namespace tiny.WebApi.Helpers
         {
             try
             {
-                Global.LogInformation("Inside ImportExcelToDataTable, converting excel byte array to DataTable.");
+                Global.LogDebug("Inside ImportExcelToDataTable, converting excel byte array to DataTable.");
                 if (fileData is not null && fileData.Length > 0)
                 {
                     using XLWorkbook workBook = new(new MemoryStream(fileData));
@@ -221,12 +221,12 @@ namespace tiny.WebApi.Helpers
                             }
                         }
                     }
-                    Global.LogInformation("Returning Excel data as DataTable.");
+                    Global.LogDebug("Returning Excel data as DataTable.");
                     return dt;
                 }
                 else
                 {
-                    Global.LogInformation("Returing defualt of DataTable.");
+                    Global.LogDebug("Returing defualt of DataTable.");
 #pragma warning disable CS8603 // Possible null reference return.
                     return default;
 #pragma warning restore CS8603 // Possible null reference return.
@@ -271,7 +271,7 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public static DataTable ImportCSVToDataTable(byte[] fileData)
         {
-            Global.LogInformation("Inside ImportCSVToDataTable, converting csv byte array to DataTable taking in to consideration the double quote in data.");
+            Global.LogDebug("Inside ImportCSVToDataTable, converting csv byte array to DataTable taking in to consideration the double quote in data.");
             DataTable dt = new();
             StreamReader sr = new(new MemoryStream(fileData));
             var csvParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
@@ -296,7 +296,7 @@ namespace tiny.WebApi.Helpers
                 }
                 dt.Rows.Add(row);
             }
-            Global.LogInformation("Returning csv data as DataTable.");
+            Global.LogDebug("Returning csv data as DataTable.");
             return dt;
         }
     }

@@ -11,7 +11,7 @@ namespace tiny.WebApi.Helpers
     /// File Poller
     /// Use this only when FileSystemWatcher proves to be ineffecient like when trying to watch files within mounted drives.
     /// </summary>
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     public class FilePoller
     {
         /// <summary>
@@ -27,8 +27,8 @@ namespace tiny.WebApi.Helpers
         /// <param name="pollTimeOutInSeconds"></param>
         /// <param name="searchOption"></param>
         /// <returns></returns>
-        [DebuggerHidden]
-        [DebuggerStepThrough]
+        //[DebuggerHidden]
+        //[DebuggerStepThrough]
         public async Task<string> StartWatching(string directory, string fileName, int pollIntervalInSeconds = 60, int pollTimeOutInSeconds = 1200, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             string result = "";
