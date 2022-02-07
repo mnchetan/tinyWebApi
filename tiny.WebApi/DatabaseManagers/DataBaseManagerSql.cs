@@ -71,7 +71,7 @@ namespace tiny.WebApi.DatabaseManagers
             _querySpecification = querySpecification;
             _context.AutoDisposeConnection = _autoDisposeConnection = autoDisposeConnection;
             _context.Transaction = Transaction;
-            _conn = _context.GetConnection(querySpecification.DatabaseSpecification.ConnectionString + "", false);
+            _conn = _context.GetConnection(querySpecification, false);
         }
         /// <summary>
         ///     Initializes a new instance of the tiny.WebApi.DatabaseManagers.DataBaseManagerSql class.

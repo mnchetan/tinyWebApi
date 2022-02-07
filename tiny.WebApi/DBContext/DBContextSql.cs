@@ -33,7 +33,7 @@ namespace tiny.WebApi.DBContext
             try
             {
                 Global.LogDebug("Inside ExecuteDataReader, get connection and execute.");
-                if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
+                if (_querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
                 {
                     return ImpersonationHelper.Execute(() => { sqlCommand.Connection.Open(); return sqlCommand.ExecuteReader(); }, _querySpecification.DatabaseSpecification);
                 }
@@ -68,7 +68,7 @@ namespace tiny.WebApi.DBContext
             try
             {
                 Global.LogDebug("Inside ExecuteNonQuery, get connection and execute.");
-                if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
+                if (_querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
                 {
                     return ImpersonationHelper.Execute(() => { sqlCommand.Connection.Open(); return sqlCommand.ExecuteNonQuery(); }, _querySpecification.DatabaseSpecification);
                 }
@@ -103,7 +103,7 @@ namespace tiny.WebApi.DBContext
             try
             {
                 Global.LogDebug("Inside ExecuteScalar, get connection and execute.");
-                if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
+                if (_querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
                 {
                     return ImpersonationHelper.Execute(() => { sqlCommand.Connection.Open(); return sqlCommand.ExecuteScalar(); }, _querySpecification.DatabaseSpecification);
                 }
@@ -138,7 +138,7 @@ namespace tiny.WebApi.DBContext
             try
             {
                 Global.LogDebug("Inside ExecuteXmlReader, get connection and execute.");
-                if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
+                if (_querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
                 {
                     return ImpersonationHelper.Execute(() => { sqlCommand.Connection.Open(); return sqlCommand.ExecuteXmlReader(); }, _querySpecification.DatabaseSpecification);
                 }
@@ -174,7 +174,7 @@ namespace tiny.WebApi.DBContext
             {
                 Global.LogDebug("Inside FillDataSet, get connection and fill.");
                 DataSet ds = new();
-                if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
+                if (_querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
                 {
                     ds = ImpersonationHelper.Execute(() =>
                     {
@@ -215,7 +215,7 @@ namespace tiny.WebApi.DBContext
             {
                 Global.LogDebug("Inside FillDataTable, get connection and fill."); 
                 DataTable dt = new();
-                if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
+                if (_querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded)
                 {
                     dt = ImpersonationHelper.Execute(() =>
                     {
@@ -258,7 +258,7 @@ namespace tiny.WebApi.DBContext
             if (_connection == null)
                 _connection = new SqlConnection(_connectionString);
             Global.LogDebug("If connection state is not open and isOpenConnection as true and impersonation is not needed then open the connection.");
-            if (!_querySpecification.DatabaseSpecification.IsImpersonationNeeded && _connection.State != ConnectionState.Open && isOpenConnection) _connection.Open();
+            if (_querySpecification is not null && _querySpecification.DatabaseSpecification is not null && !_querySpecification.DatabaseSpecification.IsImpersonationNeeded && _connection.State != ConnectionState.Open && isOpenConnection) _connection.Open();
             Global.LogDebug("Return connection.");
             return _connection;
         }
