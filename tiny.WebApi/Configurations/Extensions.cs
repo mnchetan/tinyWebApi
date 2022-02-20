@@ -68,9 +68,9 @@ namespace tiny.WebApi.Configurations
 #pragma warning restore CS8601 // Possible null reference assignment.
             }
             (Global.Configuration, Global.WebHostingEnvironment, Global.TinyWebApiConfigurations) = (configuration, webHostEnvironment, tinyWebApiConfigurations);
-            if (!((!string.IsNullOrEmpty(tinyWebApiConfigurations.QueriesJSONFileNameWithoutExtension) && File.Exists(tinyWebApiConfigurations.QueriesJSONFilePath)) || (tinyWebApiConfigurations.QuerySpecifications is not null && tinyWebApiConfigurations.QuerySpecifications.Count > 0)))
+            if (!((!string.IsNullOrEmpty(tinyWebApiConfigurations.QueriesJSONFileNameWithoutExtension) && File.Exists(tinyWebApiConfigurations.QueriesJSONFilePath)) || (Directory.Exists(Path.Combine(Global.ConfigurationDirectoryPath, "Queries", Global.Environment)) && new DirectoryInfo(Path.Combine(Global.ConfigurationDirectoryPath, "Queries", Global.Environment)).GetFiles("*.json").Length > 0) || (tinyWebApiConfigurations.QuerySpecifications is not null && tinyWebApiConfigurations.QuerySpecifications.Count > 0)))
             {
-                throw new Exception("QueriesJSONFileNameWithoutExtension needs to be specified and queries.<environment>.json should be present in the ContenRootPath or near executing assembly or QuerySpecifications need to be filled.");
+                throw new Exception(@"QueriesJSONFileNameWithoutExtension needs to be specified and queries.<environment>.json should be present in the ContenRootPath or near executing assembly or QuerySpecifications need to be filled or queires configuration as json file(s) only supporting queries configuration only and exists in folder ConfigurationDirectoryPath\Queries\{Environment}.");
             }
             BootStrapRepositories(services);
             services.AddMvc(options =>

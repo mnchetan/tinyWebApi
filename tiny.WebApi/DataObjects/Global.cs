@@ -214,6 +214,7 @@ namespace tiny.WebApi.DataObjects
         }
         /// <summary>
         ///     Gets the query specifications.
+        ///     If queries to be segregatted in different files then place JSON only files supporting only queries configuration under ConfigurationDirectoryPath\Queries\{Environment} folder. Remember query keys should be unique across all files if not then first occurance will be picked up and remaning occurances will be skipped.
         /// </summary>
         /// <value>
         ///     The query specifications.
@@ -230,6 +231,11 @@ namespace tiny.WebApi.DataObjects
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                     result = JsonConvert.DeserializeObject<Dictionary<string, QuerySpecification>>(Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.QueriesJSONFilePath));
+                if(Directory.Exists(Path.Combine(ConfigurationDirectoryPath, "Queries", Environment)))
+                {
+                    if (result is null) result = new();
+                    try { foreach (var r1 in from item in (FileInfo[]?)new DirectoryInfo(Path.Combine(ConfigurationDirectoryPath, "Queries", Environment)).GetFiles("*.json") let r = JsonConvert.DeserializeObject<Dictionary<string, QuerySpecification>>(Helpers.FileReadWriteHelper.ReadAllText(item.FullName)) from r1 in from r1 in r where !result.ContainsKey(r1.Key) select r1 select r1) result.Add(r1.Key, r1.Value); } catch { }
+                }
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 if (TinyWebApiConfigurations.QuerySpecifications is not null && TinyWebApiConfigurations.QuerySpecifications.Count > 0)
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
