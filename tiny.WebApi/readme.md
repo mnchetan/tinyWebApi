@@ -1,6 +1,8 @@
 # tiny.WebApi
-tiny Web Api supports almost any type of input and output and connects to Microsoft SQL Server/Oracle database (very much extendable to other relational databases) and allows teams to focus only on database and UI development without even having to make any change in the service. This service does not have any service specific logic and hence could be easily used within any project having Microsoft SQL Server, Oracle as backend database. This supports Get, Post, Put, Delete method automations which could be overridden for extension.
+#### tiny Web Api supports almost any type of input and output and connects to Microsoft SQL Server/Oracle database (very much extendable to other relational databases) and allows teams to focus only on database and UI development without even having to make any change in the service. This service does not have any service specific logic and hence could be easily used within any project having Microsoft SQL Server, Oracle as backend database. This supports Get, Post, Put, Delete method automations which could be overridden for extension.
 Once deployed this service does not need any future deployment apart from configuration changes.
+
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 ## Get: 
 Using this one could execute any query and pass on any input parameter via the query params as part of URL.
@@ -10,11 +12,10 @@ The API is capable of mapping out any input to the supported query or stored pro
 Supported input type is JSON only but it could take in file content as a byte array of file type Excel, CSV and BLOB.
 Excel (First sheet only) and CSV file content is uploaded as byte array within request body the filed name in which byte array is passed is shared with api along with file type and a flag stating file content is present in the request. Sheet name is also shared if specific sheet within excel is needed to be read else first sheet of excel will be read. Based on file type data is converted in to xml and shared with stored procedure/query as an xml. BLOB file type is also shared same way and passed on to query/stored procedure as varbinary type.
 
-## Note:
-Multiple file upload at a time is supported provided fileContetFieldNames are separated by comma and all files are of same type.
-Complex arrays are mapped using SQL table Types which need to follow ADO.Net/Microsoft SQL Server constraint of mapping the types in the order in which the field names are defined in the type. But browsers JSON serializers tend to serialize the objects and arrange properties alphabetically which hence the type definition in database to be done alphabetically.
-For Oracle the UDT’s are supported from Oracle 21c onwards and hence before that the UDT’s could be mapped as XML or JSON and made available to the queries/stored procedures as XML/JSON serialized CLOBS.
-This api supports hot-reload of the queries and hence restart of the service is not required. Queries are identified using unique key passed on with the calls.
+## Installation
+``` cmd
+Install-Package tiny.Logger
+```
 
 ## appsettings.json sample:
 ```xml
@@ -255,7 +256,12 @@ app.Run();
 ```
 
 ## Note:
-After adding the package to the project ensure that connectionstring.<environment>.json, queries.<environment>.json, mailers.<environment>.json & users.<environment>.json file(s) should be marked as Copy to Output Directory as Copy always or Copy if newer.
+* After adding the package to the project ensure that connectionstring.<environment>.json, queries.<environment>.json, mailers.<environment>.json & users.<environment>.json file(s) should be marked as Copy to Output Directory as Copy always or Copy if newer.
+
+* Multiple file upload at a time is supported provided fileContetFieldNames are separated by comma and all files are of same type.
+Complex arrays are mapped using SQL table Types which need to follow ADO.Net/Microsoft SQL Server constraint of mapping the types in the order in which the field names are defined in the type. But browsers JSON serializers tend to serialize the objects and arrange properties alphabetically which hence the type definition in database to be done alphabetically.
+For Oracle the UDT’s are supported from Oracle 21c onwards and hence before that the UDT’s could be mapped as XML or JSON and made available to the queries/stored procedures as XML/JSON serialized CLOBS.
+This api supports hot-reload of the queries and hence restart of the service is not required. Queries are identified using unique key passed on with the calls.
 
 ## License
 MIT License
