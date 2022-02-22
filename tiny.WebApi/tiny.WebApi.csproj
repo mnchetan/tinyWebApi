@@ -23,6 +23,7 @@
     <PackageIcon>api.png</PackageIcon>
     <PackageTags>web api;c#;net core;dynamic;</PackageTags>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/mnchetan/tinyWebApi</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
