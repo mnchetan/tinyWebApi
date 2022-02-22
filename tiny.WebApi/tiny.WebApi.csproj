@@ -15,8 +15,21 @@
     <PackageReleaseNotes>A Powerful WebApi written to ease up webapi development purely based on the configuration - supports MSSQL Server and Oracle databases.</PackageReleaseNotes>
     <Company>tiny</Company>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <ApplicationIcon>api.ico</ApplicationIcon>
+    <PackageIcon>api.png</PackageIcon>
+    <PackageTags>web api;c#;net core;dynamic;</PackageTags>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="License.txt" Pack="true" PackagePath=""></None>
+    <None Include="api.ico" Pack="true" PackagePath=""></None>
+    <None Include="api.png" Pack="true" PackagePath=""></None>
+  </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Optimize>False</Optimize>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
@@ -33,6 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="api.ico" />
     <Content Include="connectionstring.Development.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>false</ExcludeFromSingleFile>
@@ -70,6 +84,17 @@
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     <PackageReference Include="tiny.Logger" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="api.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
