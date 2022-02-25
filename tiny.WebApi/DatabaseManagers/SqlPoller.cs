@@ -47,7 +47,7 @@ namespace tiny.WebApi.Helpers
             Global.LogDebug("Inside DataBaseManagerSql and setting up the parameters.");
             _context = context;
             _querySpecification = querySpecification;
-            _conn = _context.GetConnection(querySpecification.DatabaseSpecification.IsEncrypted ? EncryptFactory.Decrypt(querySpecification.DatabaseSpecification.ConnectionString + "", querySpecification?.DatabaseSpecification?.EncryptionKey + "") : querySpecification.DatabaseSpecification.ConnectionString + "", false);
+            _conn = _context.GetConnection(querySpecification, false);
         }
         /// <summary>
         /// Creates a command of type text.

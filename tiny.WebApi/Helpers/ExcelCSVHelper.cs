@@ -199,14 +199,20 @@ namespace tiny.WebApi.Helpers
                     IXLWorksheet workSheet = string.IsNullOrEmpty(sheetName) ? workBook.Worksheet(1) : workBook.Worksheet(sheetName);
                     DataTable dt = new("Table");
                     bool firstRow = true;
+                    foreach (var row in workSheet.Rows()) if (row.IsEmpty()) row.Delete();
                     foreach (var row in workSheet.Rows())
                     {
-                        if (firstRow) foreach (var cell in row.Cells()) dt.Columns.Add(Convert.ToString(cell.Value));
+                        if (firstRow) 
+                            foreach (var cell in row.Cells()) 
+                                if (!string.IsNullOrWhiteSpace(Convert.ToString(cell.Value))) 
+                                    dt.Columns.Add(Convert.ToString(cell.Value)); 
+                                else 
+                                    break;
                         else
                         {
                             dt.Rows.Add();
                             int i = 0;
-                            foreach (var cell in row.Cells(row.FirstCellUsed().Address.ColumnNumber, row.LastCellUsed().Address.ColumnNumber))
+                            foreach (var cell in row.Cells(1, dt.Columns.Count))
                             {
                                 dt.Rows[^1][i] = cell.DataType switch
                                 {

@@ -255,7 +255,7 @@ namespace tiny.WebApi.DBContext
         {
             Global.LogDebug("Inside GetConnection, create new connection object.");
             _connectionString = connectionString + "";
-            if (_connection == null)
+            if (_connection == null || (_connection is not null && string.IsNullOrWhiteSpace(_connection.ConnectionString)))
                 _connection = new SqlConnection(_connectionString);
             Global.LogDebug("If connection state is not open and isOpenConnection as true and impersonation is not needed then open the connection.");
             if (_querySpecification is not null && _querySpecification.DatabaseSpecification is not null && !_querySpecification.DatabaseSpecification.IsImpersonationNeeded && _connection.State != ConnectionState.Open && isOpenConnection) _connection.Open();

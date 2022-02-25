@@ -199,7 +199,7 @@ namespace tiny.WebApi.DBContext
         public OracleConnection GetConnection(string connectionString, bool isOpenConnection = false)
         {
             Global.LogDebug("Inside GetConnection, create new connection object.");
-            if (_connection == null)
+            if (_connection == null || (_connection is not null && string.IsNullOrWhiteSpace(_connection.ConnectionString)))
                 _connection = new OracleConnection(_connectionString = connectionString);
             Global.LogDebug("If connection state is not open and isOpenConnection as true then open the connection.");
             if (_connection.State != ConnectionState.Open && isOpenConnection) _connection.Open();

@@ -41,7 +41,7 @@ namespace tiny.WebApi.Helpers
             Global.LogDebug("Inside DataBaseManagerSql and setting up the parameters.");
             _context = context;
             _querySpecification = querySpecification;
-            _conn = _context.GetConnection(querySpecification.DatabaseSpecification.IsEncrypted ? EncryptFactory.Decrypt(querySpecification.DatabaseSpecification.ConnectionString + "", querySpecification?.DatabaseSpecification?.EncryptionKey + "") : querySpecification.DatabaseSpecification.ConnectionString + "", false);
+            _conn = _context.GetConnection(querySpecification, false);
         }
         /// <summary>
         /// Process Action.
@@ -83,12 +83,10 @@ namespace tiny.WebApi.Helpers
         {
             try
             {
-                _context.Transaction = _conn.BeginTransaction(IsolationLevel.ReadUncommitted);
                 if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded) ImpersonationHelper.Execute(() => ProcessAction(dt), _querySpecification.DatabaseSpecification); else ProcessAction(dt);
             }
             catch
             {
-                _context.Transaction?.Rollback();
                 throw;
             }
             finally
@@ -132,14 +130,11 @@ namespace tiny.WebApi.Helpers
         {
             try
             {
-                _context.Transaction = _conn.BeginTransaction(IsolationLevel.ReadUncommitted);
                 if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded) ImpersonationHelper.Execute(() => ProcessAction(requestSpecification), _querySpecification.DatabaseSpecification);
                 else ProcessAction(requestSpecification);                
-                _context.Transaction?.Commit();
             }
             catch
             {
-                _context.Transaction?.Rollback();
                 throw;
             }
             finally
