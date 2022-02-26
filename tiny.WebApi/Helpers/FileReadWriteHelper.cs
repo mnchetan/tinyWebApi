@@ -16,17 +16,53 @@ namespace tiny.WebApi.Helpers
         /// Read text from file.
         /// </summary>
         /// <param name="filePath"></param>
+        /// <param name="encoding"></param>
         /// <returns></returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public static string ReadAllText(string filePath) => new StreamReader(filePath, Encoding.UTF8).ReadToEnd();
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+        public static string ReadAllText(string filePath, Encoding encoding = null)
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+        {
+            using var s = new StreamReader(filePath, encoding is null ? Encoding.UTF8 : encoding);
+            return s.ReadToEnd();
+        }
         /// <summary>
-        /// Write text to file.
+        /// Write all text to file.
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="content"></param>
+        /// <param name="isAppend"></param>
+        /// <param name="encoding"></param>
+        /// <param name="isCreateFolderIfNotExists"></param>
         [DebuggerHidden]
         [DebuggerStepThrough]
-        public static void WriteAllText(string filePath, string content) => new StreamWriter(filePath, false, Encoding.UTF8).Write(content);
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+        public static void WriteAllText(string filePath, string content, bool isAppend= false, Encoding encoding = null, bool isCreateFolderIfNotExists = true)
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+        {
+#pragma warning disable CS8604 // Possible null reference argument.
+            if (isCreateFolderIfNotExists && !Directory.Exists(Path.GetDirectoryName(filePath))) _ = Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+#pragma warning restore CS8604 // Possible null reference argument.
+            using var s = new StreamWriter(filePath, isAppend, encoding is null ? Encoding.UTF8 : encoding);
+            s.Write(content);
+        }
+        /// <summary>
+        /// Write byte array to file.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="filePath"></param>
+        /// <param name="mode"></param>
+        /// <param name="isCreateFolderIfNotExists"></param>
+        [DebuggerHidden]
+        [DebuggerStepThrough]
+        public static void WriteByteArrayToFile(this byte[] data, string filePath, FileMode mode = FileMode.OpenOrCreate, bool isCreateFolderIfNotExists = true)
+        {
+#pragma warning disable CS8604 // Possible null reference argument.
+            if (isCreateFolderIfNotExists && !Directory.Exists(Path.GetDirectoryName(filePath))) _ = Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+#pragma warning restore CS8604 // Possible null reference argument.
+            using var b = new BinaryWriter(File.Open(filePath, mode));
+            b.Write(data);
+        }
     }
 }
