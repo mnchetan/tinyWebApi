@@ -111,7 +111,7 @@ namespace tiny.WebApi.Configurations
         public static void UseTinyWebApi(this IApplicationBuilder app, IWebHostEnvironment webHostEnvironment)
         {
             _ = webHostEnvironment.IsDevelopment() ? app.UseDeveloperExceptionPage() : app.UseHsts();
-            app.UseMiddleware<CustomExceptionMiddleware>().UseHttpsRedirection().UseResponseCompression().UseRouting().UseCors().UseEndpoints(e => { e.MapControllers(); });
+            app.UseMiddleware<CustomExceptionMiddleware>().UseHttpsRedirection().UseResponseCompression().UseRouting().UseCors("CorsPolicy").UseEndpoints(e => { e.MapControllers(); });
         }
     }
 }
