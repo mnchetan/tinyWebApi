@@ -55,7 +55,6 @@ if (File.Exists(filePath))
                         }).ConfigureWebHostDefaults(wb =>
                         {
                             wb.UseUrls(url is string ? (url as string) : "http://localhost:5000");
-                            wb.UseContentRoot(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName);
                             wb.UseStartup<Startup>();
                         }).Build().Run();
                         break;
@@ -63,13 +62,13 @@ if (File.Exists(filePath))
 
                 default:
                     {
+                        Directory.SetCurrentDirectory(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName);
                         Host.CreateDefaultBuilder(args).ConfigureAppConfiguration((hbc, icb) =>
                         {
                             icb.Build();
                         }).ConfigureWebHostDefaults(wb =>
                         {
                             wb.UseUrls(url is string ? (url as string) : "http://localhost:5000");
-                            wb.UseContentRoot(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName);
                             wb.UseStartup<Startup>();
                         }).Build().Run();
                         break;

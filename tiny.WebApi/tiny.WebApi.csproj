@@ -24,6 +24,8 @@
     <PackageTags>web api;c#;net core;dynamic;</PackageTags>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/mnchetan/tinyWebApi</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <PackageProjectUrl>https://github.com/mnchetan/tinyWebApi</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
