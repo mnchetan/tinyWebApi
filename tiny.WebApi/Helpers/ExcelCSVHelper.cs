@@ -272,40 +272,83 @@ namespace tiny.WebApi.Helpers
         /// </summary>
         /// <param name="fileData"> File data. </param>
         /// <param name="delimiter">Default is comma.</param>
+        /// <param name="isFlushFileData">Default is true.</param>
         /// <returns>
         ///     A DataTable.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static DataTable ImportCSVToDataTable(byte[] fileData, string delimiter = ",")
+        public static DataTable ImportCSVToDataTable(byte[] fileData, string delimiter = ",", bool isFlushFileData = true)
         {
             Global.LogDebug("Inside ImportCSVToDataTable, converting csv byte array to DataTable taking in to consideration the double quote in data.");
-            DataTable dt = new();
-            StreamReader sr = new(new MemoryStream(fileData));
-            var csvParser = new Regex($"{delimiter}(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
-#pragma warning disable CS8604 // Possible null reference argument.
-            var c = csvParser.Split(sr.ReadLine());
-#pragma warning restore CS8604 // Possible null reference argument.
-            foreach (var item in c) dt.Columns.Add(item);
-            while (!sr.EndOfStream)
+            if (delimiter == "," || string.IsNullOrEmpty(delimiter))
             {
+                DataTable dt = new();
+                StreamReader sr = new(new MemoryStream(fileData));
+                var csvParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
 #pragma warning disable CS8604 // Possible null reference argument.
-                string[] X = csvParser.Split(sr.ReadLine());
+                var c = csvParser.Split(sr.ReadLine());
 #pragma warning restore CS8604 // Possible null reference argument.
-                var row = dt.NewRow();
-                for (int i = 0; i < X.Length; i++)
+                foreach (var item in c) dt.Columns.Add(item);
+                while (!sr.EndOfStream)
                 {
-                    if (X[i].StartsWith("\"") && X[i].EndsWith("\""))
+#pragma warning disable CS8604 // Possible null reference argument.
+                    string[] X = csvParser.Split(sr.ReadLine());
+#pragma warning restore CS8604 // Possible null reference argument.
+                    var row = dt.NewRow();
+                    for (int i = 0; i < X.Length; i++)
                     {
-                        X[i] = X[i][1..];
-                        X[i] = X[i][0..^1];
+                        if (X[i].StartsWith("\"") && X[i].EndsWith("\""))
+                        {
+                            X[i] = X[i][1..];
+                            X[i] = X[i][0..^1];
+                        }
+                        row[i] = X[i];
                     }
-                    row[i] = X[i];
+                    dt.Rows.Add(row);
                 }
-                dt.Rows.Add(row);
+                Global.LogDebug("Returning csv data as DataTable.");
+                return dt;
             }
-            Global.LogDebug("Returning csv data as DataTable.");
-            return dt;
+            else
+            {
+                Global.LogDebug("Returning csv data as DataTable.");
+                return ImportNonCommaDelimitedToDataTable(fileData, delimiter,isFlushFileData)
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileData"></param>
+        /// <param name="delimiter"></param>
+        /// <param name="isFlushFileData">Default is true.</param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        [DebuggerHidden]
+        public static DataTable ImportNonCommaDelimitedToDataTable(byte[] fileData, string delimiter, bool isFlushFileData = true)
+        {
+            DataTable datatable = new DataTable();
+            StreamReader streamreader = new StreamReader(new MemoryStream(fileData));
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            string[] columnheaders = streamreader.ReadLine().Split(delimiter);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            foreach (string columnheader in columnheaders)
+            {
+                datatable.Columns.Add(columnheader); // I've added the column headers here.
+            }
+
+            while (streamreader.Peek() > 0)
+            {
+                DataRow datarow = datatable.NewRow();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                datarow.ItemArray = streamreader.ReadLine().Split(delimiter);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                datatable.Rows.Add(datarow);
+            }
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
+            if (isFlushFileData) fileData = null;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
+            return datatable;
         }
     }
 }
