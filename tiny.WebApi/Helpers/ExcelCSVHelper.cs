@@ -202,11 +202,11 @@ namespace tiny.WebApi.Helpers
                     foreach (var row in workSheet.Rows()) if (row.IsEmpty()) row.Delete();
                     foreach (var row in workSheet.Rows())
                     {
-                        if (firstRow) 
-                            foreach (var cell in row.Cells()) 
-                                if (!string.IsNullOrWhiteSpace(Convert.ToString(cell.Value))) 
-                                    dt.Columns.Add(Convert.ToString(cell.Value)); 
-                                else 
+                        if (firstRow)
+                            foreach (var cell in row.Cells())
+                                if (!string.IsNullOrWhiteSpace(Convert.ToString(cell.Value)))
+                                    dt.Columns.Add(Convert.ToString(cell.Value));
+                                else
                                     break;
                         else
                         {
@@ -247,19 +247,20 @@ namespace tiny.WebApi.Helpers
         ///     Import CSV to data table.
         /// </summary>
         /// <param name="filePath"> File path. </param>
+        /// <param name="delimiter">Default is comma.</param>
         /// <returns>
         ///     A DataTable.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static DataTable ImportCSVToDataTable(string filePath)
+        public static DataTable ImportCSVToDataTable(string filePath, string delimiter = ",")
         {
             if (File.Exists(filePath))
             {
                 using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
                 byte[] buffer = new byte[fs.Length];
                 fs.Read(buffer, 0, (int)fs.Length);
-                return ImportCSVToDataTable(buffer);
+                return ImportCSVToDataTable(buffer, delimiter);
             }
             else
             {
@@ -270,7 +271,7 @@ namespace tiny.WebApi.Helpers
         ///     Import CSV to data table.
         /// </summary>
         /// <param name="fileData"> File data. </param>
-        /// <param name="delimiter"></param>
+        /// <param name="delimiter">Default is comma.</param>
         /// <returns>
         ///     A DataTable.
         /// </returns>

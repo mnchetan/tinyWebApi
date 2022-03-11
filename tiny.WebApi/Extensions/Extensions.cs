@@ -23,7 +23,7 @@ namespace tiny.WebApi.Extensions
         ///     A DataTable extension method that data table to CSV.
         /// </summary>
         /// <param name="dt"> The dt to act on. </param>
-        /// <param name="delimiter">default is comma</param>
+        /// <param name="delimiter">Default is comma.</param>
         /// <returns>
         ///     A dynamic.
         /// </returns>
