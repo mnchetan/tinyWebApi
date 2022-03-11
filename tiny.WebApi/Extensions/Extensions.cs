@@ -23,19 +23,20 @@ namespace tiny.WebApi.Extensions
         ///     A DataTable extension method that data table to CSV.
         /// </summary>
         /// <param name="dt"> The dt to act on. </param>
+        /// <param name="delimiter">default is comma</param>
         /// <returns>
         ///     A dynamic.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static dynamic DataTableToCSV(this DataTable dt)
+        public static dynamic DataTableToCSV(this DataTable dt, string delimiter = ",")
         {
             Global.LogDebug("Inside DataTableToCSV, Converting DataTable to csv and taking in account the double quotes in data.");
             StringBuilder sb = new();
             var columnNames = dt.Columns.Cast<DataColumn>().Select(o => o.ColumnName.Replace("\"", "\"\""));
-            _ = sb.AppendLine(string.Join(",", columnNames));
+            _ = sb.AppendLine(string.Join(delimiter, columnNames));
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-            foreach (var fields in from DataRow row in dt.Rows let fields = row.ItemArray.Select(fields => string.Concat("\"", fields.ToString().Replace("\"", "\"\""), "\"")).ToList() select fields) _ = sb.AppendLine(string.Join(",", fields));
+            foreach (var fields in from DataRow row in dt.Rows let fields = row.ItemArray.Select(fields => string.Concat("\"", fields.ToString().Replace("\"", "\"\""), "\"")).ToList() select fields) _ = sb.AppendLine(string.Join(delimiter, fields));
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             return Encoding.UTF8.GetBytes(sb.ToString());
         }

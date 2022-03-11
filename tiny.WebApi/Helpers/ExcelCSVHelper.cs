@@ -270,17 +270,18 @@ namespace tiny.WebApi.Helpers
         ///     Import CSV to data table.
         /// </summary>
         /// <param name="fileData"> File data. </param>
+        /// <param name="delimiter"></param>
         /// <returns>
         ///     A DataTable.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static DataTable ImportCSVToDataTable(byte[] fileData)
+        public static DataTable ImportCSVToDataTable(byte[] fileData, string delimiter = ",")
         {
             Global.LogDebug("Inside ImportCSVToDataTable, converting csv byte array to DataTable taking in to consideration the double quote in data.");
             DataTable dt = new();
             StreamReader sr = new(new MemoryStream(fileData));
-            var csvParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
+            var csvParser = new Regex($"{delimiter}(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
 #pragma warning disable CS8604 // Possible null reference argument.
             var c = csvParser.Split(sr.ReadLine());
 #pragma warning restore CS8604 // Possible null reference argument.
