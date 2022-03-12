@@ -284,7 +284,7 @@ namespace tiny.WebApi.Helpers
             if (delimiter == "," || string.IsNullOrEmpty(delimiter))
             {
                 DataTable dt = new();
-                StreamReader sr = new(new MemoryStream(fileData));
+                using StreamReader sr = new(new MemoryStream(fileData));
                 var csvParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
 #pragma warning disable CS8604 // Possible null reference argument.
                 var c = csvParser.Split(sr.ReadLine());
@@ -313,7 +313,7 @@ namespace tiny.WebApi.Helpers
             else
             {
                 Global.LogDebug("Returning csv data as DataTable.");
-                return ImportNonCommaDelimitedToDataTable(fileData, delimiter,isFlushFileData)
+                return ImportNonCommaDelimitedToDataTable(fileData, delimiter, isFlushFileData);
             }
         }
         /// <summary>
@@ -328,7 +328,7 @@ namespace tiny.WebApi.Helpers
         public static DataTable ImportNonCommaDelimitedToDataTable(byte[] fileData, string delimiter, bool isFlushFileData = true)
         {
             DataTable datatable = new DataTable();
-            StreamReader streamreader = new StreamReader(new MemoryStream(fileData));
+            using StreamReader streamreader = new StreamReader(new MemoryStream(fileData));
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             string[] columnheaders = streamreader.ReadLine().Split(delimiter);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
