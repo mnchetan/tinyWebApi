@@ -36,7 +36,7 @@ namespace tiny.WebApi.Helpers
             Global.LogDebug("Inside ExceportToExcel, exporting DataTable to ByteArray.");
             var ds = new DataSet();
             ds.Tables.Add(dt);
-            var d = ExportToExcel(ds);
+            var d = ExportToExcel(ds, sheetName);
             if (isFlushDataTableOnceExported && ds != null) ds.Dispose();
             return d;
         }
@@ -339,8 +339,8 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         public static DataTable ImportNonCommaDelimitedToDataTable(byte[] fileData, string delimiter, bool isFlushFileData = true)
         {
-            DataTable datatable = new DataTable();
-            using StreamReader streamreader = new StreamReader(new MemoryStream(fileData));
+            DataTable datatable = new();
+            using StreamReader streamreader = new(new MemoryStream(fileData));
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             string[] columnheaders = streamreader.ReadLine().Split(delimiter);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
@@ -357,11 +357,9 @@ namespace tiny.WebApi.Helpers
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 datatable.Rows.Add(datarow);
             }
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             if (isFlushFileData) fileData = null;
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
             return datatable;
         }
     }
