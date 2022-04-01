@@ -202,7 +202,9 @@ namespace tiny.WebApi.DBContext
             if (_connection == null || (_connection is not null && string.IsNullOrWhiteSpace(_connection.ConnectionString)))
                 _connection = new OracleConnection(_connectionString = connectionString);
             Global.LogDebug("If connection state is not open and isOpenConnection as true then open the connection.");
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             if (_connection.State != ConnectionState.Open && isOpenConnection) _connection.Open();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             Global.LogDebug("Return connection.");
             return _connection;
         }

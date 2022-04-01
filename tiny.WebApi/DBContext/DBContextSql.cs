@@ -258,9 +258,13 @@ namespace tiny.WebApi.DBContext
             if (_connection == null || (_connection is not null && string.IsNullOrWhiteSpace(_connection.ConnectionString)))
                 _connection = new SqlConnection(_connectionString);
             Global.LogDebug("If connection state is not open and isOpenConnection as true and impersonation is not needed then open the connection.");
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             if (_querySpecification is not null && _querySpecification.DatabaseSpecification is not null && !_querySpecification.DatabaseSpecification.IsImpersonationNeeded && _connection.State != ConnectionState.Open && isOpenConnection) _connection.Open();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             Global.LogDebug("Return connection.");
+#pragma warning disable CS8603 // Possible null reference return.
             return _connection;
+#pragma warning restore CS8603 // Possible null reference return.
         }
         /// <summary>
         ///     Gets a connection.

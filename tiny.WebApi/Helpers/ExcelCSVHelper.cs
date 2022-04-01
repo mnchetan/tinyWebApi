@@ -44,6 +44,8 @@ namespace tiny.WebApi.Helpers
         ///     Export to excel.
         /// </summary>
         /// <param name="ds"> The ds. </param>
+        /// <param name="sheetNameCommaSeperated">Provide sheet name(s) (comma seperated) for excel sheet  (optional).</param>
+        /// <param name="isFlushDataSetOnceExported"></param>
         /// <returns>
         ///     A byte[].
         /// </returns>
@@ -356,7 +358,9 @@ namespace tiny.WebApi.Helpers
                 datatable.Rows.Add(datarow);
             }
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             if (isFlushFileData) fileData = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
             return datatable;
         }
