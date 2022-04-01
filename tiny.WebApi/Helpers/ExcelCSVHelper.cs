@@ -24,17 +24,21 @@ namespace tiny.WebApi.Helpers
         ///     Export to excel.
         /// </summary>
         /// <param name="dt"> The dt. </param>
+        /// <param name="sheetName">Provide sheet name for excel sheet  (optional).</param>
+        /// <param name="isFlushDataTableOnceExported">Dispose the databale once exported.</param>
         /// <returns>
         ///     A byte[].
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static byte[] ExportToExcel(DataTable dt)
+        public static byte[] ExportToExcel(DataTable dt, string sheetName = "", bool isFlushDataTableOnceExported = false)
         {
             Global.LogDebug("Inside ExceportToExcel, exporting DataTable to ByteArray.");
             var ds = new DataSet();
             ds.Tables.Add(dt);
-            return ExportToExcel(ds);
+            var d = ExportToExcel(ds);
+            if (isFlushDataTableOnceExported && ds != null) ds.Dispose();
+            return d;
         }
         /// <summary>
         ///     Export to excel.
@@ -45,16 +49,22 @@ namespace tiny.WebApi.Helpers
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static byte[] ExportToExcel(DataSet ds)
+        public static byte[] ExportToExcel(DataSet ds, string sheetNameCommaSeperated = "", bool isFlushDataSetOnceExported = false)
         {
             Global.LogDebug("Inside ExceportToExcel, exporting DataSet to ByteArray.");
             using MemoryStream ms = new();
             using (XLWorkbook wb = new())
             {
-                foreach (DataTable dt in ds.Tables) _ = string.IsNullOrWhiteSpace(dt.TableName) ? wb.Worksheets.Add(dt) : wb.Worksheets.Add(dt, dt.TableName);
+                var arr = $"{sheetNameCommaSeperated}".Split(',');
+                for (int i = 0; i < ds.Tables.Count; i++)
+                {
+                    if (arr != null && arr.Length >= i + 1 && !string.IsNullOrEmpty(arr[i])) ds.Tables[i].TableName = arr[i];
+                    _ = string.IsNullOrWhiteSpace(ds.Tables[i].TableName) ? wb.Worksheets.Add(ds.Tables[i]) : wb.Worksheets.Add(ds.Tables[i], ds.Tables[i].TableName);
+                }
                 wb.SaveAs(ms);
             }
             Global.LogDebug("Returning ByteArray.");
+            if (isFlushDataSetOnceExported && ds != null) ds.Dispose();
             return ms.ToArray();
         }
         /// <summary>
