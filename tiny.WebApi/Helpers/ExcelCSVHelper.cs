@@ -211,31 +211,33 @@ namespace tiny.WebApi.Helpers
                     IXLWorksheet workSheet = string.IsNullOrEmpty(sheetName) ? workBook.Worksheet(1) : workBook.Worksheet(sheetName);
                     DataTable dt = new("Table");
                     bool firstRow = true;
-                    foreach (var row in workSheet.Rows()) if (row.IsEmpty()) row.Delete();
                     foreach (var row in workSheet.Rows())
                     {
-                        if (firstRow)
-                            foreach (var cell in row.Cells())
-                                if (!string.IsNullOrWhiteSpace(Convert.ToString(cell.Value)))
-                                    dt.Columns.Add(Convert.ToString(cell.Value));
-                                else
-                                    break;
-                        else
+                        if (!row.IsEmpty())
                         {
-                            dt.Rows.Add();
-                            int i = 0;
-                            foreach (var cell in row.Cells(1, dt.Columns.Count))
+                            if (firstRow)
                             {
-                                dt.Rows[^1][i] = cell.DataType switch
+                                foreach (var cell in row.Cells())
+                                    dt.Columns.Add(Convert.ToString(cell.Value));
+                                firstRow = false;
+                            }
+                            else
+                            {
+                                dt.Rows.Add();
+                                int i = 0;
+                                foreach (var cell in row.Cells(1, dt.Columns.Count))
                                 {
-                                    XLDataType.DateTime => double.TryParse(Convert.ToString(cell.Value), out double v) ? DateTime.FromOADate(v) : Convert.ToString(cell.Value),
-                                    XLDataType.Number => double.TryParse(Convert.ToString(cell.Value), out double v) ? v : Convert.ToString(cell.Value),
-                                    XLDataType.Boolean => bool.TryParse(Convert.ToString(cell.Value), out bool v) ? v : Convert.ToString(cell.Value),
-                                    XLDataType.TimeSpan => TimeSpan.TryParse(Convert.ToString(cell.Value), out TimeSpan v) ? v : Convert.ToString(cell.Value),
-                                    XLDataType.Text => Convert.ToString(cell.Value),
-                                    _ => default
-                                };
-                                i++;
+                                    dt.Rows[^1][i] = cell.DataType switch
+                                    {
+                                        XLDataType.DateTime => double.TryParse(Convert.ToString(cell.Value), out double v) ? DateTime.FromOADate(v) : Convert.ToString(cell.Value),
+                                        XLDataType.Number => double.TryParse(Convert.ToString(cell.Value), out double v) ? v : Convert.ToString(cell.Value),
+                                        XLDataType.Boolean => bool.TryParse(Convert.ToString(cell.Value), out bool v) ? v : Convert.ToString(cell.Value),
+                                        XLDataType.TimeSpan => TimeSpan.TryParse(Convert.ToString(cell.Value), out TimeSpan v) ? v : Convert.ToString(cell.Value),
+                                        XLDataType.Text => Convert.ToString(cell.Value),
+                                        _ => default
+                                    };
+                                    i++;
+                                }
                             }
                         }
                     }
