@@ -62,6 +62,8 @@ namespace tiny.WebApi.Helpers
                 {
                     if (arr != null && arr.Length >= i + 1 && !string.IsNullOrEmpty(arr[i])) ds.Tables[i].TableName = arr[i];
                     _ = string.IsNullOrWhiteSpace(ds.Tables[i].TableName) ? wb.Worksheets.Add(ds.Tables[i]) : wb.Worksheets.Add(ds.Tables[i], ds.Tables[i].TableName);
+                    if (isFlushDataSetOnceExported)
+                        ds.Tables[i].Rows.Clear();
                 }
                 wb.SaveAs(ms);
             }
