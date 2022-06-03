@@ -54,7 +54,12 @@ namespace tiny.WebApi.Helpers
         [DebuggerHidden]
         private static void GetColumnMapping(QuerySpecification querySpecification, OracleBulkCopy oracleBulkCopy)
         {
-            if (!string.IsNullOrEmpty(querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma)) foreach (var j in from i in querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Split(",") let j = i.Replace(",", "").Split(":") select j) oracleBulkCopy.ColumnMappings.Add(new OracleBulkCopyColumnMapping() { SourceColumn = j[0].Replace(":", ""), DestinationColumn = j[1].Replace(":", "") });
+            if (!string.IsNullOrEmpty(querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma))
+            {
+                querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma = querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace(@"\:", "cnmcolon");
+                querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma = querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace(@"\,", "cnmcomma");
+                foreach (var j in from i in querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Split(",") let j = i.Replace(",", "").Split(":") select j) oracleBulkCopy.ColumnMappings.Add(new OracleBulkCopyColumnMapping() { SourceColumn = j[0].Replace(":", "").Replace("cnmcolon", ":").Replace("cnmcomma", ","), DestinationColumn = j[1].Replace(":", "").Replace("cnmcolon", ":").Replace("cnmcomma", ",") });
+            }
         }
         /// <summary>
         /// Bulk insert data to the destination table.

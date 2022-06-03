@@ -60,8 +60,8 @@ namespace tiny.WebApi.Helpers
                 var arr = $"{sheetNameCommaSeperated}".Split(',');
                 for (int i = 0; i < ds.Tables.Count; i++)
                 {
-                    if (arr != null && arr.Length >= i + 1 && !string.IsNullOrEmpty(arr[i])) ds.Tables[i].TableName = arr[i];
-                    _ = string.IsNullOrWhiteSpace(ds.Tables[i].TableName) ? wb.Worksheets.Add(ds.Tables[i]) : wb.Worksheets.Add(ds.Tables[i], ds.Tables[i].TableName);
+                    if (arr != null && arr.Length >= i + 1 && !string.IsNullOrEmpty(arr[i])) ds.Tables[i].TableName = arr[i][0] == '_' || char.IsLetter(arr[i][0]) ? arr[i] : "cnmunderscore" + arr[i];
+                    _ = string.IsNullOrWhiteSpace(ds.Tables[i].TableName) ? wb.Worksheets.Add(ds.Tables[i]) : wb.Worksheets.Add(ds.Tables[i], ds.Tables[i].TableName.Replace("cnmunderscore", ""));
                     if (isFlushDataSetOnceExported)
                         ds.Tables[i].Rows.Clear();
                 }

@@ -249,6 +249,7 @@ namespace tiny.WebApi.DataObjects
         /// <summary>
         ///     Column Mapping for BulkInsert - optional
         ///     Fomrat : source1:destination1,source2:destination2.
+        ///     If column names have colon or comma in it then precede the colon or comma with backslash that is treat it as escape sequence. Example : column havin g, in it:column having , in it,column having : in it:column having : in it to be placed as column having \, in it:column having \, in it,column having \: in it:column having \: in it.
         ///     Bulk insert one file at a time per query if column mappings are used.
         /// </summary>
         /// <value>
