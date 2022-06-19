@@ -171,25 +171,18 @@ namespace tiny.WebApi.Helpers
         ///
         /// <param name="filePath">  Path of the file. </param>
         /// <param name="sheetName"> (Optional) Name of the sheet. </param>
+        /// <param name="isFlushFileData">Default true, will flush the file data once the import is completed that is will dispose the byte array shared.</param>
+        /// <param name="skipHeaderRow">Default false, true if header needs to be skipped.</param>
+        /// <param name="startRow">Default 0, specify the start row that is skip all the preious rows</param>
+        /// <param name="fileData">byte array of the file.</param>
         /// <returns>
         ///     A DataTable.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static DataTable ImportExcelToDataTable(string filePath, string sheetName = "")
-        {
-            if (File.Exists(filePath))
-            {
-                using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
-                byte[] buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, (int)fs.Length);
-                return ImportExcelToDataTable(buffer, sheetName);
-            }
-            else
-            {
-                throw new FileNotFoundException($"Excel file not found at specified file path : {filePath}");
-            }
-        }
+#pragma warning disable CS8604 // Possible null reference argument.
+        public static DataTable ImportExcelToDataTable(string filePath, string sheetName = "", bool isFlushFileData = true, bool skipHeaderRow = false, int startRow = 0, byte[]? fileData = null) => ImportExcelToDataTable(fileData, sheetName, isFlushFileData, skipHeaderRow, startRow, filePath);
+#pragma warning restore CS8604 // Possible null reference argument.
         /// <summary>
         ///     Import excel to data table.
         /// </summary>
@@ -197,53 +190,74 @@ namespace tiny.WebApi.Helpers
         ///
         /// <param name="fileData">  File Data in byte array format. </param>
         /// <param name="sheetName"> (Optional) Name of the sheet. </param>
+        /// <param name="isFlushFileData">Default true, will flush the file data once the import is completed that is will dispose the byte array shared.</param>
+        /// <param name="skipHeaderRow">Default false, true if header needs to be skipped.</param>
+        /// <param name="startRow">Default 0, specify the start row that is skip all the preious rows</param>
+        /// <param name="filePath">  Path of the file. </param>
         /// <returns>
         ///     A DataTable.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static DataTable ImportExcelToDataTable(byte[] fileData, string sheetName = "")
+        public static DataTable ImportExcelToDataTable(byte[] fileData, string sheetName = "", bool isFlushFileData = true, bool skipHeaderRow = false, int startRow = 0, string filePath = "")
         {
             try
             {
                 Global.LogDebug("Inside ImportExcelToDataTable, converting excel byte array to DataTable.");
                 if (fileData is not null && fileData.Length > 0)
                 {
-                    using XLWorkbook workBook = new(new MemoryStream(fileData));
+                    using XLWorkbook workBook = new(!string.IsNullOrEmpty(filePath) && File.Exists(filePath) ? File.OpenRead(filePath) : fileData is not null ? new MemoryStream(fileData) : throw new Exception("Please provide valid file path which exists at the location or the file data in byte array format."));
                     IXLWorksheet workSheet = string.IsNullOrEmpty(sheetName) ? workBook.Worksheet(1) : workBook.Worksheet(sheetName);
                     DataTable dt = new("Table");
                     bool firstRow = true;
+                    int j = 0;
                     foreach (var row in workSheet.Rows())
                     {
                         if (!row.IsEmpty())
                         {
                             if (firstRow)
                             {
-                                foreach (var cell in row.Cells())
-                                    dt.Columns.Add(Convert.ToString(cell.Value));
+                                if (!skipHeaderRow)
+                                    foreach (var cell in row.Cells()) dt.Columns.Add(Convert.ToString(cell.Value));
+                                else
+                                {
+                                    int cnm = 0;
+                                    foreach (var cell in row.Cells())
+                                    {
+                                        dt.Columns.Add($"Column{cnm + 1}");
+                                        cnm++;
+                                    }
+                                }
                                 firstRow = false;
                             }
                             else
                             {
-                                dt.Rows.Add();
-                                int i = 0;
-                                foreach (var cell in row.Cells(1, dt.Columns.Count))
+                                if (j >= startRow)
                                 {
-                                    dt.Rows[^1][i] = cell.DataType switch
+                                    dt.Rows.Add();
+                                    int i = 0;
+                                    foreach (var cell in row.Cells(1, dt.Columns.Count))
                                     {
-                                        XLDataType.DateTime => double.TryParse(Convert.ToString(cell.Value), out double v) ? DateTime.FromOADate(v) : Convert.ToString(cell.Value),
-                                        XLDataType.Number => double.TryParse(Convert.ToString(cell.Value), out double v) ? v : Convert.ToString(cell.Value),
-                                        XLDataType.Boolean => bool.TryParse(Convert.ToString(cell.Value), out bool v) ? v : Convert.ToString(cell.Value),
-                                        XLDataType.TimeSpan => TimeSpan.TryParse(Convert.ToString(cell.Value), out TimeSpan v) ? v : Convert.ToString(cell.Value),
-                                        XLDataType.Text => Convert.ToString(cell.Value),
-                                        _ => default
-                                    };
-                                    i++;
+                                        dt.Rows[^1][i] = cell.DataType switch
+                                        {
+                                            XLDataType.DateTime => double.TryParse(Convert.ToString(cell.Value), out double v) ? DateTime.FromOADate(v) : Convert.ToString(cell.Value),
+                                            XLDataType.Number => double.TryParse(Convert.ToString(cell.Value), out double v) ? v : Convert.ToString(cell.Value),
+                                            XLDataType.Boolean => bool.TryParse(Convert.ToString(cell.Value), out bool v) ? v : Convert.ToString(cell.Value),
+                                            XLDataType.TimeSpan => TimeSpan.TryParse(Convert.ToString(cell.Value), out TimeSpan v) ? v : Convert.ToString(cell.Value),
+                                            XLDataType.Text => Convert.ToString(cell.Value),
+                                            _ => default
+                                        };
+                                        i++;
+                                    }
                                 }
                             }
+                            j++;
                         }
                     }
                     Global.LogDebug("Returning Excel data as DataTable.");
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+                    if (isFlushFileData) fileData = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                     return dt;
                 }
                 else
@@ -264,72 +278,100 @@ namespace tiny.WebApi.Helpers
         /// </summary>
         /// <param name="filePath"> File path. </param>
         /// <param name="delimiter">Default is comma.</param>
+        /// <param name="isFlushFileData">Default true, will flush the file data once the import is completed that is will dispose the byte array shared.</param>
+        /// <param name="skipHeaderRow">Default false, true if header needs to be skipped.</param>
+        /// <param name="startRow">Default 0, specify the start row that is skip all the preious rows</param>
+        /// <param name="fileData">byte array of the file.</param>
         /// <returns>
         ///     A DataTable.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static DataTable ImportCSVToDataTable(string filePath, string delimiter = ",")
-        {
-            if (File.Exists(filePath))
-            {
-                using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read);
-                byte[] buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, (int)fs.Length);
-                return ImportCSVToDataTable(buffer, delimiter);
-            }
-            else
-            {
-                throw new FileNotFoundException($"CSV file not found at specified file path : {filePath}");
-            }
-        }
+#pragma warning disable CS8604 // Possible null reference argument.
+        public static DataTable ImportCSVToDataTable(string filePath, string delimiter = ",", bool isFlushFileData = true, bool skipHeaderRow = false, int startRow = 0, byte[]? fileData = null) => ImportCSVToDataTable(fileData, delimiter, isFlushFileData, skipHeaderRow, startRow, filePath);
+#pragma warning restore CS8604 // Possible null reference argument.
         /// <summary>
         ///     Import CSV to data table.
         /// </summary>
         /// <param name="fileData"> File data. </param>
         /// <param name="delimiter">Default is comma.</param>
-        /// <param name="isFlushFileData">Default is true.</param>
+        /// <param name="isFlushFileData">Default true, will flush the file data once the import is completed that is will dispose the byte array shared.</param>
+        /// <param name="skipHeaderRow">Default false, true if header needs to be skipped.</param>
+        /// <param name="startRow">Default 0, specify the start row that is skip all the preious rows</param>
+        /// <param name="filePath"> File path. </param>
         /// <returns>
         ///     A DataTable.
         /// </returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static DataTable ImportCSVToDataTable(byte[] fileData, string delimiter = ",", bool isFlushFileData = true)
+        public static DataTable ImportCSVToDataTable(byte[] fileData, string delimiter = ",", bool isFlushFileData = true, bool skipHeaderRow = false, int startRow = 0, string filePath = "")
         {
             Global.LogDebug("Inside ImportCSVToDataTable, converting csv byte array to DataTable taking in to consideration the double quote in data.");
             if (delimiter == "," || string.IsNullOrEmpty(delimiter))
             {
                 DataTable dt = new();
-                using StreamReader sr = new(new MemoryStream(fileData));
+                using StreamReader sr = new(!string.IsNullOrEmpty(filePath) && File.Exists(filePath) ? File.OpenRead(filePath) : fileData is not null ? new MemoryStream(fileData) : throw new Exception("Please provide valid file path which exists at the location or the file data in byte array format."));
                 var csvParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
 #pragma warning disable CS8604 // Possible null reference argument.
-                var c = csvParser.Split(sr.ReadLine());
-#pragma warning restore CS8604 // Possible null reference argument.
-                foreach (var item in c) dt.Columns.Add(item);
+                int j = 0;
+                bool isHeaderAdded = false;
                 while (!sr.EndOfStream)
                 {
-#pragma warning disable CS8604 // Possible null reference argument.
-                    string[] X = csvParser.Split(sr.ReadLine());
-#pragma warning restore CS8604 // Possible null reference argument.
-                    var row = dt.NewRow();
-                    for (int i = 0; i < X.Length; i++)
+                    if (j >= startRow)
                     {
-                        if (X[i].StartsWith("\"") && X[i].EndsWith("\""))
+                        if (!isHeaderAdded)
                         {
-                            X[i] = X[i][1..];
-                            X[i] = X[i][0..^1];
+                            var tempLine = sr.ReadLine();
+                            if (string.IsNullOrEmpty(tempLine)) continue;
+                            var c = csvParser.Split(tempLine);
+                            if (!skipHeaderRow)
+                            {
+                                foreach (var item in c) _ = dt.Columns.Add(item);
+                                isHeaderAdded = true;
+                            }
+                            else
+                            {
+                                for (int cnm = 0; cnm < c.Length; cnm++)
+                                {
+                                    _ = dt.Columns.Add($"Column{cnm + 1}");
+                                }
+                                isHeaderAdded = true;
+                            }
+                            j++;
+                            continue;
                         }
-                        row[i] = X[i];
+                        var line = sr.ReadLine();
+                        if (!string.IsNullOrEmpty(line))
+                        {
+                            var x = csvParser.Split(line);
+                            var row = dt.NewRow();
+                            for (int i = 0; i < x.Length; i++)
+                            {
+                                if (x[i].StartsWith("\"") && x[i].EndsWith("\""))
+                                {
+                                    x[i] = x[i][1..];
+                                    x[i] = x[i][0..^1];
+                                }
+                                row[i] = x[i];
+                            }
+                            dt.Rows.Add(row);
+                        }
+                        else continue;
                     }
-                    dt.Rows.Add(row);
+                    else
+                        sr.ReadLine();
+                    j++;
                 }
                 Global.LogDebug("Returning csv data as DataTable.");
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+                if (isFlushFileData) fileData = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 return dt;
             }
             else
             {
                 Global.LogDebug("Returning csv data as DataTable.");
-                return ImportNonCommaDelimitedToDataTable(fileData, delimiter, isFlushFileData);
+                return ImportNonCommaDelimitedToDataTable(fileData, delimiter, isFlushFileData, skipHeaderRow, startRow, filePath);
             }
         }
         /// <summary>
@@ -338,28 +380,60 @@ namespace tiny.WebApi.Helpers
         /// <param name="fileData"></param>
         /// <param name="delimiter"></param>
         /// <param name="isFlushFileData">Default is true.</param>
+        /// <param name="skipHeaderRow">Default false, true if header needs to be skipped.</param>
+        /// <param name="startRow">Default 0, specify the start row that is skip all the preious rows</param>
+        /// <param name="filePath"> File path. </param>
         /// <returns></returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static DataTable ImportNonCommaDelimitedToDataTable(byte[] fileData, string delimiter, bool isFlushFileData = true)
+        public static DataTable ImportNonCommaDelimitedToDataTable(byte[] fileData, string delimiter, bool isFlushFileData = true, bool skipHeaderRow = false, int startRow = 0, string filePath = "")
         {
             DataTable datatable = new();
-            using StreamReader streamreader = new(new MemoryStream(fileData));
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            string[] columnheaders = streamreader.ReadLine().Split(delimiter);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-            foreach (string columnheader in columnheaders)
-            {
-                datatable.Columns.Add(columnheader); // I've added the column headers here.
-            }
+            using StreamReader streamreader = new(!string.IsNullOrEmpty(filePath) && File.Exists(filePath) ? File.OpenRead(filePath) : fileData is not null ? new MemoryStream(fileData) : throw new Exception("Please provide valid file path which exists at the location or the file data in byte array format."));
 
+            int i = 0;
+            var isHeaderAdded = false;
             while (streamreader.Peek() > 0)
             {
-                DataRow datarow = datatable.NewRow();
+                if (i >= startRow)
+                {
+                    if (!isHeaderAdded)
+                    {
+                        var tempLine = streamreader.ReadLine();
+                        if (string.IsNullOrEmpty(tempLine)) continue;
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                datarow.ItemArray = streamreader.ReadLine().Split(delimiter);
+                        string[] columnheaders = streamreader.ReadLine().Split(delimiter);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-                datatable.Rows.Add(datarow);
+                        if (!skipHeaderRow)
+                        {
+                            foreach (string columnheader in columnheaders)
+                                datatable.Columns.Add(columnheader); // I've added the column headers here.
+                            isHeaderAdded = true;
+                        }
+                        else
+                        {
+                            for (int cnm = 0; cnm < columnheaders.Length; cnm++)
+                            {
+                                _ = datatable.Columns.Add($"Column{cnm + 1}");
+                            }
+                            isHeaderAdded = true;
+                        }
+                        i++;
+                        continue;
+                    }
+                    var line = streamreader.ReadLine();
+                    if (!string.IsNullOrEmpty(line))
+                    {
+                        DataRow datarow = datatable.NewRow();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                        datarow.ItemArray = streamreader.ReadLine().Split(delimiter);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                        datatable.Rows.Add(datarow);
+                    }
+                    else continue;
+                }
+                else streamreader.ReadLine();
+                i++;
             }
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             if (isFlushFileData) fileData = null;

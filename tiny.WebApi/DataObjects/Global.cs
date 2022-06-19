@@ -231,7 +231,7 @@ namespace tiny.WebApi.DataObjects
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                     result = JsonConvert.DeserializeObject<Dictionary<string, QuerySpecification>>(Helpers.FileReadWriteHelper.ReadAllText(TinyWebApiConfigurations.QueriesJSONFilePath));
-                if(Directory.Exists(Path.Combine(ConfigurationDirectoryPath, "Queries", Environment)))
+                if (Directory.Exists(Path.Combine(ConfigurationDirectoryPath, "Queries", Environment)))
                 {
                     if (result is null) result = new();
                     try { foreach (var r1 in from item in (FileInfo[]?)new DirectoryInfo(Path.Combine(ConfigurationDirectoryPath, "Queries", Environment)).GetFiles("*.json") let r = JsonConvert.DeserializeObject<Dictionary<string, QuerySpecification>>(Helpers.FileReadWriteHelper.ReadAllText(item.FullName)) from r1 in from r1 in r where !result.ContainsKey(r1.Key) select r1 select r1) result.Add(r1.Key, r1.Value); } catch { }
@@ -248,6 +248,26 @@ namespace tiny.WebApi.DataObjects
                 return result;
 #pragma warning restore CS8603 // Possible null reference return.
             }
+        }
+        /// <summary>
+        ///     Gets the query specifications.
+        ///     If queries to be segregatted in different files then place JSON only files supporting only queries configuration under ConfigurationDirectoryPath\Queries\{Environment} folder. Remember query keys should be unique across all files if not then first occurance will be picked up and remaning occurances will be skipped.
+        /// </summary>
+        /// <param name="jsonIdentifier"> The json identifier that is json name without extension. </param>
+        /// <value>
+        ///     The query specifications.
+        /// </value>
+        [DebuggerHidden]
+        public static Dictionary<string, QuerySpecification> GetQuerySpecifications(string jsonIdentifier)
+        {
+            LogInformation("Returning the QuerySpecifications from JSON file or Pre-Configured code or merge of both and if not available then default.");
+            Dictionary<string, QuerySpecification> result = new();
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+            if (Directory.Exists(Path.Combine(ConfigurationDirectoryPath, "Queries", Environment))) try { result = JsonConvert.DeserializeObject<Dictionary<string, QuerySpecification>>(Helpers.FileReadWriteHelper.ReadAllText(Path.Combine(ConfigurationDirectoryPath, "Queries", Environment, $"{jsonIdentifier}.json"))); } catch { }
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            return result.Count > 0 ? result : QuerySpecifications;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
         /// <summary>
         ///     Gets database specification by database name.
@@ -289,13 +309,14 @@ namespace tiny.WebApi.DataObjects
         ///     Gets query specification by query name.
         /// </summary>
         /// <param name="name"> The name. </param>
+        /// <param name="jsonIdentifier"> The json identifier that is json name without extension. </param>
         /// <returns>
         ///     The query specification by query name.
         /// </returns>
         [DebuggerHidden]
         [DebuggerStepThrough]
 #pragma warning disable CS8603 // Possible null reference return.
-        public static QuerySpecification GetQuerySpecificationByQueryName(string name) => QuerySpecifications.GetValueOrDefault(name);
+        public static QuerySpecification GetQuerySpecificationByQueryName(string name, string jsonIdentifier = "") => string.IsNullOrEmpty(jsonIdentifier) ? QuerySpecifications.GetValueOrDefault(name) : GetQuerySpecifications(jsonIdentifier).GetValueOrDefault(name);
 #pragma warning restore CS8603 // Possible null reference return.
         /// <summary>
         ///     Gets or sets the configuration.
@@ -349,9 +370,10 @@ namespace tiny.WebApi.DataObjects
         /// Gets the key from the Query specifications based on query specification value.
         /// </summary>
         /// <param name="querySpecification"></param>
+        /// <param name="jsonIdentifier"> The json identifier that is json name without extension. </param>
         /// <returns></returns>
         [DebuggerStepThrough]
         [DebuggerHidden]
-        public static string GetKeyFromQuerySpecificationValue(QuerySpecification querySpecification) => QuerySpecifications.FirstOrDefault(o => o.Value.Query == querySpecification.Query).Key;
+        public static string GetKeyFromQuerySpecificationValue(QuerySpecification querySpecification, string jsonIdentifier = "") => string.IsNullOrEmpty(jsonIdentifier) ? QuerySpecifications.FirstOrDefault(o => o.Value.Query == querySpecification.Query).Key: GetQuerySpecifications(jsonIdentifier).FirstOrDefault(o => o.Value.Query == querySpecification.Query).Key;
     }
 }
