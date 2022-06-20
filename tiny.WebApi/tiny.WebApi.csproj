@@ -9,9 +9,9 @@
     <Authors>tinyChetan</Authors>
     <Description>A Powerful WebApi written to ease up webapi development purely based on the configuration - supports MSSQL Server and Oracle databases.</Description>
     <Copyright>Copyright tiny 2021</Copyright>
-    <Version>5.0.1</Version>
-    <AssemblyVersion>5.0.1</AssemblyVersion>
-    <FileVersion>5.0.1</FileVersion>
+    <Version>5.0.2</Version>
+    <AssemblyVersion>5.0.2</AssemblyVersion>
+    <FileVersion>5.0.2</FileVersion>
     <PackageReleaseNotes>A Powerful WebApi written to ease up webapi development purely based on the configuration - supports MSSQL Server and Oracle databases.</PackageReleaseNotes>
     <Company>tiny</Company>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>

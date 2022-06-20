@@ -80,7 +80,8 @@ queries.<environment>.json sample:
     "Mailer": "somemailername1",
     "IsAllowSendingJSONInMail": false,
     "IsCachingRequired": false,
-    "CacheDurationInSeconds": 0
+    "CacheDurationInSeconds": 0,
+    "SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma": "",
   },
   "GetEmployeeDetails_StoredProcedure": {
     "Query": "usp_GetEmployeeDetails @EID = @EmployeeId, Department=@Department",
@@ -100,7 +101,8 @@ queries.<environment>.json sample:
     "Mailer": "somemailername2",
     "IsAllowSendingJSONInMail": false,
     "IsCachingRequired": false,
-    "CacheDurationInSeconds": 0
+    "CacheDurationInSeconds": 0,
+    "SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma": "",
   },
   "GetEmployeeDetails": {
     "Query": "usp_GetEmployeeDetails",
@@ -120,7 +122,8 @@ queries.<environment>.json sample:
     "Mailer": "somemailername2",
     "IsAllowSendingJSONInMail": false,
     "IsCachingRequired": false,
-    "CacheDurationInSeconds": 0
+    "CacheDurationInSeconds": 0,
+    "SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma": "",
   }
 }
 ```
