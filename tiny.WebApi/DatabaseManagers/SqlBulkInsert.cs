@@ -57,6 +57,13 @@ namespace tiny.WebApi.Helpers
             SqlBulkCopy.DestinationTableName = _querySpecification.Query;
             GetColumnMapping(_querySpecification, SqlBulkCopy);
             SqlBulkCopy.BulkCopyTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            if (!string.IsNullOrEmpty(_querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma))
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            {
+                var mapping = _querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace(@"\,", ",").Replace(@"\:", ":").ToLower();
+                foreach (var col in from DataColumn col in dt.Columns where !mapping.Contains(col.ColumnName.ToLower()) select col) dt.Columns.Remove(col);
+            }
             SqlBulkCopy.WriteToServer(dt);
             _context.Transaction?.Commit();
         }
@@ -74,7 +81,9 @@ namespace tiny.WebApi.Helpers
             {
                 querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma = querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace(@"\:", "cnmcolon");
                 querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma = querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace(@"\,", "cnmcomma");
-                foreach (var j in from i in querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Split(",") let j = i.Replace(",", "").Split(":") select j) sqlBulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping() { SourceColumn = j[0].Replace(":", "").Replace("cnmcolon", ":").Replace("cnmcomma", ","), DestinationColumn = j[1].Replace(":", "").Replace("cnmcolon",":").Replace("cnmcomma",",") });
+                foreach (var j in from i in querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Split(",") let j = i.Replace(",", "").Split(":") select j) sqlBulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping() { SourceColumn = j[0].Replace(":", "").Replace("cnmcolon", ":").Replace("cnmcomma", ","), DestinationColumn = j[1].Replace(":", "").Replace("cnmcolon", ":").Replace("cnmcomma", ",") });
+                querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma = querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace("cnmcolon", @"\:");
+                querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma = querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace("cnmcomma", @"\,");
             }
         }
         /// <summary>
@@ -112,15 +121,23 @@ namespace tiny.WebApi.Helpers
             {
                 if (item.PropertyType == typeof(DataTable))
                 {
-                    if(_conn.State != ConnectionState.Open)
+                    if (_conn.State != ConnectionState.Open)
                         _conn.Open();
                     using SqlBulkCopy SqlBulkCopy = new(_conn, SqlBulkCopyOptions.UseInternalTransaction, _context.Transaction);
                     SqlBulkCopy.DestinationTableName = item.PropertyName;
-#pragma warning disable CS8604 // Possible null reference argument.
                     GetColumnMapping(_querySpecification, SqlBulkCopy);
-#pragma warning restore CS8604 // Possible null reference argument.
                     SqlBulkCopy.BulkCopyTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
-                    SqlBulkCopy.WriteToServer(item.PropertyValue as DataTable);
+                    var dt = item.PropertyValue as DataTable;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                    if (!string.IsNullOrEmpty(_querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma))
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                    {
+                        var mapping = _querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace(@"\,", ",").Replace(@"\:", ":").ToLower();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                        foreach (var col in from DataColumn col in dt.Columns where !mapping.Contains(col.ColumnName.ToLower()) select col) dt.Columns.Remove(col);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                    }
+                    SqlBulkCopy.WriteToServer(dt);
                 }
             }
         }
@@ -136,7 +153,7 @@ namespace tiny.WebApi.Helpers
             try
             {
                 if (_querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.IsImpersonationNeeded) ImpersonationHelper.Execute(() => ProcessAction(requestSpecification), _querySpecification.DatabaseSpecification);
-                else ProcessAction(requestSpecification);                
+                else ProcessAction(requestSpecification);
             }
             catch
             {

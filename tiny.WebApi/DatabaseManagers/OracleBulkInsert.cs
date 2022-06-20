@@ -59,6 +59,8 @@ namespace tiny.WebApi.Helpers
                 querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma = querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace(@"\:", "cnmcolon");
                 querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma = querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace(@"\,", "cnmcomma");
                 foreach (var j in from i in querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Split(",") let j = i.Replace(",", "").Split(":") select j) oracleBulkCopy.ColumnMappings.Add(new OracleBulkCopyColumnMapping() { SourceColumn = j[0].Replace(":", "").Replace("cnmcolon", ":").Replace("cnmcomma", ","), DestinationColumn = j[1].Replace(":", "").Replace("cnmcolon", ":").Replace("cnmcomma", ",") });
+                querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma = querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace("cnmcolon", @"\:");
+                querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma = querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace("cnmcomma", @"\,");
             }
         }
         /// <summary>
@@ -78,6 +80,13 @@ namespace tiny.WebApi.Helpers
                 GetColumnMapping(_querySpecification, oracleBulkCopy);
                 oracleBulkCopy.DestinationTableName = _querySpecification.Query;
                 oracleBulkCopy.BulkCopyTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                if (!string.IsNullOrEmpty(_querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma))
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                {
+                    var mapping = _querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace(@"\,", ",").Replace(@"\:", ":").ToLower();
+                    foreach (var col in from DataColumn col in dt.Columns where !mapping.Contains(col.ColumnName.ToLower()) select col) dt.Columns.Remove(col);
+                }
                 oracleBulkCopy.WriteToServer(dt);
             }
             catch
@@ -108,12 +117,20 @@ namespace tiny.WebApi.Helpers
                         if (_conn.State != ConnectionState.Open)
                             _conn.Open();
                         using OracleBulkCopy oracleBulkCopy = new(_conn, OracleBulkCopyOptions.UseInternalTransaction);
-#pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                         GetColumnMapping(_querySpecification, oracleBulkCopy);
-#pragma warning restore CS8604 // Possible null reference argument.
                         oracleBulkCopy.DestinationTableName = item.PropertyName;
                         oracleBulkCopy.BulkCopyTimeout = _querySpecification is not null && _querySpecification.DatabaseSpecification is not null && _querySpecification.DatabaseSpecification.ConnectionTimeOut > 0 ? _querySpecification.DatabaseSpecification.ConnectionTimeOut : 1200;
-                        oracleBulkCopy.WriteToServer(item.PropertyValue as DataTable);
+                        using var dt = item.PropertyValue as DataTable;
+                        if (!string.IsNullOrEmpty(_querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma))
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                        {
+                            var mapping = _querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace(@"\,", ",").Replace(@"\:", ":").ToLower();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                            foreach (var col in from DataColumn col in dt.Columns where !mapping.Contains(col.ColumnName.ToLower()) select col) dt.Columns.Remove(col);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                        }
+                        oracleBulkCopy.WriteToServer(dt);
                     }
                 }
             }
