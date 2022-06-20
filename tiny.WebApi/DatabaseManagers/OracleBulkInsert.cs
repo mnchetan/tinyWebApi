@@ -84,8 +84,16 @@ namespace tiny.WebApi.Helpers
                 if (!string.IsNullOrEmpty(_querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma))
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 {
-                    var mapping = _querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace(@"\,", ",").Replace(@"\:", ":").ToLower();
-                    foreach (var col in from DataColumn col in dt.Columns where !mapping.Contains(col.ColumnName.ToLower()) select col) dt.Columns.Remove(col);
+                    for (int i = 0; i < dt.Columns.Count; i++)
+                    {
+                        var hasFound = false;
+                        foreach (var _ in from OracleBulkCopyColumnMapping x in oracleBulkCopy.ColumnMappings where x.SourceColumn.ToLower() == dt.Columns[i].ColumnName.ToLower() select new { })
+                        {
+                            hasFound = true;
+                            break;
+                        }
+                        if (!hasFound) dt.Columns.Remove(dt.Columns[i]);
+                    }
                 }
                 oracleBulkCopy.WriteToServer(dt);
             }
@@ -125,10 +133,18 @@ namespace tiny.WebApi.Helpers
                         if (!string.IsNullOrEmpty(_querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma))
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                         {
-                            var mapping = _querySpecification.SourceDestinationColumnMapping_SourceDestinationSeperatedbyColonAndRepeatedbyComma.Replace(@"\,", ",").Replace(@"\:", ":").ToLower();
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                            foreach (var col in from DataColumn col in dt.Columns where !mapping.Contains(col.ColumnName.ToLower()) select col) dt.Columns.Remove(col);
+                            for (int i = 0; i < dt.Columns.Count; i++)
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
+                            {
+                                var hasFound = false;
+                                foreach (var _ in from OracleBulkCopyColumnMapping x in oracleBulkCopy.ColumnMappings where x.SourceColumn.ToLower() == dt.Columns[i].ColumnName.ToLower() select new { })
+                                {
+                                    hasFound = true;
+                                    break;
+                                }
+                                if (!hasFound) dt.Columns.Remove(dt.Columns[i]);
+                            }
                         }
                         oracleBulkCopy.WriteToServer(dt);
                     }
