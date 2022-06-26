@@ -2,6 +2,8 @@
 #### tiny Web Api supports almost any type of input and output and connects to Microsoft SQL Server/Oracle database (very much extendable to other relational databases) and allows teams to focus only on database and UI development without even having to make any change in the service. This service does not have any service specific logic and hence could be easily used within any project having Microsoft SQL Server, Oracle as backend database. This supports Get, Post, Put, Delete method automations which could be overridden for extension.
 Once deployed this service does not need any future deployment apart from configuration changes.
 
+#### In simple words it is a complete Automation of Rest service development.
+
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 ## Get: 
